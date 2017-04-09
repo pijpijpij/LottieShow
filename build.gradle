@@ -1,0 +1,58 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
+ext {
+    kotlinVersion = '1.1.1'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    compileSdkVersion = 25
+    buildToolsVersion = '25.0.2'
+    minSdkVersion = 21
+    targetSdkVersion = 25
+
+    supportVersion = '25.3.1'
+    daggerVersion = '2.10'
+    intentBuilderVersion = '0.14.0'
+    fragmentArgsVersion = '3.0.2'
+    rxBindingsVersion = '1.0.1'
+
+    junitVersion = '4.12'
+    mockitoVersion = '1.10.19'
+    assertjCoreVersion = '1.7.1'
+    assertjAndroidVersion = '1.1.1'
+
+    commonsLangVersion = '3.4'
+    commonsCollectionsVersion = '4.1'
+    commonsIo = 'commons-io:commons-io:2.5'
+    autoValueVersion = '1.4'
+    autoValueWither = 'com.gabrielittner.auto.value:auto-value-with:0.1.5'
+    autoValueCursor = 'com.gabrielittner.auto.value:auto-value-cursor:0.5.0'
+    autoValueCursorAnnotations = 'com.gabrielittner.auto.value:auto-value-cursor-annotations:0.5.0'
+    autoValueParcel = 'com.ryanharter.auto.value:auto-value-parcel:0.2.2'
+    autoValueParcelAdapter = 'com.ryanharter.auto.value:auto-value-parcel-adapter:0.2.2'
+
+    rxJavaVersion = '1.2.6'
+    rxJavaString = 'io.reactivex:rxjava-string:1.1.0'
+    rxAndroid = 'io.reactivex:rxandroid:1.2.1'
+}
+
+allprojects {
+    buildscript {
+        repositories {
+            jcenter()
+        }
+    }
+    repositories {
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
