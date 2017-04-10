@@ -28,7 +28,7 @@ public class LottiesViewModel {
     @SuppressWarnings("WeakerAccess")
     public LottiesViewModel(Iterable<LottieSource> sources) {
         FuncN<Iterable<LottieFile>> collector = untypedLists -> {
-            //noinspection unchecked
+            @SuppressWarnings("unchecked")
             Transformer<Object, Iterable<LottieFile>> transformer = input -> (Iterable<LottieFile>)input;
             Iterable<Iterable<LottieFile>> allLists = transformedIterable(asList(untypedLists), transformer);
             Collection<LottieFile> result = new ArrayList<>();
