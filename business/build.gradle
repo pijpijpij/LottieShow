@@ -7,24 +7,25 @@ buildscript {
     }
     dependencies {
         classpath "net.ltgt.gradle:gradle-apt-plugin:0.10"
-        classpath 'me.tatarka:gradle-retrolambda:3.2.3'
+        classpath "me.tatarka:gradle-retrolambda:$retrolambdaVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
-//repositories {
-//    jcenter()
-////    maven { url "${System.getenv()['ANDROID_HOME']}/extras/android/m2repository" }
-//}
+repositories {
+    maven { url "${System.getenv()['ANDROID_HOME']}/extras/android/m2repository" }
+}
 
 apply plugin: "net.ltgt.apt"
-apply plugin: 'kotlin'
+//apply plugin: 'kotlin'
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'me.tatarka.retrolambda'
 
-println "${System.getenv()['ANDROID_HOME']}/extras/android/m2repository"
 sourceCompatibility = "${rootProject.ext.sourceCompatibility}"
 targetCompatibility = "${rootProject.ext.targetCompatibility}"
+
+// With java 8 and wish to run unit tests
+retrolambda.oldJdk System.getenv("JAVA7_HOME")
 
 dependencies {
     compile "com.android.support:support-annotations:$supportVersion"
@@ -34,7 +35,7 @@ dependencies {
     compile "org.apache.commons:commons-collections4:$commonsCollectionsVersion"
     compile "io.reactivex:rxjava:$rxJavaVersion"
     compile "com.google.dagger:dagger:$daggerVersion"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
+//    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
 
     testCompile "junit:junit:$junitVersion"
     testCompile "org.mockito:mockito-core:${mockitoVersion}"

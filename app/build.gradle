@@ -2,15 +2,14 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath 'com.android.tools.build:gradle:2.3.1'
-        // Should be the last one on the classpath according to the
-        // Retrolambda website.
-        classpath 'me.tatarka:gradle-retrolambda:3.2.5'
+        // Should be the last one on the classpath according to the Retrolambda website.
+        classpath "me.tatarka:gradle-retrolambda:$retrolambdaVersion"
         // For lintVitalRelase's inability to deal with Lombok inside Retrolambda
         classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
     }
 }
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+//apply plugin: 'kotlin-android'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
@@ -44,7 +43,6 @@ android {
 dependencies {
     compile project(":business")
     compile "com.android.support:appcompat-v7:$supportVersion"
-    compile "com.android.support:support-v4:$supportVersion"
     compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:design:$supportVersion"
     compile "com.jakewharton:butterknife:8.5.1"
@@ -70,7 +68,7 @@ dependencies {
     compile "com.jakewharton.rxbinding:rxbinding:$rxBindingsVersion"
 
     testCompile "junit:junit:$junitVersion"
-    testCompile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
+//    testCompile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
     testCompile "org.mockito:mockito-core:${mockitoVersion}"
 }
 
