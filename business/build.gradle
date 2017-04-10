@@ -11,10 +11,9 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
-//repositories {
-//    jcenter()
-////    maven { url "${System.getenv()['ANDROID_HOME']}/extras/android/m2repository" }
-//}
+repositories {
+    maven { url "${System.getenv()['ANDROID_HOME']}/extras/android/m2repository" }
+}
 
 apply plugin: "net.ltgt.apt"
 apply plugin: 'kotlin'
