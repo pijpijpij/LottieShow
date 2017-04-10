@@ -30,6 +30,7 @@ class RemovableExternalStorage {
     @NonNull
     public Observable<File> root() {
         return events.map(ignored -> Environment.getExternalStorageState())
+                     .doOnNext(state -> System.out.println("External storage state changed to " + state))
                      .map(state -> Environment.MEDIA_MOUNTED.equals(state) ||
                                    Environment.MEDIA_MOUNTED_READ_ONLY.equals(state))
                      .distinctUntilChanged()

@@ -6,6 +6,7 @@ import com.pij.lottieshow.sources.LottieSource;
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.collections4.Transformer;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -13,6 +14,7 @@ import javax.inject.Inject;
 
 import rx.Observable;
 import rx.functions.FuncN;
+import rx.subjects.PublishSubject;
 
 import static java.util.Arrays.asList;
 import static org.apache.commons.collections4.CollectionUtils.addAll;
@@ -23,10 +25,11 @@ import static rx.Observable.combineLatest;
 public class LottiesViewModel {
 
     private final Observable<Iterable<LottieFile>> lotties;
+    private final PublishSubject<Void> promptFileSelection = PublishSubject.create();
 
     @Inject
     @SuppressWarnings("WeakerAccess")
-    public LottiesViewModel(Iterable<LottieSource> sources) {
+    public LottiesViewModel(Iterable<LottieSource> sources/*, LottieSink */) {
         FuncN<Iterable<LottieFile>> collector = untypedLists -> {
             @SuppressWarnings("unchecked")
             Transformer<Object, Iterable<LottieFile>> transformer = input -> (Iterable<LottieFile>)input;
@@ -43,5 +46,10 @@ public class LottiesViewModel {
     @SuppressWarnings("WeakerAccess")
     public Observable<Iterable<LottieFile>> shouldShowList() {
         return lotties;
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void addLottie(URI newFile) {
+        throw new UnsupportedOperationException("addLottie([newFile]) not implemented yet");
     }
 }
