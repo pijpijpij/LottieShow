@@ -68,7 +68,7 @@ public class LottieListActivity extends AppCompatActivity {
                                                                 .setAction("Action", null)
                                                                 .show(), Throwable::printStackTrace));
 
-        LottieAdapter adapter = new LottieAdapter(R.layout.lottie_list_item);
+        LottieAdapter adapter = new LottieAdapter(android.R.layout.simple_list_item_1);
         list.setAdapter(adapter);
         subscriptions.add(viewModel.shouldShowList()
                                    .subscribe(adapter::setItems,

@@ -4,7 +4,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.pij.lottieshow.R;
 import com.pij.lottieshow.model.LottieFile;
 
 import butterknife.BindView;
@@ -19,9 +18,8 @@ class LottieViewHolder extends RecyclerView.ViewHolder {
 
     final CompositeSubscription subscription = new CompositeSubscription();
     LottieFile item;
-    @BindView(R.id.id)
-    TextView idView;
-    @BindView(R.id.label)
+    //    @BindView(R.id.label)
+    @BindView(android.R.id.text1)
     TextView labelView;
 
     @SuppressWarnings("WeakerAccess")
@@ -38,7 +36,6 @@ class LottieViewHolder extends RecyclerView.ViewHolder {
     @SuppressWarnings("WeakerAccess")
     public void setItem(LottieFile item) {
         this.item = item;
-        idView.setText(item.id().getAbsolutePath());
         labelView.setText(item.label());
     }
 }
