@@ -21,6 +21,7 @@ ext {
     daggerVersion = '2.10'
     intentBuilderVersion = '0.14.0'
     fragmentArgsVersion = '3.0.2'
+    butterknifeVersion = '8.5.1'
     rxBindingsVersion = '1.0.1'
 
     junitVersion = '4.12'

@@ -27,11 +27,18 @@ class LottieViewHolder extends RecyclerView.ViewHolder {
     @SuppressWarnings("WeakerAccess")
     public LottieViewHolder(View view) {
         super(view);
-        ButterKnife.bind(view);
+        ButterKnife.bind(this, view);
     }
 
     @Override
     public String toString() {
         return super.toString() + " '" + labelView.getText() + "'";
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public void setItem(LottieFile item) {
+        this.item = item;
+        idView.setText(item.id().getAbsolutePath());
+        labelView.setText(item.label());
     }
 }

@@ -9,7 +9,7 @@ import rx.Observable;
  * @author Pierrejean
  */
 
-interface LottieSource {
+public interface LottieSource {
 
     Observable<Iterable<LottieFile>> getLottieFiles();
 }
