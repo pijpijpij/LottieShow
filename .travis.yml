@@ -1,7 +1,5 @@
 language: android
-jdk:
-  - oraclejdk7
-  - oraclejdk8
+jdk: oraclejdk8
 env:
   global:
     - ANDROID_TARGET=android-21
@@ -15,6 +13,10 @@ android:
   - extra-android-m2repository
   - extra-android-support
   - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
+
+before_install:
+  - export JAVA7_HOME=/usr/lib/jvm/java-7-oracle
+
 before-script:
 #  - android list targets
 #  - ./gradlew build jacocoTestReport assembleAndroidTest
