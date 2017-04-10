@@ -12,19 +12,18 @@ android:
   - build-tools-25.0.2
   - android-25
   - extra-android-m2repository
-  - extra-android-support
-  - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
-
-before_install:
+##  - extra-android-support
+##  - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
 
 before_script:
 #  - android list targets
 #  - ./gradlew build jacocoTestReport assembleAndroidTest
-  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
-  - emulator -avd test -no-skin -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
+##  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
+##  - emulator -avd test -no-skin -no-audio -no-window &
+##  - android-wait-for-emulator
+##  - adb shell input keyevent 82 &
 # Not sure there's any need to skip code verification
 # - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
 script:
-  - ./gradlew test connectedCheck
+##  - ./gradlew test connectedCheck
+  - ./gradlew test
