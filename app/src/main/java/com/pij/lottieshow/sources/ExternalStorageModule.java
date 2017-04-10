@@ -14,7 +14,7 @@ import static rx.Observable.just;
  */
 
 @Module
-abstract class ExternalStorageModule {
+public abstract class ExternalStorageModule {
 
     @Provides
     @IntoSet

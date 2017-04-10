@@ -16,7 +16,6 @@ import dagger.android.AndroidInjector;
 import dagger.multibindings.IntoMap;
 import dagger.multibindings.IntoSet;
 
-import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static rx.Observable.just;
 
@@ -31,12 +30,6 @@ public abstract class LottieListActivityModule {
     @Provides
     static LottiesViewModel provideLottiesViewModel(Set<LottieSource> sources) {
         return new LottiesViewModel(new ArrayList<>(sources));
-    }
-
-    @Provides
-    @IntoSet
-    static LottieSource provideEmptyLottieSource() {
-        return () -> just(emptyList());
     }
 
     @Provides
