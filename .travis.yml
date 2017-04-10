@@ -28,4 +28,4 @@ before_script:
 # - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
 script:
 ##  - ./gradlew test connectedCheck
-  - ./gradlew test --stacktrace
+  - ./gradlew test

@@ -7,7 +7,7 @@ buildscript {
     }
     dependencies {
         classpath "net.ltgt.gradle:gradle-apt-plugin:0.10"
-        classpath 'me.tatarka:gradle-retrolambda:3.2.3'
+        classpath "me.tatarka:gradle-retrolambda:$retrolambdaVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
@@ -21,9 +21,11 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'me.tatarka.retrolambda'
 
-println "${System.getenv()['ANDROID_HOME']}/extras/android/m2repository"
 sourceCompatibility = "${rootProject.ext.sourceCompatibility}"
 targetCompatibility = "${rootProject.ext.targetCompatibility}"
+
+// With java 8 and wish to run unit tests
+retrolambda.oldJdk System.getenv("JAVA7_HOME")
 
 dependencies {
     compile "com.android.support:support-annotations:$supportVersion"
