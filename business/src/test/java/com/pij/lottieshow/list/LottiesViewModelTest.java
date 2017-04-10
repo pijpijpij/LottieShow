@@ -1,6 +1,7 @@
 package com.pij.lottieshow.list;
 
 import com.pij.lottieshow.model.LottieFile;
+import com.pij.lottieshow.sources.LottieSource;
 
 import org.apache.commons.collections4.IterableUtils;
 import org.junit.Rule;

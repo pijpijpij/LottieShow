@@ -3,6 +3,7 @@ package com.pij.lottieshow.list;
 import android.app.Activity;
 
 import com.pij.lottieshow.model.LottieFile;
+import com.pij.lottieshow.sources.LottieSource;
 
 import java.io.File;
 import java.util.ArrayList;

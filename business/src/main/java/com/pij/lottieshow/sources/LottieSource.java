@@ -1,4 +1,4 @@
-package com.pij.lottieshow.list;
+package com.pij.lottieshow.sources;
 
 import com.pij.lottieshow.model.LottieFile;
 

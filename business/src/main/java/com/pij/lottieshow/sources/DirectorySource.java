@@ -1,6 +1,5 @@
 package com.pij.lottieshow.sources;
 
-import com.pij.lottieshow.list.LottieSource;
 import com.pij.lottieshow.model.LottieFile;
 
 import java.io.File;

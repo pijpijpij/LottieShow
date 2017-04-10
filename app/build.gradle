@@ -66,6 +66,7 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-android-processor:${daggerVersion}"
 
     compile "com.jakewharton.rxbinding:rxbinding:$rxBindingsVersion"
+    compile 'com.cantrowitz:rxbroadcast:1.1.1'
 
     testCompile "junit:junit:$junitVersion"
 //    testCompile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"

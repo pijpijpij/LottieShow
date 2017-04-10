@@ -21,7 +21,7 @@ public class LottieApplication extends Application implements HasDispatchingActi
     @Override
     public void onCreate() {
         super.onCreate();
-        DaggerLottieApplicationComponent.create().inject(this);
+        DaggerLottieApplicationComponent.builder().application(this).build().inject(this);
     }
 
     @Override
