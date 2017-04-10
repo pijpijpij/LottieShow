@@ -21,7 +21,7 @@ import static rx.Observable.just;
  * <p>Created on 10/04/2017.</p>
  * @author Pierrejean
  */
-public class FileSystemSourceTest {
+public class DirectorySourceTest {
 
     @Rule
     public MockitoRule mockito = MockitoJUnit.rule();
@@ -31,7 +31,7 @@ public class FileSystemSourceTest {
     @Test
     public void emitsEmptyListWhenRootIsNotDirectory() {
         when(mockRoot.isDirectory()).thenReturn(false);
-        FileSystemSource sut = createDefaultSut(mockRoot);
+        DirectorySource sut = createDefaultSut(mockRoot);
         TestSubscriber<Iterable<LottieFile>> subscriber = TestSubscriber.create();
 
         sut.getLottieFiles().subscribe(subscriber);
@@ -44,7 +44,7 @@ public class FileSystemSourceTest {
     public void emitsEmptyListWhenDirectoryEmpty() {
         when(mockRoot.isDirectory()).thenReturn(true);
         when(mockRoot.listFiles()).thenReturn(new File[0]);
-        FileSystemSource sut = createDefaultSut(mockRoot);
+        DirectorySource sut = createDefaultSut(mockRoot);
         TestSubscriber<Iterable<LottieFile>> subscriber = TestSubscriber.create();
 
         sut.getLottieFiles().subscribe(subscriber);
@@ -57,7 +57,7 @@ public class FileSystemSourceTest {
     public void emitsSingletonListWhenDirectoryContainsOneFile() {
         when(mockRoot.isDirectory()).thenReturn(true);
         when(mockRoot.listFiles()).thenReturn(new File[]{ new File("zip", "zap") });
-        FileSystemSource sut = createDefaultSut(mockRoot);
+        DirectorySource sut = createDefaultSut(mockRoot);
         TestSubscriber<Iterable<LottieFile>> subscriber = TestSubscriber.create();
 
         sut.getLottieFiles().subscribe(subscriber);
@@ -66,7 +66,7 @@ public class FileSystemSourceTest {
         subscriber.assertValue(singletonList(LottieFile.create(new File("zip", "zap"))));
     }
 
-    private FileSystemSource createDefaultSut(File root) {
-        return new FileSystemSource(just(root));
+    private DirectorySource createDefaultSut(File root) {
+        return new DirectorySource(just(root));
     }
 }

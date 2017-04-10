@@ -15,11 +15,11 @@ import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
  * @author Pierrejean
  */
 @SuppressWarnings("WeakerAccess")
-public class FileSystemSource implements LottieSource {
+public class DirectorySource implements LottieSource {
 
     private final Observable<File> storageRoot;
 
-    public FileSystemSource(Observable<File> storageRoot) {
+    public DirectorySource(Observable<File> storageRoot) {
         this.storageRoot = storageRoot;
     }
 
