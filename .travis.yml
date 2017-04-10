@@ -16,6 +16,8 @@ android:
 ##  - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
 
 before_script:
+ - ls /usr/lib/jvm/java-7-oracle
+ - ls $JAVA7_HOME
 #  - android list targets
 #  - ./gradlew build jacocoTestReport assembleAndroidTest
 ##  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
