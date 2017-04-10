@@ -13,7 +13,7 @@ android:
   - extra-android-m2repository
   - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
 script:
- - android list targets
+  - android list targets
 #  - ./gradlew build jacocoTestReport assembleAndroidTest
   - ./gradlew test assembleAndroidTest
   - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
