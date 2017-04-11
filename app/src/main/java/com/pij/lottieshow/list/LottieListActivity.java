@@ -27,6 +27,7 @@ import butterknife.Unbinder;
 import dagger.android.AndroidInjection;
 import rx.Observable;
 import rx.Subscription;
+import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 import rx.subscriptions.CompositeSubscription;
 
@@ -120,7 +121,7 @@ public class LottieListActivity extends AppCompatActivity {
 
     private void notifyError(Throwable error) {
         error.printStackTrace();
-        //TODO add a dialog to display detial of exception stack.
+        //TODO add a dialog to display detail of exception stack.
         Snackbar.make(fab, "Error: " + error, Snackbar.LENGTH_LONG)
                 .setAction(R.string.snackbar_show_error, null)
                 .show();
@@ -131,7 +132,7 @@ public class LottieListActivity extends AppCompatActivity {
      * <li><code>{@literal *}/{@literal *}</code> is too lax</li>
      * <li><code>{@literal *}/json</code> does not work</li>
      * <li><code>application/json</code> does not work</li>
-     * <li><code>application/{@literal *}</code> leaves .json file selectable, so that's what we use.</li>
+     * <li><code>application/{@literal *}</code> leaves .json files selectable, so that's what we use.</li>
      * </ul>
      */
     private void pickJsonFile() {
@@ -140,19 +141,20 @@ public class LottieListActivity extends AppCompatActivity {
     }
 
     private Subscription showInFragment(Observable<LottieFile> lottieFile) {
-        return lottieFile.flatMap((item) -> just(item).map(LottieDetailFragment::createInstance).compose(absorbError()))
+        return lottieFile.compose(mapWithoutError(LottieDetailFragment::createInstance))
                          .subscribe(this::setDetailFragment, this::notifyError);
     }
 
     private Subscription showInActivity(Observable<LottieFile> lottieFile) {
-        return lottieFile.flatMap(item -> just(item).map(i -> LottieDetailActivity.createIntent(this, i))
-                                                    .compose(absorbError()))
+        return lottieFile.compose(mapWithoutError(i -> LottieDetailActivity.createIntent(this, i)))
                          .subscribe(this::startActivity, this::notifyError);
     }
 
     @NonNull
-    private <T> Observable.Transformer<T, T> absorbError() {
-        return input -> input.doOnError(this::notifyError).onErrorResumeNext(empty());
+    private <T> Observable.Transformer<LottieFile, T> mapWithoutError(final Func1<LottieFile, T> mapper) {
+        return lottieFile -> lottieFile.flatMap(item -> just(item).map(mapper)
+                                                                  .doOnError(this::notifyError)
+                                                                  .onErrorResumeNext(empty()));
     }
 
     private int setDetailFragment(LottieDetailFragment fragment) {
