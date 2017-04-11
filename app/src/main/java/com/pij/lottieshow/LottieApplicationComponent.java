@@ -1,7 +1,9 @@
 package com.pij.lottieshow;
 
+import com.pij.lottieshow.interactor.ExternalStorageModule;
 import com.pij.lottieshow.list.LottieListActivityModule;
-import com.pij.lottieshow.sources.ExternalStorageModule;
+
+import javax.inject.Singleton;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -17,6 +19,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
         AndroidSupportInjectionModule.class,
         LottieListActivityModule.class
 })
+@Singleton
 interface LottieApplicationComponent {
 
     void inject(LottieApplication target);

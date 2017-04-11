@@ -1,4 +1,4 @@
-package com.pij.lottieshow.sources;
+package com.pij.lottieshow.interactor;
 
 import android.content.Intent;
 import android.os.Environment;

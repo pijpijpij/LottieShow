@@ -1,4 +1,4 @@
-package com.pij.lottieshow.sources;
+package com.pij.lottieshow.interactor;
 
 import com.pij.lottieshow.model.LottieFile;
 
@@ -16,6 +16,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.when;
 import static rx.Observable.just;
+import static rx.Observable.never;
 
 /**
  * <p>Created on 10/04/2017.</p>
@@ -27,6 +28,18 @@ public class DirectorySourceTest {
     public MockitoRule mockito = MockitoJUnit.rule();
     @Mock
     File mockRoot;
+
+    @Test
+    public void emitsEmptyListWhenRootDoesNotEmit() {
+        when(mockRoot.isDirectory()).thenReturn(false);
+        DirectorySource sut = new DirectorySource(never());
+        TestSubscriber<Iterable<LottieFile>> subscriber = TestSubscriber.create();
+
+        sut.getLottieFiles().subscribe(subscriber);
+
+        subscriber.assertNoErrors();
+        subscriber.assertValue(emptyList());
+    }
 
     @Test
     public void emitsEmptyListWhenRootIsNotDirectory() {
@@ -63,7 +76,8 @@ public class DirectorySourceTest {
         sut.getLottieFiles().subscribe(subscriber);
 
         subscriber.assertNoErrors();
-        subscriber.assertValue(singletonList(LottieFile.create(new File("zip", "zap"))));
+        //noinspection unchecked
+        subscriber.assertValues(emptyList(), singletonList(LottieFile.create(new File("zip", "zap"))));
     }
 
     private DirectorySource createDefaultSut(File root) {
