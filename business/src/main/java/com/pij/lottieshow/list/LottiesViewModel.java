@@ -9,7 +9,6 @@ import com.pij.lottieshow.model.LottieFile;
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.collections4.Transformer;
 
-import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,6 +53,6 @@ public class LottiesViewModel {
 
     @SuppressWarnings("WeakerAccess")
     public void addLottie(URI newFile) {
-        sink.add(LottieFile.create(new File(newFile)));
+        sink.add(LottieFile.create(newFile));
     }
 }
