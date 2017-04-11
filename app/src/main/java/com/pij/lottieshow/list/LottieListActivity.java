@@ -3,6 +3,7 @@ package com.pij.lottieshow.list;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -30,6 +31,8 @@ import rx.subjects.PublishSubject;
 import rx.subscriptions.CompositeSubscription;
 
 import static com.jakewharton.rxbinding.view.RxView.clicks;
+import static rx.Observable.empty;
+import static rx.Observable.just;
 
 /**
  * An activity representing a list of Lotties. This activity
@@ -76,7 +79,8 @@ public class LottieListActivity extends AppCompatActivity {
         subscriptions.addAll(clicks(fab).subscribe(click -> pickJsonFile(), this::notifyError),
                              jsonFilePicked.map(Intent::getData)
                                            .map(Uri::toString)
-                                           .map(URI::create).subscribe(viewModel::addLottie, this::notifyError),
+                                           .map(URI::create)
+                                           .subscribe(viewModel::addLottie, this::notifyError),
 
 
                              viewModel.shouldShowList().subscribe(adapter::setItems, this::notifyError),
@@ -136,13 +140,19 @@ public class LottieListActivity extends AppCompatActivity {
     }
 
     private Subscription showInFragment(Observable<LottieFile> lottieFile) {
-        return lottieFile.map(LottieDetailFragment::createInstance)
+        return lottieFile.flatMap((item) -> just(item).map(LottieDetailFragment::createInstance).compose(absorbError()))
                          .subscribe(this::setDetailFragment, this::notifyError);
     }
 
     private Subscription showInActivity(Observable<LottieFile> lottieFile) {
-        return lottieFile.map(item -> LottieDetailActivity.createIntent(this, item))
+        return lottieFile.flatMap(item -> just(item).map(i -> LottieDetailActivity.createIntent(this, i))
+                                                    .compose(absorbError()))
                          .subscribe(this::startActivity, this::notifyError);
+    }
+
+    @NonNull
+    private <T> Observable.Transformer<T, T> absorbError() {
+        return input -> input.doOnError(this::notifyError).onErrorResumeNext(empty());
     }
 
     private int setDetailFragment(LottieDetailFragment fragment) {

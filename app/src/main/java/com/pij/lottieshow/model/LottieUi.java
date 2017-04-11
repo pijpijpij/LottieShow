@@ -2,6 +2,7 @@ package com.pij.lottieshow.model;
 
 import android.net.Uri;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 
@@ -12,7 +13,7 @@ import com.google.auto.value.AutoValue;
 public abstract class LottieUi implements Parcelable {
 
     public static LottieUi create(LottieFile model) {
-        return create(Uri.parse(model.id().toString()), model.label(), model.content());
+        return create(Uri.parse(model.id().toString()), model.content(), model.label());
     }
 
     public static LottieUi create(Uri id, String content, String label) {
@@ -23,6 +24,7 @@ public abstract class LottieUi implements Parcelable {
 
     public abstract String label();
 
+    @Nullable
     public abstract String content();
 
 }
