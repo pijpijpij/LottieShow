@@ -1,6 +1,7 @@
 package com.pij.lottieshow;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 
 import com.pij.lottieshow.list.MemoryLottieStore;
 
@@ -27,4 +28,8 @@ class LottieApplicationModule {
         return application.getApplicationContext();
     }
 
+    @Provides
+    AssetManager provideAssetManager(Context context) {
+        return context.getAssets();
+    }
 }
