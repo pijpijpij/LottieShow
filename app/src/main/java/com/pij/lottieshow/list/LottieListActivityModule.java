@@ -28,12 +28,6 @@ import static rx.Observable.just;
 @Module(subcomponents = LottieListActivitySubComponent.class)
 public abstract class LottieListActivityModule {
 
-    @Provides
-    @IntoSet
-    static LottieSource provideTestLottieSource() {
-        return () -> just(singletonList(LottieFile.create(new File("you should see", "at least that one"))));
-    }
-
     @Binds
     abstract Iterable<LottieSource> provideLottiesSources(Set<LottieSource> sources);
 

@@ -1,6 +1,7 @@
 package com.pij.lottieshow;
 
 import com.pij.lottieshow.interactor.AssetModule;
+import com.pij.lottieshow.interactor.BuildTypeModule;
 import com.pij.lottieshow.interactor.ExternalStorageModule;
 import com.pij.lottieshow.list.LottieListActivityModule;
 
@@ -15,8 +16,10 @@ import dagger.android.support.AndroidSupportInjectionModule;
  * @author Pierrejean
  */
 @Component(modules = {
-        LottieApplicationModule.class, AssetModule.class,
+        LottieApplicationModule.class,
+        AssetModule.class,
         ExternalStorageModule.class,
+        BuildTypeModule.class,
         AndroidSupportInjectionModule.class,
         LottieListActivityModule.class
 })
