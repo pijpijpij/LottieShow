@@ -2,4 +2,6 @@
     <string name="app_name">LottieShow</string>
     <string name="title_lottie_detail">Lottie Detail</string>
     <string name="snackbar_show_error">Display error details</string>
+
+    <string name="lottie_icon_label">Initial Lottie image</string>
 </resources>
