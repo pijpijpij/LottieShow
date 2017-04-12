@@ -1,4 +1,4 @@
-package com.pij.lottieshow;
+package com.pij.lottieshow.detail;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.pij.lottieshow.R;
 import com.pij.lottieshow.list.LottieListActivity;
 import com.pij.lottieshow.model.LottieFile;
 import com.pij.lottieshow.model.LottieUi;

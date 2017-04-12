@@ -1,11 +1,10 @@
-package com.pij.lottieshow;
+package com.pij.lottieshow.detail;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +13,14 @@ import android.widget.TextView;
 import com.hannesdorfmann.fragmentargs.FragmentArgs;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentWithArgs;
+import com.pij.lottieshow.R;
 import com.pij.lottieshow.list.LottieListActivity;
 import com.pij.lottieshow.model.LottieFile;
 import com.pij.lottieshow.model.LottieUi;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import dagger.android.support.DaggerFragment;
 
 import static com.pij.lottieshow.model.LottieUi.create;
 
@@ -30,14 +31,14 @@ import static com.pij.lottieshow.model.LottieUi.create;
  * on handsets.
  */
 @FragmentWithArgs
-public class LottieDetailFragment extends Fragment {
+public class LottieDetailFragment extends DaggerFragment {
 
 
     /**
      * The dummy content this fragment is presenting.
      */
     @Arg
-    LottieUi mItem;
+    LottieUi lottie;
     private Unbinder unbinder;
 
     @NonNull
@@ -61,7 +62,7 @@ public class LottieDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FragmentArgs.inject(this);
-        if (mItem != null) {
+        if (lottie != null) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
@@ -69,7 +70,7 @@ public class LottieDetailFragment extends Fragment {
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout)activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content());
+                appBarLayout.setTitle(lottie.label());
             }
         }
     }
@@ -84,8 +85,8 @@ public class LottieDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
         // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView)view.findViewById(R.id.lottie_detail)).setText(mItem.label());
+        if (lottie != null) {
+            ((TextView)view.findViewById(R.id.lottie_detail)).setText(lottie.label());
         }
     }
 

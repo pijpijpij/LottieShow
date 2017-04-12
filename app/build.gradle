@@ -69,6 +69,8 @@ dependencies {
     compile "com.jakewharton.rxbinding:rxbinding:$rxBindingsVersion"
     compile 'com.cantrowitz:rxbroadcast:1.1.1'
 
+    compile 'com.airbnb.android:lottie:1.5.3'
+
     testCompile "junit:junit:$junitVersion"
 //    testCompile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
     testCompile "org.mockito:mockito-core:${mockitoVersion}"

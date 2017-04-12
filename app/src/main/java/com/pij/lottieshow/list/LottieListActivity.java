@@ -7,14 +7,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.pij.lottieshow.LottieDetailActivity;
-import com.pij.lottieshow.LottieDetailFragment;
 import com.pij.lottieshow.R;
+import com.pij.lottieshow.detail.LottieDetailActivity;
+import com.pij.lottieshow.detail.LottieDetailFragment;
 import com.pij.lottieshow.model.LottieFile;
 
 import java.net.URI;
@@ -25,6 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.AndroidInjection;
+import dagger.android.support.DaggerAppCompatActivity;
 import rx.Observable;
 import rx.Subscription;
 import rx.functions.Func1;
@@ -43,7 +43,7 @@ import static rx.Observable.just;
  * item label. On tablets, the activity presents the list of items and
  * item label side-by-side using two vertical panes.
  */
-public class LottieListActivity extends AppCompatActivity {
+public class LottieListActivity extends DaggerAppCompatActivity {
 
     private static final int REQUESTCODE_PICK = 24;
 
