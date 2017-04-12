@@ -2,13 +2,12 @@ package com.pij.lottieshow.list;
 
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.pij.lottieshow.model.LottieFile;
+import com.pij.lottieshow.model.LottieUi;
 
 import java.util.List;
 
@@ -19,7 +18,6 @@ import static com.jakewharton.rxbinding.view.RxView.clicks;
 import static com.jakewharton.rxbinding.view.RxView.detaches;
 import static java.util.Collections.emptyList;
 import static org.apache.commons.collections4.IterableUtils.toList;
-import static org.apache.commons.collections4.ListUtils.defaultIfNull;
 
 /**
  * <p>Created on 06/04/2017.</p>
@@ -27,10 +25,10 @@ import static org.apache.commons.collections4.ListUtils.defaultIfNull;
  */
 class LottieAdapter extends RecyclerView.Adapter<LottieViewHolder> {
 
-    private final PublishSubject<LottieFile> itemClicked = PublishSubject.create();
+    private final PublishSubject<LottieUi> itemClicked = PublishSubject.create();
     private final int itemLayout;
     @NonNull
-    private List<LottieFile> values = emptyList();
+    private List<LottieUi> values = emptyList();
 
     LottieAdapter(@LayoutRes int itemLayout) {
         this.itemLayout = itemLayout;
@@ -48,7 +46,7 @@ class LottieAdapter extends RecyclerView.Adapter<LottieViewHolder> {
 
     @Override
     public void onBindViewHolder(final LottieViewHolder holder, int position) {
-        LottieFile item = values.get(position);
+        LottieUi item = values.get(position);
         holder.setItem(item);
     }
 
@@ -64,13 +62,13 @@ class LottieAdapter extends RecyclerView.Adapter<LottieViewHolder> {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void setItems(@Nullable Iterable<LottieFile> items) {
-        values = defaultIfNull(toList(items), emptyList());
+    public void setItems(Iterable<LottieUi> items) {
+        values = toList(items);
         notifyDataSetChanged();
     }
 
     @SuppressWarnings("WeakerAccess")
-    public Observable<LottieFile> itemClicked() {
+    public Observable<LottieUi> itemClicked() {
         return itemClicked.asObservable();
     }
 

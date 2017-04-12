@@ -14,7 +14,9 @@ import android.view.View;
 import com.pij.lottieshow.R;
 import com.pij.lottieshow.detail.LottieDetailActivity;
 import com.pij.lottieshow.detail.LottieDetailFragment;
-import com.pij.lottieshow.model.LottieFile;
+import com.pij.lottieshow.model.LottieUi;
+
+import org.apache.commons.collections4.IterableUtils;
 
 import java.net.URI;
 
@@ -32,6 +34,7 @@ import rx.subjects.PublishSubject;
 import rx.subscriptions.CompositeSubscription;
 
 import static com.jakewharton.rxbinding.view.RxView.clicks;
+import static org.apache.commons.collections4.IterableUtils.transformedIterable;
 import static rx.Observable.empty;
 import static rx.Observable.just;
 
@@ -84,7 +87,10 @@ public class LottieListActivity extends DaggerAppCompatActivity {
                                            .subscribe(viewModel::addLottie, this::notifyError),
 
 
-                             viewModel.shouldShowList().subscribe(adapter::setItems, this::notifyError),
+                             viewModel.shouldShowList()
+                                      .map(IterableUtils::emptyIfNull)
+                                      .map(list -> transformedIterable(list, LottieUi::create))
+                                      .subscribe(adapter::setItems, this::notifyError),
 
                              // The detail container view will be present only in the
                              // large-screen layouts (res/values-w900dp).
@@ -140,21 +146,21 @@ public class LottieListActivity extends DaggerAppCompatActivity {
         startActivityForResult(pick, REQUESTCODE_PICK);
     }
 
-    private Subscription showInFragment(Observable<LottieFile> lottieFile) {
+    private Subscription showInFragment(Observable<LottieUi> lottieFile) {
         return lottieFile.compose(mapWithoutError(LottieDetailFragment::createInstance))
                          .subscribe(this::setDetailFragment, this::notifyError);
     }
 
-    private Subscription showInActivity(Observable<LottieFile> lottieFile) {
+    private Subscription showInActivity(Observable<LottieUi> lottieFile) {
         return lottieFile.compose(mapWithoutError(i -> LottieDetailActivity.createIntent(this, i)))
                          .subscribe(this::startActivity, this::notifyError);
     }
 
     @NonNull
-    private <T> Observable.Transformer<LottieFile, T> mapWithoutError(final Func1<LottieFile, T> mapper) {
-        return lottieFile -> lottieFile.flatMap(item -> just(item).map(mapper)
-                                                                  .doOnError(this::notifyError)
-                                                                  .onErrorResumeNext(empty()));
+    private <T> Observable.Transformer<LottieUi, T> mapWithoutError(final Func1<LottieUi, T> mapper) {
+        return lottie -> lottie.flatMap(item -> just(item).map(mapper)
+                                                          .doOnError(this::notifyError)
+                                                          .onErrorResumeNext(empty()));
     }
 
     private int setDetailFragment(LottieDetailFragment fragment) {

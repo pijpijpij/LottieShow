@@ -13,13 +13,10 @@ import android.view.MenuItem;
 
 import com.pij.lottieshow.R;
 import com.pij.lottieshow.list.LottieListActivity;
-import com.pij.lottieshow.model.LottieFile;
 import com.pij.lottieshow.model.LottieUi;
 
 import se.emilsjolander.intentbuilder.Extra;
 import se.emilsjolander.intentbuilder.IntentBuilder;
-
-import static com.pij.lottieshow.model.LottieUi.create;
 
 /**
  * An activity representing a single Lottie detail screen. This
@@ -34,8 +31,8 @@ public class LottieDetailActivity extends AppCompatActivity {
     LottieUi file;
 
     @NonNull
-    public static Intent createIntent(Context context, LottieFile item) {
-        return new LottieDetailActivityIntentBuilder(create(item)).build(context);
+    public static Intent createIntent(Context context, LottieUi item) {
+        return new LottieDetailActivityIntentBuilder(item).build(context);
     }
 
     @Override

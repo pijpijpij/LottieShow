@@ -18,6 +18,8 @@ import com.pij.lottieshow.list.LottieListActivity;
 import com.pij.lottieshow.model.LottieFile;
 import com.pij.lottieshow.model.LottieUi;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.support.DaggerFragment;
@@ -33,12 +35,10 @@ import static com.pij.lottieshow.model.LottieUi.create;
 @FragmentWithArgs
 public class LottieDetailFragment extends DaggerFragment {
 
-
-    /**
-     * The dummy content this fragment is presenting.
-     */
     @Arg
     LottieUi lottie;
+    @Inject
+    LottieDetailViewModel viewModel;
     private Unbinder unbinder;
 
     @NonNull
@@ -51,10 +51,6 @@ public class LottieDetailFragment extends DaggerFragment {
         return LottieDetailFragmentBuilder.newLottieDetailFragment(item);
     }
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public LottieDetailFragment() {
     }
 
@@ -69,17 +65,8 @@ public class LottieDetailFragment extends DaggerFragment {
         FragmentArgs.inject(this);
         unbinder = ButterKnife.bind(this, view);
 
-        if (lottie != null) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout)activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(lottie.label());
-            }
-        }
+        // TODO Move this code to LottieDetailActivity
+        updateToolbar();
 
         // Show the dummy content as text in a TextView.
         if (lottie != null) {
@@ -91,5 +78,19 @@ public class LottieDetailFragment extends DaggerFragment {
     public void onDestroyView() {
         unbinder.unbind();
         super.onDestroyView();
+    }
+
+    private void updateToolbar() {
+        if (lottie != null) {
+            // Load the dummy content specified by the fragment
+            // arguments. In a real-world scenario, use a Loader
+            // to load content from a content provider.
+
+            Activity activity = this.getActivity();
+            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout)activity.findViewById(R.id.toolbar_layout);
+            if (appBarLayout != null) {
+                appBarLayout.setTitle(lottie.label());
+            }
+        }
     }
 }
