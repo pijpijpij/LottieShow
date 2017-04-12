@@ -1,6 +1,9 @@
 package com.pij.lottieshow.list;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +17,8 @@ import com.pij.lottieshow.LottieDetailFragment;
 import com.pij.lottieshow.R;
 import com.pij.lottieshow.model.LottieFile;
 
+import java.net.URI;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -22,9 +27,13 @@ import butterknife.Unbinder;
 import dagger.android.AndroidInjection;
 import rx.Observable;
 import rx.Subscription;
+import rx.functions.Func1;
+import rx.subjects.PublishSubject;
 import rx.subscriptions.CompositeSubscription;
 
 import static com.jakewharton.rxbinding.view.RxView.clicks;
+import static rx.Observable.empty;
+import static rx.Observable.just;
 
 /**
  * An activity representing a list of Lotties. This activity
@@ -35,6 +44,8 @@ import static com.jakewharton.rxbinding.view.RxView.clicks;
  * item label side-by-side using two vertical panes.
  */
 public class LottieListActivity extends AppCompatActivity {
+
+    private static final int REQUESTCODE_PICK = 24;
 
     private final CompositeSubscription subscriptions = new CompositeSubscription();
     @Nullable
@@ -49,6 +60,7 @@ public class LottieListActivity extends AppCompatActivity {
     @Inject
     LottiesViewModel viewModel;
     private Unbinder unbinder;
+    private PublishSubject<Intent> jsonFilePicked = PublishSubject.create();
 
     public LottieListActivity() {}
 
@@ -62,26 +74,25 @@ public class LottieListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        subscriptions.add(clicks(fab).subscribe(view -> Snackbar.make(fab,
-                                                                      "Replace with your own action",
-                                                                      Snackbar.LENGTH_LONG)
-                                                                .setAction("Action", null)
-                                                                .show(), Throwable::printStackTrace));
-
-        LottieAdapter adapter = new LottieAdapter(R.layout.lottie_list_item);
+        LottieAdapter adapter = new LottieAdapter(android.R.layout.simple_list_item_1);
         list.setAdapter(adapter);
-        subscriptions.add(viewModel.shouldShowList()
-                                   .subscribe(adapter::setItems,
-                                              Throwable::printStackTrace,
-                                              () -> System.out.println("PJC completed")));
 
-        // The detail container view will be present only in the
-        // large-screen layouts (res/values-w900dp).
-        // If this view is present, then the
-        // activity should be in two-pane mode.
-        subscriptions.add(detailContainer == null
-                          ? showInActivity(adapter.itemClicked())
-                          : showInFragment(adapter.itemClicked()));
+        subscriptions.addAll(clicks(fab).subscribe(click -> pickJsonFile(), this::notifyError),
+                             jsonFilePicked.map(Intent::getData)
+                                           .map(Uri::toString)
+                                           .map(URI::create)
+                                           .subscribe(viewModel::addLottie, this::notifyError),
+
+
+                             viewModel.shouldShowList().subscribe(adapter::setItems, this::notifyError),
+
+                             // The detail container view will be present only in the
+                             // large-screen layouts (res/values-w900dp).
+                             // If this view is present, then the
+                             // activity should be in two-pane mode.
+                             detailContainer == null
+                             ? showInActivity(adapter.itemClicked())
+                             : showInFragment(adapter.itemClicked()));
     }
 
     @Override
@@ -91,14 +102,59 @@ public class LottieListActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUESTCODE_PICK:
+                switch (resultCode) {
+                    case RESULT_OK:
+                        jsonFilePicked.onNext(data);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void notifyError(Throwable error) {
+        error.printStackTrace();
+        //TODO add a dialog to display detail of exception stack.
+        Snackbar.make(fab, "Error: " + error, Snackbar.LENGTH_LONG)
+                .setAction(R.string.snackbar_show_error, null)
+                .show();
+    }
+
+    /**
+     * <b>Implementation note:</b> It is not clear why some type work better than others:<ul>
+     * <li><code>{@literal *}/{@literal *}</code> is too lax</li>
+     * <li><code>{@literal *}/json</code> does not work</li>
+     * <li><code>application/json</code> does not work</li>
+     * <li><code>application/{@literal *}</code> leaves .json files selectable, so that's what we use.</li>
+     * </ul>
+     */
+    private void pickJsonFile() {
+        Intent pick = new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("application/*");
+        startActivityForResult(pick, REQUESTCODE_PICK);
+    }
+
     private Subscription showInFragment(Observable<LottieFile> lottieFile) {
-        return lottieFile.map(LottieDetailFragment::createInstance)
-                         .subscribe(this::setDetailFragment, Throwable::printStackTrace);
+        return lottieFile.compose(mapWithoutError(LottieDetailFragment::createInstance))
+                         .subscribe(this::setDetailFragment, this::notifyError);
     }
 
     private Subscription showInActivity(Observable<LottieFile> lottieFile) {
-        return lottieFile.map(item -> LottieDetailActivity.createIntent(this, item))
-                         .subscribe(this::startActivity, Throwable::printStackTrace);
+        return lottieFile.compose(mapWithoutError(i -> LottieDetailActivity.createIntent(this, i)))
+                         .subscribe(this::startActivity, this::notifyError);
+    }
+
+    @NonNull
+    private <T> Observable.Transformer<LottieFile, T> mapWithoutError(final Func1<LottieFile, T> mapper) {
+        return lottieFile -> lottieFile.flatMap(item -> just(item).map(mapper)
+                                                                  .doOnError(this::notifyError)
+                                                                  .onErrorResumeNext(empty()));
     }
 
     private int setDetailFragment(LottieDetailFragment fragment) {

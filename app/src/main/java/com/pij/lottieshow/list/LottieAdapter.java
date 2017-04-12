@@ -27,7 +27,7 @@ import static org.apache.commons.collections4.ListUtils.defaultIfNull;
  */
 class LottieAdapter extends RecyclerView.Adapter<LottieViewHolder> {
 
-    private final PublishSubject<LottieFile> clickedItem = PublishSubject.create();
+    private final PublishSubject<LottieFile> itemClicked = PublishSubject.create();
     private final int itemLayout;
     @NonNull
     private List<LottieFile> values = emptyList();
@@ -42,16 +42,14 @@ class LottieAdapter extends RecyclerView.Adapter<LottieViewHolder> {
         LottieViewHolder holder = new LottieViewHolder(view);
         holder.subscription.add(clicks(view).takeUntil(detaches(parent))
                                             .map(click -> holder.item)
-                                            .subscribe(clickedItem));
+                                            .subscribe(itemClicked));
         return holder;
     }
 
     @Override
     public void onBindViewHolder(final LottieViewHolder holder, int position) {
         LottieFile item = values.get(position);
-        holder.item = item;
-        holder.idView.setText(item.id().getAbsolutePath());
-        holder.labelView.setText(item.label());
+        holder.setItem(item);
     }
 
     @Override
@@ -73,7 +71,7 @@ class LottieAdapter extends RecyclerView.Adapter<LottieViewHolder> {
 
     @SuppressWarnings("WeakerAccess")
     public Observable<LottieFile> itemClicked() {
-        return clickedItem.asObservable();
+        return itemClicked.asObservable();
     }
 
 }

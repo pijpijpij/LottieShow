@@ -2,10 +2,11 @@ package com.pij.lottieshow.list;
 
 import android.app.Activity;
 
+import com.pij.lottieshow.interactor.LottieSink;
+import com.pij.lottieshow.interactor.LottieSource;
 import com.pij.lottieshow.model.LottieFile;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Set;
 
 import dagger.Binds;
@@ -16,7 +17,6 @@ import dagger.android.AndroidInjector;
 import dagger.multibindings.IntoMap;
 import dagger.multibindings.IntoSet;
 
-import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static rx.Observable.just;
 
@@ -28,22 +28,15 @@ import static rx.Observable.just;
 @Module(subcomponents = LottieListActivitySubComponent.class)
 public abstract class LottieListActivityModule {
 
-    @Provides
-    static LottiesViewModel provideLottiesViewModel(Set<LottieSource> sources) {
-        return new LottiesViewModel(new ArrayList<>(sources));
-    }
+    @Binds
+    abstract Iterable<LottieSource> provideLottiesSources(Set<LottieSource> sources);
 
-    @Provides
-    @IntoSet
-    static LottieSource provideEmptyLottieSource() {
-        return () -> just(emptyList());
-    }
+    @Binds
+    abstract LottieSink provideMemoryLottieSink(MemoryLottieStore implementation);
 
-    @Provides
+    @Binds
     @IntoSet
-    static LottieSource provideTestLottieSource() {
-        return () -> just(singletonList(LottieFile.create(new File("asdfasdf", "the label"))));
-    }
+    abstract LottieSource provideMemoryLottieSource(MemoryLottieStore implementation);
 
     /**
      * Required for automatic injection.

@@ -10,4 +10,4 @@
                                         android:layout_marginRight="16dp"
                                         app:layoutManager="LinearLayoutManager"
                                         tools:context="com.pij.lottieshow.list.LottieListActivity"
-                                        tools:listitem="@layout/lottie_list_item"/>
+                                        tools:listitem="@android:layout/simple_list_item_1"/>

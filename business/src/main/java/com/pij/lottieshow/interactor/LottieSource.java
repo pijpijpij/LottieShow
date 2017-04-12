@@ -1,4 +1,4 @@
-package com.pij.lottieshow.list;
+package com.pij.lottieshow.interactor;
 
 import com.pij.lottieshow.model.LottieFile;
 
@@ -9,7 +9,7 @@ import rx.Observable;
  * @author Pierrejean
  */
 
-interface LottieSource {
+public interface LottieSource {
 
     Observable<Iterable<LottieFile>> getLottieFiles();
 }
