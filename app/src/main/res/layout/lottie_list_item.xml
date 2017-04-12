@@ -1,0 +1,32 @@
+<android.support.v7.widget.CardView
+    android:id="@+id/card_view"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/lottie_list_item_height"
+    android:layout_gravity="center"
+    android:layout_marginBottom="4dp"
+    android:layout_marginEnd="@dimen/screen_edge_right"
+    android:layout_marginStart="@dimen/screen_edge_left"
+    android:layout_marginTop="4dp"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    card_view:cardElevation="4dp"
+    card_view:contentPadding="8dp"
+    tools:showIn="@layout/lottie_list">
+
+    <!--Includes the standard 16 margin left and right-->
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent">
+
+        <ImageView android:layout_width="40dp" android:layout_height="match_parent"
+                   android:contentDescription="@string/lottie_icon_label"/>
+        <Space android:layout_width="@dimen/horizontal_margin" android:layout_height="match_parent"/>
+        <TextView
+            android:id="@android:id/text1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:text="/some file label"/>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

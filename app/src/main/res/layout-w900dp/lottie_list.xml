@@ -3,8 +3,6 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:layout_marginLeft="16dp"
-              android:layout_marginRight="16dp"
               android:baselineAligned="false"
               android:divider="?android:attr/dividerHorizontal"
               android:orientation="horizontal"
@@ -23,11 +21,9 @@
                                             xmlns:tools="http://schemas.android.com/tools"
                                             android:layout_width="@dimen/item_width"
                                             android:layout_height="match_parent"
-                                            android:layout_marginLeft="16dp"
-                                            android:layout_marginRight="16dp"
                                             app:layoutManager="LinearLayoutManager"
                                             tools:context="com.pij.lottieshow.list.LottieListActivity"
-                                            tools:listitem="@android:layout/simple_list_item_1"/>
+                                            tools:listitem="@layout/lottie_list_item"/>
 
     <FrameLayout
         android:id="@+id/lottie_detail_container"

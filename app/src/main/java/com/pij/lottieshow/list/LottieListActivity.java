@@ -74,7 +74,7 @@ public class LottieListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        LottieAdapter adapter = new LottieAdapter(android.R.layout.simple_list_item_1);
+        LottieAdapter adapter = new LottieAdapter(R.layout.lottie_list_item);
         list.setAdapter(adapter);
 
         subscriptions.addAll(clicks(fab).subscribe(click -> pickJsonFile(), this::notifyError),
