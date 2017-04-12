@@ -31,7 +31,7 @@ ext {
 
     commonsLangVersion = '3.4'
     commonsCollectionsVersion = '4.1'
-    commonsIo = 'commons-io:commons-io:2.5'
+    commonsIoVersion = '2.5'
     autoValueVersion = '1.4'
     autoValueWither = 'com.gabrielittner.auto.value:auto-value-with:0.1.5'
     autoValueCursor = 'com.gabrielittner.auto.value:auto-value-cursor:0.5.0'

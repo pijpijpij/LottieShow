@@ -20,6 +20,9 @@ import com.pij.lottieshow.model.Converter;
 import com.pij.lottieshow.model.LottieUi;
 import com.pij.lottieshow.ui.Utils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -74,7 +77,12 @@ public class LottieDetailFragment extends DaggerFragment {
         // TODO Move this code to LottieDetailActivity
         updateToolbar();
 
-        //        subscriptions.addAll(viewModel.);
+        subscriptions.addAll(
+                // Display the lottie
+                viewModel.showAnimation().map(this::asJsonObject).subscribe(animation::setAnimation, this::notifyError),
+
+                // Display errors
+                viewModel.showLoadingError().subscribe(this::notifyError, this::notifyError));
 
         // display the content
         if (lottie != null) {
@@ -88,6 +96,16 @@ public class LottieDetailFragment extends DaggerFragment {
         subscriptions.clear();
         unbinder.unbind();
         super.onDestroyView();
+    }
+
+    @NonNull
+    private JSONObject asJsonObject(String json) {
+        try {
+            return new JSONObject(json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     private void notifyError(Throwable error) {

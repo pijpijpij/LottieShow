@@ -33,6 +33,7 @@ dependencies {
     apt "com.google.auto.value:auto-value:$autoValueVersion"
     compile "org.apache.commons:commons-lang3:$commonsLangVersion"
     compile "org.apache.commons:commons-collections4:$commonsCollectionsVersion"
+    compile "commons-io:commons-io:${commonsIoVersion}"
     compile "io.reactivex:rxjava:$rxJavaVersion"
     compile "com.google.dagger:dagger:$daggerVersion"
 //    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"

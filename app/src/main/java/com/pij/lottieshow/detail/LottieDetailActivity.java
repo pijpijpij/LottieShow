@@ -38,6 +38,7 @@ public class LottieDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LottieDetailActivityIntentBuilder.inject(getIntent(), this);
         setContentView(R.layout.activity_lottie_detail);
         Toolbar toolbar = (Toolbar)findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
