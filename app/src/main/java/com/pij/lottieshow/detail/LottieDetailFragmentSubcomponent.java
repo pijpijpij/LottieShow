@@ -8,7 +8,7 @@ import dagger.android.AndroidInjector;
  * @author Pierrejean
  */
 
-@Subcomponent
+@Subcomponent(/*modules = ...*/)
 public interface LottieDetailFragmentSubcomponent extends AndroidInjector<LottieDetailFragment> {
 
     @Subcomponent.Builder

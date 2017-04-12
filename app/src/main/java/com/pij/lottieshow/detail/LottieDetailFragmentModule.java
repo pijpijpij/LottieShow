@@ -18,6 +18,6 @@ public abstract class LottieDetailFragmentModule {
     @Binds
     @IntoMap
     @FragmentKey(LottieDetailFragment.class)
-    abstract AndroidInjector.Factory<? extends Fragment> bindYourFragmentInjectorFactory(
+    abstract AndroidInjector.Factory<? extends Fragment> bindLottieDetailFragmentInjectorFactory(
             LottieDetailFragmentSubcomponent.Builder builder);
 }

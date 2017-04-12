@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.pij.lottieshow.interactor.LottieSink;
 import com.pij.lottieshow.interactor.LottieSource;
+import com.pij.lottieshow.interactor.SourceFunnel;
 import com.pij.lottieshow.model.LottieFile;
 
 import org.apache.commons.collections4.IterableUtils;
@@ -98,6 +99,6 @@ public class LottiesViewModelTest {
 
     @NonNull
     private LottiesViewModel createDefaultSut(List<LottieSource> lottieSources) {
-        return new LottiesViewModel(lottieSources, mockSink);
+        return new LottiesViewModel(new SourceFunnel(lottieSources), mockSink);
     }
 }

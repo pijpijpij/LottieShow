@@ -10,21 +10,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.hannesdorfmann.fragmentargs.FragmentArgs;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentWithArgs;
 import com.pij.lottieshow.R;
 import com.pij.lottieshow.list.LottieListActivity;
-import com.pij.lottieshow.model.LottieFile;
+import com.pij.lottieshow.model.Converter;
 import com.pij.lottieshow.model.LottieUi;
+import com.pij.lottieshow.ui.Utils;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.support.DaggerFragment;
-
-import static com.pij.lottieshow.model.LottieUi.create;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * A fragment representing a single Lottie detail screen.
@@ -37,14 +39,18 @@ public class LottieDetailFragment extends DaggerFragment {
 
     @Arg
     LottieUi lottie;
+
     @Inject
     LottieDetailViewModel viewModel;
-    private Unbinder unbinder;
+    @Inject
+    Converter converter;
 
-    @NonNull
-    public static LottieDetailFragment createInstance(LottieFile item) {
-        return createInstance(create(item));
-    }
+    @BindView(R.id.lottie_detail)
+    TextView label;
+    @BindView(R.id.animation)
+    LottieAnimationView animation;
+    private Unbinder unbinder;
+    private CompositeSubscription subscriptions = new CompositeSubscription();
 
     @NonNull
     public static LottieDetailFragment createInstance(LottieUi item) {
@@ -68,16 +74,24 @@ public class LottieDetailFragment extends DaggerFragment {
         // TODO Move this code to LottieDetailActivity
         updateToolbar();
 
-        // Show the dummy content as text in a TextView.
+        //        subscriptions.addAll(viewModel.);
+
+        // display the content
         if (lottie != null) {
-            ((TextView)view.findViewById(R.id.lottie_detail)).setText(lottie.label());
+            converter.toModel(lottie).subscribe(viewModel::loadLottie, this::notifyError);
+            label.setText(lottie.label());
         }
     }
 
     @Override
     public void onDestroyView() {
+        subscriptions.clear();
         unbinder.unbind();
         super.onDestroyView();
+    }
+
+    private void notifyError(Throwable error) {
+        Utils.notifyError(error, animation);
     }
 
     private void updateToolbar() {
