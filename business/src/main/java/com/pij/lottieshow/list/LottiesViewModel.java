@@ -10,6 +10,8 @@ import java.net.URI;
 
 import rx.Observable;
 
+import static rx.Observable.defer;
+
 public class LottiesViewModel {
 
     private final Observable<Iterable<LottieFile>> lotties;
@@ -18,7 +20,7 @@ public class LottiesViewModel {
     @SuppressWarnings("WeakerAccess")
     public LottiesViewModel(@NonNull LottieSource updatableSources, @NonNull LottieSink sink) {
         this.sink = sink;
-        this.lotties = updatableSources.getLottieFiles();
+        this.lotties = defer(updatableSources::getLottieFiles);
     }
 
     @SuppressWarnings("WeakerAccess")
