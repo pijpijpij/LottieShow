@@ -59,9 +59,16 @@ public class LottieDetailFragment extends DaggerFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.lottie_detail, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         FragmentArgs.inject(this);
+        unbinder = ButterKnife.bind(this, view);
+
         if (lottie != null) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
@@ -73,17 +80,7 @@ public class LottieDetailFragment extends DaggerFragment {
                 appBarLayout.setTitle(lottie.label());
             }
         }
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.lottie_detail, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        unbinder = ButterKnife.bind(this, view);
         // Show the dummy content as text in a TextView.
         if (lottie != null) {
             ((TextView)view.findViewById(R.id.lottie_detail)).setText(lottie.label());
