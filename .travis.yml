@@ -29,4 +29,4 @@ before_script:
 script:
 ## No need for connected checks quite yet
 #  - ./gradlew test assembleRelease connectedCheck
-  - ./gradlew test assembleDebug
+  - ./gradlew test assembleRelease

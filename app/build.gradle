@@ -54,8 +54,8 @@ dependencies {
     compile "se.emilsjolander:intentbuilder-api:$intentBuilderVersion"
     annotationProcessor "se.emilsjolander:intentbuilder-compiler:$intentBuilderVersion"
 
-    compile "com.google.auto.value:auto-value:$autoValueVersion"
-    compile 'com.ryanharter.auto.value:auto-value-parcel:0.2.5'
+    provided "com.google.auto.value:auto-value:$autoValueVersion"
+    provided 'com.ryanharter.auto.value:auto-value-parcel:0.2.5'
 //    autoValueParcelAdapter = 'com.ryanharter.auto.value:auto-value-parcel-adapter:+'
 
     compile "com.android.support:support-annotations:$supportVersion"

@@ -30,7 +30,6 @@ retrolambda.oldJdk System.getenv("JAVA7_HOME")
 dependencies {
     compile "com.android.support:support-annotations:$supportVersion"
     compileOnly "com.google.auto.value:auto-value:$autoValueVersion"
-    apt "com.google.auto.value:auto-value:$autoValueVersion"
     compile "org.apache.commons:commons-lang3:$commonsLangVersion"
     compile "org.apache.commons:commons-collections4:$commonsCollectionsVersion"
     compile "commons-io:commons-io:$commonsIoVersion"
