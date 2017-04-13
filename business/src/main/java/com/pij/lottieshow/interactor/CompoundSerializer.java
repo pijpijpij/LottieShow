@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import com.pij.lottieshow.model.LottieFile;
 
-import java.io.FileNotFoundException;
 import java.io.Reader;
 import java.util.NoSuchElementException;
 
@@ -32,24 +31,19 @@ public class CompoundSerializer implements Serializer {
         // emits all known formats
         Observable<Reader> readers = from(serializers).concatMap(serializer -> serializer.open(input)
                                                                                          .toObservable()
-                                                                                         .onErrorResumeNext(this::absorbUnknownFormat)
                                                                                          .onErrorResumeNext
-                                                                                                 (this::absorbFileNotFound));
+                                                                                                 (this::absorbUnknownFile));
         return readers.take(1).toSingle().onErrorResumeNext(e -> transformNoSerializerFound(e, input));
     }
 
     private Single<? extends Reader> transformNoSerializerFound(Throwable e, LottieFile file) {
-        return (e instanceof NoSuchElementException) ? Single.error(new UnsupportedFormatException(
+        return (e instanceof NoSuchElementException) ? Single.error(new UnknownFileException(
                 "Could not find a Serializer for " + file + ".",
                 e)) : Single.error(e);
     }
 
-    private Observable<Reader> absorbUnknownFormat(Throwable e) {
-        return (e instanceof UnsupportedFormatException) ? empty() : error(e);
-    }
-
-    private Observable<Reader> absorbFileNotFound(Throwable e) {
-        return (e instanceof FileNotFoundException) ? empty() : error(e);
+    private Observable<Reader> absorbUnknownFile(Throwable e) {
+        return (e instanceof UnknownFileException) ? empty() : error(e);
     }
 
 }

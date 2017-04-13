@@ -6,6 +6,10 @@ import android.support.annotation.NonNull;
 
 import com.google.auto.value.AutoValue;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.net.URI;
+
 /**
  * A dummy item representing a piece of content.
  */
@@ -13,13 +17,13 @@ import com.google.auto.value.AutoValue;
 public abstract class LottieUi implements Parcelable {
 
     public static LottieUi create(LottieFile model) {
-        String shortName = calculateLabel(model);
+        String shortName = StringUtils.isEmpty(model.label()) ? defaultLabel(model.id()) : model.label();
         return create(Uri.parse(model.id().toString()), shortName);
     }
 
     @NonNull
-    private static String calculateLabel(LottieFile model) {
-        String path = model.id().getPath();
+    private static String defaultLabel(URI id) {
+        String path = id.getPath();
         int lastSlash = path.lastIndexOf('/');
         String name = path.substring(lastSlash + 1);
         int extension = name.lastIndexOf(".json");

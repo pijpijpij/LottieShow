@@ -8,7 +8,7 @@ import com.pij.lottieshow.model.LottieFile;
 
 import org.apache.commons.io.IOUtils;
 
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -52,8 +52,8 @@ public class ContentResolverSerializer implements Serializer {
     private InputStream open(Uri uri) {
         try {
             return contentResolver.openInputStream(uri);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (FileNotFoundException e) {
+            throw new UnknownFileException(e);
         }
     }
 }

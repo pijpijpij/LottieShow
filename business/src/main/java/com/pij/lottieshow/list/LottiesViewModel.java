@@ -6,8 +6,6 @@ import com.pij.lottieshow.interactor.LottieSink;
 import com.pij.lottieshow.interactor.LottieSource;
 import com.pij.lottieshow.model.LottieFile;
 
-import java.net.URI;
-
 import rx.Observable;
 
 import static rx.Observable.defer;
@@ -29,7 +27,7 @@ public class LottiesViewModel {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void addLottie(URI newFile) {
-        sink.add(LottieFile.create(newFile));
+    public void addLottie(LottieFile newFile) {
+        sink.add(newFile);
     }
 }

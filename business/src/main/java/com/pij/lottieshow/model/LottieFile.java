@@ -19,13 +19,13 @@ public abstract class LottieFile {
         return create(id, null);
     }
 
-    public static LottieFile create(URI id, String content) {
-        return new AutoValue_LottieFile(id, content);
+    public static LottieFile create(URI id, String label) {
+        return new AutoValue_LottieFile(id, label);
     }
 
     public abstract URI id();
 
     @Nullable
-    public abstract String content();
+    public abstract String label();
 
 }

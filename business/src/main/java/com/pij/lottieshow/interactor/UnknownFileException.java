@@ -5,25 +5,25 @@ package com.pij.lottieshow.interactor;
  * @author Pierrejean
  */
 
-class UnsupportedFormatException extends RuntimeException {
+class UnknownFileException extends RuntimeException {
 
     @SuppressWarnings("WeakerAccess")
-    public UnsupportedFormatException() {
+    public UnknownFileException() {
         super();
     }
 
     @SuppressWarnings("WeakerAccess")
-    public UnsupportedFormatException(Throwable cause) {
+    public UnknownFileException(Throwable cause) {
         super(cause);
     }
 
     @SuppressWarnings("WeakerAccess")
-    public UnsupportedFormatException(String format) {
+    public UnknownFileException(String format) {
         super(format);
     }
 
     @SuppressWarnings("WeakerAccess")
-    public UnsupportedFormatException(String message, Throwable cause) {
+    public UnknownFileException(String message, Throwable cause) {
         super(message, cause);
     }
 }

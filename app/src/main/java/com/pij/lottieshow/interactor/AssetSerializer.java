@@ -7,6 +7,7 @@ import com.pij.lottieshow.model.LottieFile;
 
 import org.apache.commons.io.IOUtils;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -53,7 +54,7 @@ class AssetSerializer implements Serializer {
     @NonNull
     private String assetFileName(String id) {
         if (!id.startsWith(PREFIX)) {
-            throw new UnsupportedFormatException(id);
+            throw new UnknownFileException(id);
         }
         return id.replace(PREFIX, "");
 
@@ -62,6 +63,8 @@ class AssetSerializer implements Serializer {
     private InputStream open(String asset) {
         try {
             return assets.open(asset);
+        } catch (FileNotFoundException e) {
+            throw new UnknownFileException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
