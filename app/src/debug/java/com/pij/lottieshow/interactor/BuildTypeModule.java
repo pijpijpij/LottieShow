@@ -4,7 +4,6 @@ import com.pij.lottieshow.model.LottieFile;
 
 import java.io.File;
 
-import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.IntoSet;

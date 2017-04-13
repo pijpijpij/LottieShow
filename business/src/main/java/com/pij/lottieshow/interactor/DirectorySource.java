@@ -7,7 +7,6 @@ import java.io.File;
 import rx.Observable;
 
 import static java.util.Collections.emptyList;
-import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 import static rx.Observable.just;
 
 /**
@@ -28,9 +27,8 @@ public class DirectorySource implements LottieSource {
      */
     @Override
     public Observable<Iterable<LottieFile>> lottieFiles() {
-        Observable<File[]> files = storageRoot.map(root -> root.isDirectory() ? root.listFiles() : null)
-                                              .map(list -> defaultIfNull(list, new File[0]));
-        Observable<Iterable<LottieFile>> lotties = files.flatMap(list -> Observable.from(list)
+        Observable<File[]> files = storageRoot.map(root -> root.isDirectory() ? root.listFiles() : new File[0]);
+        Observable<Iterable<LottieFile>> lotties = files.flatMap(list -> Observable.from(list).map(File::toURI)
                                                                                    .map(LottieFile::create)
                                                                                    .toList()
                                                                                    .doOnError
