@@ -1,6 +1,7 @@
 package com.pij.lottieshow.interactor;
 
-import android.content.res.AssetManager;
+import android.content.ContentResolver;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import com.pij.lottieshow.model.LottieFile;
@@ -8,7 +9,6 @@ import com.pij.lottieshow.model.LottieFile;
 import org.apache.commons.io.IOUtils;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -27,22 +27,20 @@ import static rx.Single.using;
  * @author Pierrejean
  */
 
-class AssetSerializer implements Serializer {
+public class ContentResolverSerializer implements Serializer {
 
-    static final String PREFIX = "file:///android_asset/";
-
-    private final AssetManager assets;
+    private final ContentResolver contentResolver;
 
     @Inject
-    AssetSerializer(AssetManager assets) {
-        this.assets = assets;
+    public ContentResolverSerializer(ContentResolver contentResolver) {
+        this.contentResolver = contentResolver;
     }
 
     @Override
     public Single<Reader> open(LottieFile input) {
         return just(input).map(LottieFile::id)
                           .map(URI::toString)
-                          .map(this::assetFileName)
+                          .map(Uri::parse)
                           .flatMap(filename -> using(() -> open(filename), this::asReader, IOUtils::closeQuietly));
     }
 
@@ -51,22 +49,11 @@ class AssetSerializer implements Serializer {
         return just(stream).zipWith(just(defaultCharset()), InputStreamReader::new);
     }
 
-    @NonNull
-    private String assetFileName(String id) {
-        if (!id.startsWith(PREFIX)) {
-            throw new UnknownFileException(id);
-        }
-        return id.replace(PREFIX, "");
-
-    }
-
-    private InputStream open(String asset) {
+    private InputStream open(Uri uri) {
         try {
-            return assets.open(asset);
+            return contentResolver.openInputStream(uri);
         } catch (FileNotFoundException e) {
             throw new UnknownFileException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 }

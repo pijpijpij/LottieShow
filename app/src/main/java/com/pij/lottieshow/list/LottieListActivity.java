@@ -1,7 +1,6 @@
 package com.pij.lottieshow.list;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,8 +17,6 @@ import com.pij.lottieshow.ui.Utils;
 
 import org.apache.commons.collections4.IterableUtils;
 
-import java.net.URI;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -30,7 +27,6 @@ import dagger.android.support.DaggerAppCompatActivity;
 import rx.Observable;
 import rx.Subscription;
 import rx.functions.Func1;
-import rx.subjects.PublishSubject;
 import rx.subscriptions.CompositeSubscription;
 
 import static com.jakewharton.rxbinding.view.RxView.clicks;
@@ -62,8 +58,9 @@ public class LottieListActivity extends DaggerAppCompatActivity {
     RecyclerView list;
     @Inject
     LottiesViewModel viewModel;
+    @Inject
+    SafClient saf;
     private Unbinder unbinder;
-    private PublishSubject<Intent> jsonFilePicked = PublishSubject.create();
 
     public LottieListActivity() {}
 
@@ -81,11 +78,7 @@ public class LottieListActivity extends DaggerAppCompatActivity {
         list.setAdapter(adapter);
 
         subscriptions.addAll(clicks(fab).subscribe(click -> pickJsonFile(), this::notifyError),
-                             jsonFilePicked.map(Intent::getData)
-                                           .map(Uri::toString)
-                                           .map(URI::create)
-                                           .subscribe(viewModel::addLottie, this::notifyError),
-
+                             saf.analysed().subscribe(viewModel::addLottie, this::notifyError),
 
                              viewModel.shouldShowList()
                                       .map(IterableUtils::emptyIfNull)
@@ -114,7 +107,7 @@ public class LottieListActivity extends DaggerAppCompatActivity {
             case REQUESTCODE_PICK:
                 switch (resultCode) {
                     case RESULT_OK:
-                        jsonFilePicked.onNext(data);
+                        saf.analyse(data);
                         break;
                     default:
                         break;
@@ -129,17 +122,8 @@ public class LottieListActivity extends DaggerAppCompatActivity {
         Utils.notifyError(error, fab);
     }
 
-    /**
-     * <b>Implementation note:</b> It is not clear why some type work better than others:<ul>
-     * <li><code>{@literal *}/{@literal *}</code> is too lax</li>
-     * <li><code>{@literal *}/json</code> does not work</li>
-     * <li><code>application/json</code> does not work</li>
-     * <li><code>application/{@literal *}</code> leaves .json files selectable, so that's what we use.</li>
-     * </ul>
-     */
     private void pickJsonFile() {
-        Intent pick = new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("application/*");
-        startActivityForResult(pick, REQUESTCODE_PICK);
+        saf.pickJsonFile(this, REQUESTCODE_PICK);
     }
 
     private Subscription showInFragment(Observable<LottieUi> lottieFile) {

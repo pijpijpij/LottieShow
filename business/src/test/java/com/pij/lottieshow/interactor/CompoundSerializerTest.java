@@ -28,7 +28,7 @@ public class CompoundSerializerTest {
         TestSubscriber<Reader> subscriber = TestSubscriber.create();
         sut.open(LottieFile.create(URI.create("dummy.com"))).subscribe(subscriber);
 
-        subscriber.assertError(UnsupportedFormatException.class);
+        subscriber.assertError(UnknownFileException.class);
     }
 
     @Test
@@ -56,8 +56,8 @@ public class CompoundSerializerTest {
     }
 
     @Test
-    public void emitsReaderIfFirstSerializerFailsButSecondSucceeds() {
-        Serializer serializer1 = input -> Single.error(new UnsupportedFormatException());
+    public void emitsReaderIfFirstSerializerDoesNotKnownTheFileButSecondDoes() {
+        Serializer serializer1 = input -> Single.error(new UnknownFileException());
         StringReader reader = new StringReader("whatever");
         Serializer serializer2 = input -> Single.just(reader);
         CompoundSerializer sut = new CompoundSerializer(asList(serializer1, serializer2));
@@ -71,7 +71,7 @@ public class CompoundSerializerTest {
 
     @Test
     public void emitsExceptionIfFirstSerializerFailsAndSecondFailsForANonFormatReason() {
-        Serializer serializer1 = input -> Single.error(new UnsupportedFormatException());
+        Serializer serializer1 = input -> Single.error(new UnknownFileException());
         Serializer serializer2 = input -> Single.error(new RuntimeException());
         CompoundSerializer sut = new CompoundSerializer(asList(serializer1, serializer2));
 

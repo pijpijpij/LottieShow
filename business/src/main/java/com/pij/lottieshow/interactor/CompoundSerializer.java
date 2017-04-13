@@ -32,18 +32,18 @@ public class CompoundSerializer implements Serializer {
         Observable<Reader> readers = from(serializers).concatMap(serializer -> serializer.open(input)
                                                                                          .toObservable()
                                                                                          .onErrorResumeNext
-                                                                                                 (this::absorbUnknownFormat));
-        return readers.take(1).toSingle().onErrorResumeNext(this::transformNoSerializerFound);
+                                                                                                 (this::absorbUnknownFile));
+        return readers.take(1).toSingle().onErrorResumeNext(e -> transformNoSerializerFound(e, input));
     }
 
-    private Single<? extends Reader> transformNoSerializerFound(Throwable e) {
-        return (e instanceof NoSuchElementException)
-               ? Single.error(new UnsupportedFormatException(e))
-               : Single.error(e);
+    private Single<? extends Reader> transformNoSerializerFound(Throwable e, LottieFile file) {
+        return (e instanceof NoSuchElementException) ? Single.error(new UnknownFileException(
+                "Could not find a Serializer for " + file + ".",
+                e)) : Single.error(e);
     }
 
-    private Observable<Reader> absorbUnknownFormat(Throwable e) {
-        return (e instanceof UnsupportedFormatException) ? empty() : error(e);
+    private Observable<Reader> absorbUnknownFile(Throwable e) {
+        return (e instanceof UnknownFileException) ? empty() : error(e);
     }
 
 }

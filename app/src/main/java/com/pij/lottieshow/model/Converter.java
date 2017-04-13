@@ -35,8 +35,8 @@ public class Converter {
 
     @NonNull
     public Single<LottieFile> toModel(LottieUi ui) {
-        Observable<Map<LottieUi, LottieFile>> map = sources.map(this::mapFromModel);
-        return just(ui).withLatestFrom(map, (value, list) -> list.get(value)).toSingle();
+        Observable<Map<LottieUi, LottieFile>> files = sources.map(this::mapFromModel);
+        return just(ui).withLatestFrom(files, (value, map) -> map.get(value)).toSingle();
     }
 
     @NonNull
