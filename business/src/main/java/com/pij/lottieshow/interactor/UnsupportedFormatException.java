@@ -21,4 +21,9 @@ class UnsupportedFormatException extends RuntimeException {
     public UnsupportedFormatException(String format) {
         super(format);
     }
+
+    @SuppressWarnings("WeakerAccess")
+    public UnsupportedFormatException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
