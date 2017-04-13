@@ -24,7 +24,7 @@ public class Converter {
     private final Observable<Iterable<LottieFile>> sources;
 
     public Converter(LottieSource source) {
-        this.sources = source.getLottieFiles();
+        this.sources = source.lottieFiles();
     }
 
 

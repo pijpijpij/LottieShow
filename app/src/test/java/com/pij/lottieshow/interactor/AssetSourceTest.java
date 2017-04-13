@@ -12,14 +12,15 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 
 import rx.observers.TestSubscriber;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
@@ -42,7 +43,7 @@ public class AssetSourceTest {
         when(mockAssets.list("samples")).thenReturn(null);
         TestSubscriber<List<LottieFile>> subscriber = TestSubscriber.create();
 
-        sut.getLottieFiles().map(IterableUtils::toList).subscribe(subscriber);
+        sut.lottieFiles().map(IterableUtils::toList).subscribe(subscriber);
 
         subscriber.assertNoErrors();
         subscriber.assertValue(emptyList());
@@ -53,7 +54,7 @@ public class AssetSourceTest {
         when(mockAssets.list("samples")).thenThrow(new IOException());
         TestSubscriber<List<LottieFile>> subscriber = TestSubscriber.create();
 
-        sut.getLottieFiles().map(IterableUtils::toList).subscribe(subscriber);
+        sut.lottieFiles().map(IterableUtils::toList).subscribe(subscriber);
 
         subscriber.assertNoErrors();
         subscriber.assertValue(emptyList());
@@ -64,7 +65,7 @@ public class AssetSourceTest {
         when(mockAssets.list("samples")).thenReturn(new String[0]);
         TestSubscriber<List<LottieFile>> subscriber = TestSubscriber.create();
 
-        sut.getLottieFiles().map(IterableUtils::toList).subscribe(subscriber);
+        sut.lottieFiles().map(IterableUtils::toList).subscribe(subscriber);
 
         subscriber.assertNoErrors();
         subscriber.assertValue(emptyList());
@@ -72,12 +73,25 @@ public class AssetSourceTest {
 
     @Test
     public void emitsSingletonListWhenOneSampleAssets() throws IOException {
+        when(mockAssets.list("samples")).thenReturn(new String[]{ "a_file" });
+        TestSubscriber<List<LottieFile>> subscriber = TestSubscriber.create();
+
+        sut.lottieFiles().map(IterableUtils::toList).subscribe(subscriber);
+
+        subscriber.assertNoErrors();
+        assertThat(subscriber.getOnNextEvents().get(0)).containsExactly(LottieFile.create(URI.create(
+                "file:///android_asset/samples/a_file")));
+        subscriber.assertValue(singletonList(LottieFile.create(URI.create("file:///android_asset/samples/a_file"))));
+    }
+
+    @Test
+    public void doesNotSupportSpacesInName() throws IOException {
         when(mockAssets.list("samples")).thenReturn(new String[]{ "a file" });
         TestSubscriber<List<LottieFile>> subscriber = TestSubscriber.create();
 
-        sut.getLottieFiles().map(IterableUtils::toList).subscribe(subscriber);
+        sut.lottieFiles().map(IterableUtils::toList).subscribe(subscriber);
 
         subscriber.assertNoErrors();
-        subscriber.assertValue(singletonList(LottieFile.create(new File("samples", "a file"))));
+        subscriber.assertValue(emptyList());
     }
 }

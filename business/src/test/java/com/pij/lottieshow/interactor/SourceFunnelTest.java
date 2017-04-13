@@ -36,7 +36,7 @@ public class SourceFunnelTest {
         SourceFunnel sut = createDefaultSut(singletonList(lottieSource));
         TestSubscriber<List<LottieFile>> subscriber = TestSubscriber.create();
 
-        sut.getLottieFiles().map(IterableUtils::toList).subscribe(subscriber);
+        sut.lottieFiles().map(IterableUtils::toList).subscribe(subscriber);
 
         subscriber.assertNoErrors();
         subscriber.assertValue(emptyList());
@@ -49,7 +49,7 @@ public class SourceFunnelTest {
         SourceFunnel sut = createDefaultSut(singletonList(lottieSource));
         TestSubscriber<List<LottieFile>> subscriber = TestSubscriber.create();
 
-        sut.getLottieFiles().map(IterableUtils::toList).subscribe(subscriber);
+        sut.lottieFiles().map(IterableUtils::toList).subscribe(subscriber);
 
         subscriber.assertNoErrors();
         subscriber.assertValue(singletonList(LottieFile.create(new File("parent", "label"))));
@@ -63,7 +63,7 @@ public class SourceFunnelTest {
         SourceFunnel sut = createDefaultSut(asList(lottieSource1, lottieSource2));
         TestSubscriber<List<LottieFile>> subscriber = TestSubscriber.create();
 
-        sut.getLottieFiles().map(IterableUtils::toList).subscribe(subscriber);
+        sut.lottieFiles().map(IterableUtils::toList).subscribe(subscriber);
 
         subscriber.assertNoErrors();
         subscriber.assertValue(singletonList(LottieFile.create(new File("parent", "label"))));
@@ -78,7 +78,7 @@ public class SourceFunnelTest {
         SourceFunnel sut = createDefaultSut(asList(lottieSource1, lottieSource2));
         TestSubscriber<List<LottieFile>> subscriber = TestSubscriber.create();
 
-        sut.getLottieFiles().map(IterableUtils::toList).subscribe(subscriber);
+        sut.lottieFiles().map(IterableUtils::toList).subscribe(subscriber);
 
         subscriber.assertNoErrors();
         subscriber.assertValue(asList(LottieFile.create(new File("parent1", "label1")),

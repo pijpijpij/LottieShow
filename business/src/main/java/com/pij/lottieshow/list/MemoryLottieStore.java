@@ -24,7 +24,7 @@ public class MemoryLottieStore implements LottieSource, LottieSink {
     private final BehaviorSubject<LottieFile> store = BehaviorSubject.create();
 
     @Override
-    public Observable<Iterable<LottieFile>> getLottieFiles() {
+    public Observable<Iterable<LottieFile>> lottieFiles() {
         return store.asObservable().scan(new ArrayList<>(), this::append);
     }
 

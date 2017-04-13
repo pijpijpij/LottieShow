@@ -35,7 +35,7 @@ public class DirectorySourceTest {
         DirectorySource sut = new DirectorySource(never());
         TestSubscriber<Iterable<LottieFile>> subscriber = TestSubscriber.create();
 
-        sut.getLottieFiles().subscribe(subscriber);
+        sut.lottieFiles().subscribe(subscriber);
 
         subscriber.assertNoErrors();
         subscriber.assertValue(emptyList());
@@ -47,7 +47,7 @@ public class DirectorySourceTest {
         DirectorySource sut = createDefaultSut(mockRoot);
         TestSubscriber<Iterable<LottieFile>> subscriber = TestSubscriber.create();
 
-        sut.getLottieFiles().subscribe(subscriber);
+        sut.lottieFiles().subscribe(subscriber);
 
         subscriber.assertNoErrors();
         subscriber.assertValue(emptyList());
@@ -60,7 +60,7 @@ public class DirectorySourceTest {
         DirectorySource sut = createDefaultSut(mockRoot);
         TestSubscriber<Iterable<LottieFile>> subscriber = TestSubscriber.create();
 
-        sut.getLottieFiles().subscribe(subscriber);
+        sut.lottieFiles().subscribe(subscriber);
 
         subscriber.assertNoErrors();
         subscriber.assertValue(emptyList());
@@ -73,7 +73,7 @@ public class DirectorySourceTest {
         DirectorySource sut = createDefaultSut(mockRoot);
         TestSubscriber<Iterable<LottieFile>> subscriber = TestSubscriber.create();
 
-        sut.getLottieFiles().subscribe(subscriber);
+        sut.lottieFiles().subscribe(subscriber);
 
         subscriber.assertNoErrors();
         //noinspection unchecked

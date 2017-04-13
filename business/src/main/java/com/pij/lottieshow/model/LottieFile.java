@@ -16,16 +16,14 @@ public abstract class LottieFile {
     }
 
     public static LottieFile create(URI id) {
-        return create(id, null, id.getPath());
+        return create(id, null);
     }
 
-    public static LottieFile create(URI id, String content, String label) {
-        return new AutoValue_LottieFile(id, label, content);
+    public static LottieFile create(URI id, String content) {
+        return new AutoValue_LottieFile(id, content);
     }
 
     public abstract URI id();
-
-    public abstract String label();
 
     @Nullable
     public abstract String content();

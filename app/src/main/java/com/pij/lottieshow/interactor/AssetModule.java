@@ -15,4 +15,8 @@ public abstract class AssetModule {
     @Binds
     @IntoSet
     abstract LottieSource provideAssetSource(AssetSource implementation);
+
+    @Binds
+    @IntoSet
+    abstract Serializer provideAssetSerializer(AssetSerializer implementation);
 }

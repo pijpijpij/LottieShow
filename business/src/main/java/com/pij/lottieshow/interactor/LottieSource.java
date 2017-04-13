@@ -11,5 +11,5 @@ import rx.Observable;
 
 public interface LottieSource {
 
-    Observable<Iterable<LottieFile>> getLottieFiles();
+    Observable<Iterable<LottieFile>> lottieFiles();
 }

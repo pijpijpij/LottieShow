@@ -32,7 +32,7 @@ public class SourceFunnel implements LottieSource {
     }
 
     @Override
-    public Observable<Iterable<LottieFile>> getLottieFiles() {
+    public Observable<Iterable<LottieFile>> lottieFiles() {
         return lotties;
     }
 
@@ -46,7 +46,7 @@ public class SourceFunnel implements LottieSource {
             forEach(allLists, input -> addAll(result, input));
             return result;
         };
-        Iterable<Observable<Iterable<LottieFile>>> lotties = transformedIterable(sources, LottieSource::getLottieFiles);
+        Iterable<Observable<Iterable<LottieFile>>> lotties = transformedIterable(sources, LottieSource::lottieFiles);
         return combineLatest(lotties, collector).doOnNext(list -> System.out.println(
                 "PJC Emitting " + IterableUtils.size(list) + " items"));
     }

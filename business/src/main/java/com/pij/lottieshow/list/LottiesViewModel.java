@@ -20,7 +20,7 @@ public class LottiesViewModel {
     @SuppressWarnings("WeakerAccess")
     public LottiesViewModel(@NonNull LottieSource updatableSources, @NonNull LottieSink sink) {
         this.sink = sink;
-        this.lotties = defer(updatableSources::getLottieFiles);
+        this.lotties = defer(updatableSources::lottieFiles);
     }
 
     @SuppressWarnings("WeakerAccess")

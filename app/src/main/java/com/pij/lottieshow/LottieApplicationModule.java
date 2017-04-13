@@ -3,7 +3,9 @@ package com.pij.lottieshow;
 import android.content.Context;
 import android.content.res.AssetManager;
 
+import com.pij.lottieshow.interactor.CompoundSerializer;
 import com.pij.lottieshow.interactor.LottieSource;
+import com.pij.lottieshow.interactor.Serializer;
 import com.pij.lottieshow.interactor.SourceFunnel;
 import com.pij.lottieshow.list.MemoryLottieStore;
 import com.pij.lottieshow.model.Converter;
@@ -34,6 +36,12 @@ abstract class LottieApplicationModule {
     @Singleton
     static SourceFunnel provideSourceFunnel(Set<LottieSource> sources) {
         return new SourceFunnel(sources);
+    }
+
+    @Provides
+    @Singleton
+    static CompoundSerializer provideCompoundSerializer(Set<Serializer> sources) {
+        return new CompoundSerializer(sources);
     }
 
     @Provides

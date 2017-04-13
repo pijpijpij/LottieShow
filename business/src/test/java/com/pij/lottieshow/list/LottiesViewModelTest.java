@@ -42,7 +42,7 @@ public class LottiesViewModelTest {
 
     @Test
     public void sourceEmptyListEmitEmptyList() {
-        when(mockSource.getLottieFiles()).thenReturn(just(emptyList()));
+        when(mockSource.lottieFiles()).thenReturn(just(emptyList()));
         TestSubscriber<List<LottieFile>> subscriber = TestSubscriber.create();
 
         sut.shouldShowList().map(IterableUtils::toList).subscribe(subscriber);
@@ -54,7 +54,7 @@ public class LottiesViewModelTest {
     @Test
     public void sourceSingleItemEmitSingletonList() {
         LottieFile lottie = LottieFile.create(new File("parent", "label"));
-        when(mockSource.getLottieFiles()).thenReturn(just(singletonList(lottie)));
+        when(mockSource.lottieFiles()).thenReturn(just(singletonList(lottie)));
         TestSubscriber<List<LottieFile>> subscriber = TestSubscriber.create();
 
         sut.shouldShowList().map(IterableUtils::toList).subscribe(subscriber);
@@ -67,7 +67,7 @@ public class LottiesViewModelTest {
     public void twoItemsSourceEmit2ItemList() {
         LottieFile lottie1 = LottieFile.create(new File("parent1", "label1"));
         LottieFile lottie2 = LottieFile.create(new File("parent2", "label2"));
-        when(mockSource.getLottieFiles()).thenReturn(just(asList(lottie1, lottie2)));
+        when(mockSource.lottieFiles()).thenReturn(just(asList(lottie1, lottie2)));
         TestSubscriber<List<LottieFile>> subscriber = TestSubscriber.create();
 
         sut.shouldShowList().map(IterableUtils::toList).subscribe(subscriber);
