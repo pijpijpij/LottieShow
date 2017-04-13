@@ -29,3 +29,28 @@
 ## Retrolambda
 ########################################################################################################################
 -dontwarn java.lang.invoke.*
+
+########################################################################################################################
+# Proguard bug includes the old HTTP library
+########################################################################################################################
+# We just ignore the warnmings
+-dontnote android.net.http.*
+-dontnote org.apache.commons.codec.**
+-dontnote org.apache.http.**
+
+########################################################################################################################
+# Dagger 2
+########################################################################################################################
+# That's a bug in Dagger 2.10 (see https://github.com/google/dagger/issues/645)
+# CanIgnoreReturnValue
+-dontwarn com.google.errorprone.annotations.CanIgnoreReturnValue
+
+########################################################################################################################
+# RxJava
+########################################################################################################################
+# The rxjava library depends on sun.misc.Unsafe, which is unavailable on Android
+# The rxjava team is aware of this, and mention in the docs that they only use
+# the unsafe functionality if the platform supports it.
+#  - ReactiveX/RxJava#1415 (comment)
+#  - https://github.com/ReactiveX/RxJava/blob/1.x/src/main/java/rx/internal/util/unsafe/UnsafeAccess.java#L23
+-dontwarn rx.internal.util.unsafe.**
