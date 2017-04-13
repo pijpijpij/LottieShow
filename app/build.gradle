@@ -54,23 +54,26 @@ dependencies {
     compile "se.emilsjolander:intentbuilder-api:$intentBuilderVersion"
     annotationProcessor "se.emilsjolander:intentbuilder-compiler:$intentBuilderVersion"
 
-    compile "com.google.auto.value:auto-value:${autoValueVersion}"
+    compile "com.google.auto.value:auto-value:$autoValueVersion"
     compile 'com.ryanharter.auto.value:auto-value-parcel:0.2.5'
 //    autoValueParcelAdapter = 'com.ryanharter.auto.value:auto-value-parcel-adapter:+'
 
     compile "com.android.support:support-annotations:$supportVersion"
-    compile "org.apache.commons:commons-lang3:${commonsLangVersion}"
-    compile "org.apache.commons:commons-collections4:${commonsCollectionsVersion}"
+    compile "org.apache.commons:commons-lang3:$commonsLangVersion"
+    compile "org.apache.commons:commons-collections4:$commonsCollectionsVersion"
 //    compile "com.google.dagger:dagger-android:${daggerVersion}"
-    compile "com.google.dagger:dagger-android-support:${daggerVersion}"
-    annotationProcessor "com.google.dagger:dagger-compiler:${daggerVersion}"
-    annotationProcessor "com.google.dagger:dagger-android-processor:${daggerVersion}"
+    compile "com.google.dagger:dagger-android-support:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
 
     compile "com.jakewharton.rxbinding:rxbinding:$rxBindingsVersion"
     compile 'com.cantrowitz:rxbroadcast:1.1.1'
 
+    compile 'com.airbnb.android:lottie:1.5.3'
+
     testCompile "junit:junit:$junitVersion"
 //    testCompile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
-    testCompile "org.mockito:mockito-core:${mockitoVersion}"
+    testCompile "org.mockito:mockito-core:$mockitoVersion"
+    testCompile "org.assertj:assertj-core:$assertjCoreVersion"
 }
 

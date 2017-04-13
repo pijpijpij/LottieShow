@@ -25,7 +25,7 @@ public class MemoryLottieStoreTest {
         MemoryLottieStore sut = new MemoryLottieStore();
         TestSubscriber<List<LottieFile>> subscriber = TestSubscriber.create();
 
-        sut.getLottieFiles().map(IterableUtils::toList).subscribe(subscriber);
+        sut.lottieFiles().map(IterableUtils::toList).subscribe(subscriber);
 
         subscriber.assertNoErrors();
         subscriber.assertValue(emptyList());
@@ -35,7 +35,7 @@ public class MemoryLottieStoreTest {
     public void emitsSingletonWithFirstItemSecond() {
         MemoryLottieStore sut = new MemoryLottieStore();
         TestSubscriber<List<LottieFile>> subscriber = TestSubscriber.create();
-        sut.getLottieFiles().map(IterableUtils::toList).subscribe(subscriber);
+        sut.lottieFiles().map(IterableUtils::toList).subscribe(subscriber);
 
         sut.add(LottieFile.create(new File("aa", "bbb")));
 
@@ -48,7 +48,7 @@ public class MemoryLottieStoreTest {
     public void emitsListWithLatestAddedAtEnd() {
         MemoryLottieStore sut = new MemoryLottieStore();
         TestSubscriber<List<LottieFile>> subscriber = TestSubscriber.create();
-        sut.getLottieFiles().map(IterableUtils::toList).subscribe(subscriber);
+        sut.lottieFiles().map(IterableUtils::toList).subscribe(subscriber);
 
         sut.add(LottieFile.create(new File("11", "111")));
         sut.add(LottieFile.create(new File("22", "222")));

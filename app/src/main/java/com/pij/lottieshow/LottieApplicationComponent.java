@@ -1,5 +1,6 @@
 package com.pij.lottieshow;
 
+import com.pij.lottieshow.detail.LottieFragmentModule;
 import com.pij.lottieshow.interactor.AssetModule;
 import com.pij.lottieshow.interactor.BuildTypeModule;
 import com.pij.lottieshow.interactor.ExternalStorageModule;
@@ -21,7 +22,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
         ExternalStorageModule.class,
         BuildTypeModule.class,
         AndroidSupportInjectionModule.class,
-        LottieListActivityModule.class
+        LottieListActivityModule.class, LottieFragmentModule.class
 })
 @Singleton
 interface LottieApplicationComponent {

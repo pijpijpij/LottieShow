@@ -27,7 +27,7 @@ public class DirectorySource implements LottieSource {
      * Always provide an initial sequence, an empty one at worst.
      */
     @Override
-    public Observable<Iterable<LottieFile>> getLottieFiles() {
+    public Observable<Iterable<LottieFile>> lottieFiles() {
         Observable<File[]> files = storageRoot.map(root -> root.isDirectory() ? root.listFiles() : null)
                                               .map(list -> defaultIfNull(list, new File[0]));
         Observable<Iterable<LottieFile>> lotties = files.flatMap(list -> Observable.from(list)

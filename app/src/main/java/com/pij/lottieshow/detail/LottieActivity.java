@@ -1,4 +1,4 @@
-package com.pij.lottieshow;
+package com.pij.lottieshow.detail;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,14 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.pij.lottieshow.R;
 import com.pij.lottieshow.list.LottieListActivity;
-import com.pij.lottieshow.model.LottieFile;
 import com.pij.lottieshow.model.LottieUi;
 
 import se.emilsjolander.intentbuilder.Extra;
 import se.emilsjolander.intentbuilder.IntentBuilder;
-
-import static com.pij.lottieshow.model.LottieUi.create;
 
 /**
  * An activity representing a single Lottie detail screen. This
@@ -27,19 +25,20 @@ import static com.pij.lottieshow.model.LottieUi.create;
  * in a {@link LottieListActivity}.
  */
 @IntentBuilder
-public class LottieDetailActivity extends AppCompatActivity {
+public class LottieActivity extends AppCompatActivity {
 
     @Extra
     LottieUi file;
 
     @NonNull
-    public static Intent createIntent(Context context, LottieFile item) {
-        return new LottieDetailActivityIntentBuilder(create(item)).build(context);
+    public static Intent createIntent(Context context, LottieUi item) {
+        return new LottieActivityIntentBuilder(item).build(context);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LottieActivityIntentBuilder.inject(getIntent(), this);
         setContentView(R.layout.activity_lottie_detail);
         Toolbar toolbar = (Toolbar)findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
@@ -67,7 +66,7 @@ public class LottieDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            LottieDetailFragment fragment = LottieDetailFragment.createInstance(file);
+            LottieFragment fragment = LottieFragment.createInstance(file);
             getSupportFragmentManager().beginTransaction().add(R.id.lottie_detail_container, fragment).commit();
         }
     }
