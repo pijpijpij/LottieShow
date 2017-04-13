@@ -4,6 +4,7 @@ import com.pij.lottieshow.model.LottieFile;
 
 import org.junit.Test;
 
+import java.io.FileNotFoundException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URI;
@@ -56,8 +57,22 @@ public class CompoundSerializerTest {
     }
 
     @Test
-    public void emitsReaderIfFirstSerializerFailsButSecondSucceeds() {
+    public void emitsReaderIfFirstSerializerDoesNotSupportFormatButSecondDoes() {
         Serializer serializer1 = input -> Single.error(new UnsupportedFormatException());
+        StringReader reader = new StringReader("whatever");
+        Serializer serializer2 = input -> Single.just(reader);
+        CompoundSerializer sut = new CompoundSerializer(asList(serializer1, serializer2));
+
+        TestSubscriber<Reader> subscriber = TestSubscriber.create();
+        sut.open(LottieFile.create(URI.create("dummy.com"))).subscribe(subscriber);
+
+        subscriber.assertNoErrors();
+        subscriber.assertValue(reader);
+    }
+
+    @Test
+    public void emitsReaderIfFirstSerializerDoesNotFindTheFileButSecondDoes() {
+        Serializer serializer1 = input -> Single.error(new FileNotFoundException());
         StringReader reader = new StringReader("whatever");
         Serializer serializer2 = input -> Single.just(reader);
         CompoundSerializer sut = new CompoundSerializer(asList(serializer1, serializer2));

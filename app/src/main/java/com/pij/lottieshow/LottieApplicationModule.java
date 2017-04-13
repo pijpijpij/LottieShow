@@ -1,9 +1,11 @@
 package com.pij.lottieshow;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.AssetManager;
 
 import com.pij.lottieshow.interactor.CompoundSerializer;
+import com.pij.lottieshow.interactor.ContentResolverSerializer;
 import com.pij.lottieshow.interactor.LottieSource;
 import com.pij.lottieshow.interactor.Serializer;
 import com.pij.lottieshow.interactor.SourceFunnel;
@@ -55,9 +57,20 @@ abstract class LottieApplicationModule {
     }
 
     @Provides
+    static ContentResolver provideContentResolver(Context context) {
+        return context.getContentResolver();
+    }
+
+    @Provides
     @Singleton
     static Converter provideConverter(SourceFunnel source) {
         return new Converter(source);
+    }
+
+    @Provides
+    @IntoSet
+    static Serializer provideContentResolverSerializer(ContentResolver contentResolver) {
+        return new ContentResolverSerializer(contentResolver);
     }
 
     @Binds
