@@ -12,12 +12,12 @@ import dagger.multibindings.IntoMap;
  * <p>Created on 12/04/2017.</p>
  * @author Pierrejean
  */
-@Module(subcomponents = LottieDetailFragmentSubcomponent.class)
-public abstract class LottieDetailFragmentModule {
+@Module(subcomponents = LottieFragmentSubcomponent.class)
+public abstract class LottieFragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(LottieDetailFragment.class)
+    @FragmentKey(LottieFragment.class)
     abstract AndroidInjector.Factory<? extends Fragment> bindLottieDetailFragmentInjectorFactory(
-            LottieDetailFragmentSubcomponent.Builder builder);
+            LottieFragmentSubcomponent.Builder builder);
 }

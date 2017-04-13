@@ -25,20 +25,20 @@ import se.emilsjolander.intentbuilder.IntentBuilder;
  * in a {@link LottieListActivity}.
  */
 @IntentBuilder
-public class LottieDetailActivity extends AppCompatActivity {
+public class LottieActivity extends AppCompatActivity {
 
     @Extra
     LottieUi file;
 
     @NonNull
     public static Intent createIntent(Context context, LottieUi item) {
-        return new LottieDetailActivityIntentBuilder(item).build(context);
+        return new LottieActivityIntentBuilder(item).build(context);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LottieDetailActivityIntentBuilder.inject(getIntent(), this);
+        LottieActivityIntentBuilder.inject(getIntent(), this);
         setContentView(R.layout.activity_lottie_detail);
         Toolbar toolbar = (Toolbar)findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
@@ -66,7 +66,7 @@ public class LottieDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            LottieDetailFragment fragment = LottieDetailFragment.createInstance(file);
+            LottieFragment fragment = LottieFragment.createInstance(file);
             getSupportFragmentManager().beginTransaction().add(R.id.lottie_detail_container, fragment).commit();
         }
     }

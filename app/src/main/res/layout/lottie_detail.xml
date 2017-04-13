@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:padding="@dimen/horizontal_margin"
     android:textIsSelectable="true"
-    tools:context="com.pij.lottieshow.detail.LottieDetailFragment">
+    tools:context="com.pij.lottieshow.detail.LottieFragment">
 
     <TextView android:id="@+id/lottie_detail"
               android:layout_width="match_parent"

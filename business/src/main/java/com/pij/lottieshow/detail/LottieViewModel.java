@@ -16,14 +16,14 @@ import rx.subjects.PublishSubject;
 import static rx.Observable.empty;
 import static rx.Observable.just;
 
-class LottieDetailViewModel {
+class LottieViewModel {
 
     private PublishSubject<LottieFile> lottie = PublishSubject.create();
     private PublishSubject<Throwable> errors = PublishSubject.create();
 
     @Inject
     @SuppressWarnings("WeakerAccess")
-    public LottieDetailViewModel() {
+    public LottieViewModel() {
     }
 
     @SuppressWarnings("WeakerAccess")

@@ -11,8 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.pij.lottieshow.R;
-import com.pij.lottieshow.detail.LottieDetailActivity;
-import com.pij.lottieshow.detail.LottieDetailFragment;
+import com.pij.lottieshow.detail.LottieActivity;
+import com.pij.lottieshow.detail.LottieFragment;
 import com.pij.lottieshow.model.LottieUi;
 import com.pij.lottieshow.ui.Utils;
 
@@ -42,7 +42,7 @@ import static rx.Observable.just;
  * An activity representing a list of Lotties. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link LottieDetailActivity} representing
+ * lead to a {@link LottieActivity} representing
  * item label. On tablets, the activity presents the list of items and
  * item label side-by-side using two vertical panes.
  */
@@ -143,12 +143,12 @@ public class LottieListActivity extends DaggerAppCompatActivity {
     }
 
     private Subscription showInFragment(Observable<LottieUi> lottieFile) {
-        return lottieFile.compose(mapWithoutError(LottieDetailFragment::createInstance))
+        return lottieFile.compose(mapWithoutError(LottieFragment::createInstance))
                          .subscribe(this::setDetailFragment, this::notifyError);
     }
 
     private Subscription showInActivity(Observable<LottieUi> lottieFile) {
-        return lottieFile.compose(mapWithoutError(i -> LottieDetailActivity.createIntent(this, i)))
+        return lottieFile.compose(mapWithoutError(i -> LottieActivity.createIntent(this, i)))
                          .subscribe(this::startActivity, this::notifyError);
     }
 
@@ -159,7 +159,7 @@ public class LottieListActivity extends DaggerAppCompatActivity {
                                                           .onErrorResumeNext(empty()));
     }
 
-    private int setDetailFragment(LottieDetailFragment fragment) {
+    private int setDetailFragment(LottieFragment fragment) {
         return getSupportFragmentManager().beginTransaction().replace(R.id.lottie_detail_container, fragment).commit();
     }
 }

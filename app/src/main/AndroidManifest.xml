@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".detail.LottieDetailActivity"
+            android:name=".detail.LottieActivity"
             android:label="@string/title_lottie_detail"
             android:parentActivityName=".list.LottieListActivity"
             android:theme="@style/AppTheme.NoActionBar">

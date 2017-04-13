@@ -34,17 +34,17 @@ import rx.subscriptions.CompositeSubscription;
 /**
  * A fragment representing a single Lottie detail screen.
  * This fragment is either contained in a {@link LottieListActivity}
- * in two-pane mode (on tablets) or a {@link LottieDetailActivity}
+ * in two-pane mode (on tablets) or a {@link LottieActivity}
  * on handsets.
  */
 @FragmentWithArgs
-public class LottieDetailFragment extends DaggerFragment {
+public class LottieFragment extends DaggerFragment {
 
     @Arg
     LottieUi lottie;
 
     @Inject
-    LottieDetailViewModel viewModel;
+    LottieViewModel viewModel;
     @Inject
     Converter converter;
 
@@ -56,11 +56,11 @@ public class LottieDetailFragment extends DaggerFragment {
     private CompositeSubscription subscriptions = new CompositeSubscription();
 
     @NonNull
-    public static LottieDetailFragment createInstance(LottieUi item) {
-        return LottieDetailFragmentBuilder.newLottieDetailFragment(item);
+    public static LottieFragment createInstance(LottieUi item) {
+        return LottieFragmentBuilder.newLottieFragment(item);
     }
 
-    public LottieDetailFragment() {
+    public LottieFragment() {
     }
 
     @Override
@@ -74,7 +74,7 @@ public class LottieDetailFragment extends DaggerFragment {
         FragmentArgs.inject(this);
         unbinder = ButterKnife.bind(this, view);
 
-        // TODO Move this code to LottieDetailActivity
+        // TODO Move this code to LottieActivity
         updateToolbar();
 
         subscriptions.addAll(
