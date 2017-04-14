@@ -14,8 +14,6 @@ import java.util.List;
 import rx.Observable;
 import rx.subjects.PublishSubject;
 
-import static com.jakewharton.rxbinding.view.RxView.clicks;
-import static com.jakewharton.rxbinding.view.RxView.detaches;
 import static java.util.Collections.emptyList;
 import static org.apache.commons.collections4.IterableUtils.toList;
 
@@ -37,11 +35,7 @@ class LottieAdapter extends RecyclerView.Adapter<LottieViewHolder> {
     @Override
     public LottieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(itemLayout, parent, false);
-        LottieViewHolder holder = new LottieViewHolder(view);
-        holder.subscription.add(clicks(view).takeUntil(detaches(parent))
-                                            .map(click -> holder.item)
-                                            .subscribe(itemClicked));
-        return holder;
+        return new LottieViewHolder(view);
     }
 
     @Override
@@ -56,9 +50,15 @@ class LottieAdapter extends RecyclerView.Adapter<LottieViewHolder> {
     }
 
     @Override
-    public void onViewRecycled(LottieViewHolder holder) {
-        holder.subscription.clear();
-        super.onViewRecycled(holder);
+    public void onViewAttachedToWindow(LottieViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        holder.setClickListener(itemClicked);
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(LottieViewHolder holder) {
+        holder.resetClickListener();
+        super.onViewDetachedFromWindow(holder);
     }
 
     @SuppressWarnings("WeakerAccess")
