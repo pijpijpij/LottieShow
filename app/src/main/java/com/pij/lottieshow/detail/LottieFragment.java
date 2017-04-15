@@ -94,6 +94,7 @@ public class LottieFragment extends DaggerFragment {
     @Override
     public void onDestroyView() {
         subscriptions.clear();
+        animation.cancelAnimation();
         unbinder.unbind();
         super.onDestroyView();
     }
