@@ -31,6 +31,7 @@ class SafClient {
 
     private final ContentResolver contentResolver;
     private final PublishSubject<Intent> jsonFilePicked = PublishSubject.create();
+    private PublishSubject<Boolean> inProgress = PublishSubject.create();
 
     @SuppressWarnings("WeakerAccess")
     @Inject
@@ -60,7 +61,15 @@ class SafClient {
 
     @SuppressWarnings("WeakerAccess")
     public Observable<LottieFile> analysed() {
-        return jsonFilePicked.map(Intent::getData).flatMap(uri -> createLottie(uri).toObservable());
+        return jsonFilePicked.map(Intent::getData)
+                             .doOnNext(ignored -> inProgress.onNext(true))
+                             .flatMap(uri -> createLottie(uri).toObservable()
+                                                              .doAfterTerminate(() -> inProgress.onNext(false)));
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public Observable<Boolean> inProgress() {
+        return inProgress;
     }
 
     @NonNull
