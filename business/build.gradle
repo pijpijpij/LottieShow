@@ -8,11 +8,11 @@ buildscript {
     dependencies {
         classpath "net.ltgt.gradle:gradle-apt-plugin:0.10"
         classpath "me.tatarka:gradle-retrolambda:$retrolambdaVersion"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+//        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
 repositories {
-    maven { url "${System.getenv()['ANDROID_HOME']}/extras/android/m2repository" }
+    maven { url "${System.env['ANDROID_HOME']}/extras/android/m2repository" }
 }
 
 apply plugin: "net.ltgt.apt"

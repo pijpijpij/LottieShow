@@ -1,6 +1,6 @@
 buildscript {
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+//        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath 'com.android.tools.build:gradle:2.3.1'
         // Should be the last one on the classpath according to the Retrolambda website.
         classpath "me.tatarka:gradle-retrolambda:$retrolambdaVersion"
@@ -24,10 +24,10 @@ android {
         baseline file("lint-baseline.xml")
         abortOnError true
     }
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-        test.java.srcDirs += 'src/test/kotlin'
-    }
+//    sourceSets {
+//        main.java.srcDirs += 'src/main/kotlin'
+//        test.java.srcDirs += 'src/test/kotlin'
+//    }
     defaultConfig {
         applicationId "com.pij.lottieshow"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -72,6 +72,12 @@ dependencies {
 
     compile "com.jakewharton.rxbinding:rxbinding:$rxBindingsVersion"
     compile 'com.cantrowitz:rxbroadcast:1.1.1'
+
+    debugCompile rootProject.ext.ciBuild ?
+            "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion" :
+            "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 
     compile 'com.airbnb.android:lottie:1.5.3'
 
