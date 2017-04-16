@@ -1,8 +1,23 @@
 # LottieShow
+This is a visualisation tool for [Lotties](http://airbnb.design/lottie/), animations created by Air BnB.
 
-## Future ideas
+It lists the Lotties it knows about. Each one can be viewed in more detail.
+
+# Integration
+The app can import Lotties from a few sources:
+- The local SD card,
+- Google Drive,
+- The `Downloads` folder. That provides basic e-mail integration: all files included in an e-mail are created in that 
+folder.
+ 
+These imports are achieved via the Storage Access framework.
+
+# Future ideas
 
 They are, in no particular order:
+- Integration with [Dropbox](https://github.com/pijpijpij/LottieShow/issues/21)
+- Opening a Lottie directly [from other applications](https://github.com/pijpijpij/LottieShow/issues/22). That's in essence declaring the app as a handler for *.json 
+files.
 - Monitor removal/insertion of External storage (see https://developer.android.com/reference/android/os/Environment.html#getExternalStorageDirectory())
 - Online library
 - Export as video
@@ -10,7 +25,6 @@ They are, in no particular order:
 - Change background colour (with a colour picker or a simple RGB value)
 - auto-sync with Google drive or Dropbox
 - export from Bodymovin
-- "open from" using the system file picker
 - resizing (during replay) with a slider.
 - play:
   - continuous
@@ -19,8 +33,7 @@ They are, in no particular order:
 - show in context (put a screen grab in the background)
 
 
-License
--------
+# License
 
     Copyright 2017 PiJ International
 
