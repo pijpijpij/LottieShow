@@ -22,10 +22,20 @@ import rx.subjects.BehaviorSubject;
 public class MemoryLottieStore implements LottieSource, LottieSink {
 
     private final BehaviorSubject<LottieFile> store = BehaviorSubject.create();
+    private final Observable<Iterable<LottieFile>> lotties;
+
+    public MemoryLottieStore() {
+        lotties = store.asObservable()
+                       .scan(new ArrayList<>(), this::append)
+                       .replay(1)
+                       .autoConnect()
+                       .doOnNext(i -> System.out.println("PJC got " + IterableUtils.size(i) + " items:"))
+                       .doOnNext(i -> System.out.println("PJC " + i));
+    }
 
     @Override
     public Observable<Iterable<LottieFile>> lottieFiles() {
-        return store.asObservable().scan(new ArrayList<>(), this::append);
+        return lotties;
     }
 
     @Override
