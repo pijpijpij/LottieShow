@@ -60,4 +60,20 @@ public class MemoryLottieStoreTest {
                                 asList(LottieFile.create(new File("11", "111")),
                                        LottieFile.create(new File("22", "222"))));
     }
+
+    @Test
+    public void emitLastListForSecondSubscriber() {
+        MemoryLottieStore sut = new MemoryLottieStore();
+        sut.lottieFiles().subscribe();
+        sut.add(LottieFile.create(new File("11", "111")));
+        sut.add(LottieFile.create(new File("22", "222")));
+
+        TestSubscriber<List<LottieFile>> subscriber = TestSubscriber.create();
+        sut.lottieFiles().map(IterableUtils::toList).subscribe(subscriber);
+
+        subscriber.assertNoErrors();
+        //noinspection unchecked
+        subscriber.assertValues(asList(LottieFile.create(new File("11", "111")),
+                                       LottieFile.create(new File("22", "222"))));
+    }
 }
