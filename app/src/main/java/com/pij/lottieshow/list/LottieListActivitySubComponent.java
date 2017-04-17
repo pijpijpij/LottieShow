@@ -1,5 +1,7 @@
 package com.pij.lottieshow.list;
 
+import com.pij.dagger.ActivityScope;
+
 import dagger.Subcomponent;
 import dagger.android.AndroidInjector;
 
@@ -8,7 +10,8 @@ import dagger.android.AndroidInjector;
  * @author Pierrejean
  */
 
-@Subcomponent(/*modules = ...*/)
+@ActivityScope
+@Subcomponent(modules = LottieListActivityModule.class)
 public interface LottieListActivitySubComponent extends AndroidInjector<LottieListActivity> {
 
     @Subcomponent.Builder
