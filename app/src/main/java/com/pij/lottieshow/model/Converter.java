@@ -29,7 +29,7 @@ public class Converter {
 
     private static LottieUi create(LottieFile model) {
         String shortName = StringUtils.isEmpty(model.label()) ? defaultLabel(model.id()) : model.label();
-        return LottieUi.create(Uri.parse(model.id().toString()), shortName, model.content());
+        return LottieUi.create(Uri.parse(model.id().toString()), shortName);
     }
 
     @NonNull

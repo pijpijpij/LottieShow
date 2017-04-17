@@ -29,10 +29,10 @@ class LottieViewModel {
 
     @SuppressWarnings("WeakerAccess")
     public Observable<String> showAnimation() {
-        return lottie.flatMap(input -> serializer.open(input)
-                                                 .toObservable()
-                                                 .doOnError(errors::onNext)
-                                                 .onErrorResumeNext(empty()));
+        return lottie.concatMap(input -> serializer.open(input)
+                                                   .toObservable()
+                                                   .doOnError(errors::onNext)
+                                                   .onErrorResumeNext(empty()));
     }
 
     @SuppressWarnings("WeakerAccess")

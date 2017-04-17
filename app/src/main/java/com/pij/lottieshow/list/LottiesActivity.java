@@ -20,6 +20,7 @@ import com.pij.lottieshow.saf.SafClient;
 import com.pij.lottieshow.ui.Utils;
 
 import org.apache.commons.collections4.IterableUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.inject.Inject;
 
@@ -29,6 +30,7 @@ import butterknife.Unbinder;
 import dagger.android.AndroidInjection;
 import dagger.android.support.DaggerAppCompatActivity;
 import rx.Observable;
+import rx.Single;
 import rx.Subscription;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
@@ -92,16 +94,12 @@ public class LottiesActivity extends DaggerAppCompatActivity {
                              saf.analysed().subscribe(viewModel::addLottie, this::notifyError),
                              saf.inProgress().subscribe(this::showProgress, this::notifyError),
 
-                             adapter.contentNeeded()
-                                    .flatMap(this::toModel)
-                                    .subscribe(viewModel::loadContent, this::notifyError),
-                             adapter.itemClicked()
-                                    .flatMap(this::toModel)
+                             adapter.itemClicked().flatMapSingle(this::toModel)
                                     .subscribe(viewModel::select, this::notifyError),
 
                              viewModel.shouldShowList()
                                       .map(IterableUtils::emptyIfNull)
-                                      .flatMap(list -> from(list).flatMap(this::fromModel).toList())
+                                      .flatMap(list -> from(list).flatMapSingle(this::fromModel).toList())
                                       .subscribe(adapter::setItems, this::notifyError),
 
                              // The detail container view will be present only in the
@@ -137,12 +135,12 @@ public class LottiesActivity extends DaggerAppCompatActivity {
         }
     }
 
-    private Observable<LottieFile> toModel(LottieUi ui) {
-        return converter.toModel(ui).toObservable();
+    private Single<LottieFile> toModel(LottieUi ui) {
+        return converter.toModel(ui);
     }
 
-    private Observable<LottieUi> fromModel(LottieFile model) {
-        return converter.fromModel(model).toObservable();
+    private Single<Pair<LottieUi, Single<String>>> fromModel(LottieFile model) {
+        return Single.zip(converter.fromModel(model), Single.just(model.content()), Pair::of);
     }
 
     private void showProgress(boolean inProgress) {
@@ -169,9 +167,9 @@ public class LottiesActivity extends DaggerAppCompatActivity {
 
     @NonNull
     private <T> Observable.Transformer<LottieFile, T> mapWithoutError(final Func1<LottieUi, T> mapper) {
-        return lottie -> lottie.flatMap(this::fromModel).flatMap(item -> just(item).map(mapper)
-                                                          .doOnError(this::notifyError)
-                                                          .onErrorResumeNext(empty()));
+        return lottie -> lottie.flatMapSingle(this::fromModel).map(Pair::getLeft).flatMap(item -> just(item).map(mapper)
+                                                                                                            .doOnError(this::notifyError)
+                                                                                                            .onErrorResumeNext(empty()));
     }
 
     private int setDetailFragment(LottieFragment fragment) {

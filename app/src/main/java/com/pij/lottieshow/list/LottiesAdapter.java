@@ -9,9 +9,12 @@ import android.view.ViewGroup;
 
 import com.pij.lottieshow.model.LottieUi;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.List;
 
 import rx.Observable;
+import rx.Single;
 import rx.subjects.PublishSubject;
 
 import static java.util.Collections.emptyList;
@@ -27,7 +30,7 @@ class LottiesAdapter extends RecyclerView.Adapter<LottieViewHolder> {
     private final PublishSubject<LottieUi> contentNeeded = PublishSubject.create();
     private final int itemLayout;
     @NonNull
-    private List<LottieUi> values = emptyList();
+    private List<Pair<LottieUi, Single<String>>> values = emptyList();
 
     LottiesAdapter(@LayoutRes int itemLayout) {
         this.itemLayout = itemLayout;
@@ -41,11 +44,9 @@ class LottiesAdapter extends RecyclerView.Adapter<LottieViewHolder> {
 
     @Override
     public void onBindViewHolder(final LottieViewHolder holder, int position) {
-        LottieUi item = values.get(position);
-        holder.setItem(item);
-        if (item.content() == null) {
-            contentNeeded.onNext(item);
-        }
+        Pair<LottieUi, Single<String>> item = values.get(position);
+        holder.setItem(item.getLeft());
+        holder.setContent(item.getRight());
     }
 
     @Override
@@ -66,7 +67,7 @@ class LottiesAdapter extends RecyclerView.Adapter<LottieViewHolder> {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void setItems(Iterable<LottieUi> items) {
+    public void setItems(List<Pair<LottieUi, Single<String>>> items) {
         values = toList(items);
         notifyDataSetChanged();
     }
@@ -74,11 +75,6 @@ class LottiesAdapter extends RecyclerView.Adapter<LottieViewHolder> {
     @SuppressWarnings("WeakerAccess")
     public Observable<LottieUi> itemClicked() {
         return itemClicked.asObservable();
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public Observable<LottieUi> contentNeeded() {
-        return contentNeeded.asObservable();
     }
 
 }

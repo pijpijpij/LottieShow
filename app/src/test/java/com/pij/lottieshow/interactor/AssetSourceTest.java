@@ -16,11 +16,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
+import rx.Single;
 import rx.observers.TestSubscriber;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 /**
@@ -34,7 +36,8 @@ public class AssetSourceTest {
 
     @Mock
     AssetManager mockAssets;
-
+    @Mock
+    AssetSerializer mockSerializer;
     @InjectMocks
     AssetSource sut;
 
@@ -74,6 +77,7 @@ public class AssetSourceTest {
     @Test
     public void emitsSingletonListWhenOneSampleAssets() throws IOException {
         when(mockAssets.list("samples")).thenReturn(new String[]{ "a_file" });
+        setupSerializerSameContentForAll();
         TestSubscriber<List<LottieFile>> subscriber = TestSubscriber.create();
 
         sut.lottieFiles().map(IterableUtils::toList).subscribe(subscriber);
@@ -87,11 +91,16 @@ public class AssetSourceTest {
     @Test
     public void doesNotSupportSpacesInName() throws IOException {
         when(mockAssets.list("samples")).thenReturn(new String[]{ "a file" });
+        setupSerializerSameContentForAll();
         TestSubscriber<List<LottieFile>> subscriber = TestSubscriber.create();
 
         sut.lottieFiles().map(IterableUtils::toList).subscribe(subscriber);
 
         subscriber.assertNoErrors();
         subscriber.assertValue(emptyList());
+    }
+
+    private void setupSerializerSameContentForAll() {
+        when(mockSerializer.open(any(LottieFile.class))).thenReturn(Single.just("zap!"));
     }
 }
