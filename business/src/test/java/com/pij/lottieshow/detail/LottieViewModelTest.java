@@ -11,7 +11,6 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.net.URI;
 
 import rx.Single;
@@ -34,8 +33,7 @@ public class LottieViewModelTest {
 
     @Test
     public void readsLottieOffSerializer() {
-        when(mockSerializer.open(LottieFile.create(URI.create("zip.com")))).thenReturn(Single.just(new StringReader(
-                "Hello!")));
+        when(mockSerializer.open(LottieFile.create(URI.create("zip.com")))).thenReturn(Single.just("Hello!"));
         TestSubscriber<String> subscriber = TestSubscriber.create();
         sut.showAnimation().subscribe(subscriber);
 
