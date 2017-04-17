@@ -55,11 +55,7 @@ class AssetSource implements LottieSource {
 
     @NonNull
     private Single<LottieFile> appendContent(LottieFile file) {
-        return Single.zip(Single.just(file),
-                          serializer.open(file)
-                                    .doOnError(Throwable::printStackTrace)
-                                    .onErrorResumeNext(Single.just(null)),
-                          LottieFile::create);
+        return Single.zip(Single.just(file), Single.just(serializer.open(file)), LottieFile::create);
     }
 
     @NonNull
