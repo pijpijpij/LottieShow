@@ -5,8 +5,8 @@ import android.support.v4.app.Fragment;
 
 import com.pij.lottieshow.detail.LottieFragment;
 import com.pij.lottieshow.detail.LottieFragmentSubcomponent;
-import com.pij.lottieshow.list.LottieListActivity;
-import com.pij.lottieshow.list.LottieListActivitySubComponent;
+import com.pij.lottieshow.list.LottiesActivity;
+import com.pij.lottieshow.list.LottiesActivitySubComponent;
 
 import dagger.Binds;
 import dagger.Module;
@@ -25,9 +25,9 @@ abstract class BuildersModule {
 
     @Binds
     @IntoMap
-    @ActivityKey(LottieListActivity.class)
+    @ActivityKey(LottiesActivity.class)
     abstract AndroidInjector.Factory<? extends Activity> bindLottieListActivityInjectorFactory(
-            LottieListActivitySubComponent.Builder builder);
+            LottiesActivitySubComponent.Builder builder);
 
     @Binds
     @IntoMap

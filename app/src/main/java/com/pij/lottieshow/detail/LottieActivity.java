@@ -12,7 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.pij.lottieshow.R;
-import com.pij.lottieshow.list.LottieListActivity;
+import com.pij.lottieshow.list.LottiesActivity;
 import com.pij.lottieshow.model.LottieUi;
 
 import se.emilsjolander.intentbuilder.Extra;
@@ -22,7 +22,7 @@ import se.emilsjolander.intentbuilder.IntentBuilder;
  * An activity representing a single Lottie detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
  * item label are presented side-by-side with a list of items
- * in a {@link LottieListActivity}.
+ * in a {@link LottiesActivity}.
  */
 @IntentBuilder
 public class LottieActivity extends AppCompatActivity {
@@ -81,7 +81,7 @@ public class LottieActivity extends AppCompatActivity {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            navigateUpTo(new Intent(this, LottieListActivity.class));
+            navigateUpTo(new Intent(this, LottiesActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);

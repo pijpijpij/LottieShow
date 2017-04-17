@@ -6,15 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/horizontal_margin"
-    android:textIsSelectable="true"
     tools:context="com.pij.lottieshow.detail.LottieFragment">
 
-    <TextView android:id="@+id/lottie_detail"
+    <TextView android:id="@+id/error"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:gravity="center_horizontal"
-              android:textIsSelectable="true"
-              tools:text="/some/lottie/label"/>
+              tools:text="Error message"/>
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animation"

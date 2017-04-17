@@ -21,14 +21,15 @@ import static org.apache.commons.collections4.IterableUtils.toList;
  * <p>Created on 06/04/2017.</p>
  * @author Pierrejean
  */
-class LottieAdapter extends RecyclerView.Adapter<LottieViewHolder> {
+class LottiesAdapter extends RecyclerView.Adapter<LottieViewHolder> {
 
     private final PublishSubject<LottieUi> itemClicked = PublishSubject.create();
+    private final PublishSubject<LottieUi> contentNeeded = PublishSubject.create();
     private final int itemLayout;
     @NonNull
     private List<LottieUi> values = emptyList();
 
-    LottieAdapter(@LayoutRes int itemLayout) {
+    LottiesAdapter(@LayoutRes int itemLayout) {
         this.itemLayout = itemLayout;
     }
 
@@ -42,6 +43,9 @@ class LottieAdapter extends RecyclerView.Adapter<LottieViewHolder> {
     public void onBindViewHolder(final LottieViewHolder holder, int position) {
         LottieUi item = values.get(position);
         holder.setItem(item);
+        if (item.content() == null) {
+            contentNeeded.onNext(item);
+        }
     }
 
     @Override
@@ -70,6 +74,11 @@ class LottieAdapter extends RecyclerView.Adapter<LottieViewHolder> {
     @SuppressWarnings("WeakerAccess")
     public Observable<LottieUi> itemClicked() {
         return itemClicked.asObservable();
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public Observable<LottieUi> contentNeeded() {
+        return contentNeeded.asObservable();
     }
 
 }

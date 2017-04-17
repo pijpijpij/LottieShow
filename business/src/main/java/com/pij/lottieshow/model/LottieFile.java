@@ -20,7 +20,11 @@ public abstract class LottieFile {
     }
 
     public static LottieFile create(URI id, String label) {
-        return new AutoValue_LottieFile(id, label);
+        return create(id, label, null);
+    }
+
+    public static LottieFile create(URI id, String label, String content) {
+        return new AutoValue_LottieFile(id, label, content);
     }
 
     public abstract URI id();
@@ -28,4 +32,6 @@ public abstract class LottieFile {
     @Nullable
     public abstract String label();
 
+    @Nullable
+    public abstract String content();
 }

@@ -13,7 +13,10 @@ import android.view.View;
 import com.pij.lottieshow.R;
 import com.pij.lottieshow.detail.LottieActivity;
 import com.pij.lottieshow.detail.LottieFragment;
+import com.pij.lottieshow.model.Converter;
+import com.pij.lottieshow.model.LottieFile;
 import com.pij.lottieshow.model.LottieUi;
+import com.pij.lottieshow.saf.SafClient;
 import com.pij.lottieshow.ui.Utils;
 
 import org.apache.commons.collections4.IterableUtils;
@@ -31,8 +34,8 @@ import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 
 import static com.jakewharton.rxbinding.view.RxView.clicks;
-import static org.apache.commons.collections4.IterableUtils.transformedIterable;
 import static rx.Observable.empty;
+import static rx.Observable.from;
 import static rx.Observable.just;
 
 /**
@@ -43,9 +46,9 @@ import static rx.Observable.just;
  * item label. On tablets, the activity presents the list of items and
  * item label side-by-side using two vertical panes.
  */
-public class LottieListActivity extends DaggerAppCompatActivity {
+public class LottiesActivity extends DaggerAppCompatActivity {
 
-    private static final int REQUESTCODE_PICK = 24;
+    private static final int REQUEST_CODE_PICK = 24;
 
     private final CompositeSubscription subscriptions = new CompositeSubscription();
     @Nullable
@@ -57,14 +60,18 @@ public class LottieListActivity extends DaggerAppCompatActivity {
     FloatingActionButton fab;
     @BindView(R.id.lottie_list)
     RecyclerView list;
+
     @Inject
     LottiesViewModel viewModel;
     @Inject
     SafClient saf;
+    @Inject
+    Converter converter;
+
     private Unbinder unbinder;
     private Snackbar progress;
 
-    public LottieListActivity() {}
+    public LottiesActivity() {}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,16 +85,23 @@ public class LottieListActivity extends DaggerAppCompatActivity {
 
         progress = Snackbar.make(fab, "Loading...", Snackbar.LENGTH_INDEFINITE);
 
-        LottieAdapter adapter = new LottieAdapter(R.layout.lottie_list_item);
+        LottiesAdapter adapter = new LottiesAdapter(R.layout.lottie_list_item);
         list.setAdapter(adapter);
 
         subscriptions.addAll(clicks(fab).subscribe(click -> pickJsonFile(), this::notifyError),
                              saf.analysed().subscribe(viewModel::addLottie, this::notifyError),
                              saf.inProgress().subscribe(this::showProgress, this::notifyError),
 
+                             adapter.contentNeeded()
+                                    .flatMap(this::toModel)
+                                    .subscribe(viewModel::loadContent, this::notifyError),
+                             adapter.itemClicked()
+                                    .flatMap(this::toModel)
+                                    .subscribe(viewModel::select, this::notifyError),
+
                              viewModel.shouldShowList()
                                       .map(IterableUtils::emptyIfNull)
-                                      .map(list -> transformedIterable(list, LottieUi::create))
+                                      .flatMap(list -> from(list).flatMap(this::fromModel).toList())
                                       .subscribe(adapter::setItems, this::notifyError),
 
                              // The detail container view will be present only in the
@@ -95,8 +109,8 @@ public class LottieListActivity extends DaggerAppCompatActivity {
                              // If this view is present, then the
                              // activity should be in two-pane mode.
                              detailContainer == null
-                             ? showInActivity(adapter.itemClicked())
-                             : showInFragment(adapter.itemClicked()));
+                             ? showInActivity(viewModel.shouldShowLottie())
+                             : showInFragment(viewModel.shouldShowLottie()));
     }
 
     @Override
@@ -109,7 +123,7 @@ public class LottieListActivity extends DaggerAppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case REQUESTCODE_PICK:
+            case REQUEST_CODE_PICK:
                 switch (resultCode) {
                     case RESULT_OK:
                         saf.analyse(data);
@@ -123,6 +137,14 @@ public class LottieListActivity extends DaggerAppCompatActivity {
         }
     }
 
+    private Observable<LottieFile> toModel(LottieUi ui) {
+        return converter.toModel(ui).toObservable();
+    }
+
+    private Observable<LottieUi> fromModel(LottieFile model) {
+        return converter.fromModel(model).toObservable();
+    }
+
     private void showProgress(boolean inProgress) {
         if (inProgress) { progress.show(); } else progress.dismiss();
     }
@@ -132,22 +154,22 @@ public class LottieListActivity extends DaggerAppCompatActivity {
     }
 
     private void pickJsonFile() {
-        saf.pickJsonFile(this, REQUESTCODE_PICK);
+        saf.pickJsonFile(this, REQUEST_CODE_PICK);
     }
 
-    private Subscription showInFragment(Observable<LottieUi> lottieFile) {
+    private Subscription showInFragment(Observable<LottieFile> lottieFile) {
         return lottieFile.compose(mapWithoutError(LottieFragment::createInstance))
                          .subscribe(this::setDetailFragment, this::notifyError);
     }
 
-    private Subscription showInActivity(Observable<LottieUi> lottieFile) {
+    private Subscription showInActivity(Observable<LottieFile> lottieFile) {
         return lottieFile.compose(mapWithoutError(i -> LottieActivity.createIntent(this, i)))
                          .subscribe(this::startActivity, this::notifyError);
     }
 
     @NonNull
-    private <T> Observable.Transformer<LottieUi, T> mapWithoutError(final Func1<LottieUi, T> mapper) {
-        return lottie -> lottie.flatMap(item -> just(item).map(mapper)
+    private <T> Observable.Transformer<LottieFile, T> mapWithoutError(final Func1<LottieUi, T> mapper) {
+        return lottie -> lottie.flatMap(this::fromModel).flatMap(item -> just(item).map(mapper)
                                                           .doOnError(this::notifyError)
                                                           .onErrorResumeNext(empty()));
     }

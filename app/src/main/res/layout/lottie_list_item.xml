@@ -20,11 +20,16 @@
 
     <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent">
 
-        <ImageView android:layout_width="40dp" android:layout_height="match_parent"
-                   android:contentDescription="@string/lottie_icon_label"/>
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/image"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/lottie_icon_label"/>
+
         <Space android:layout_width="@dimen/horizontal_margin" android:layout_height="match_parent"/>
+
         <TextView
-            android:id="@android:id/text1"
+            android:id="@+id/label"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:text="/some file label"/>

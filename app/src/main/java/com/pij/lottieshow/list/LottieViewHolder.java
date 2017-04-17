@@ -1,11 +1,15 @@
 package com.pij.lottieshow.list;
 
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.pij.lottieshow.R;
 import com.pij.lottieshow.model.LottieUi;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,9 +26,11 @@ import static com.jakewharton.rxbinding.view.RxView.clicks;
 class LottieViewHolder extends RecyclerView.ViewHolder {
 
     private final CompositeSubscription subscription = new CompositeSubscription();
-    @BindView(android.R.id.text1)
-    TextView labelView;
-    private LottieUi item;
+    @BindView(R.id.label)
+    TextView label;
+    @BindView(R.id.image)
+    LottieAnimationView image;
+    private Observable<LottieUi> clicks;
 
     @SuppressWarnings("WeakerAccess")
     public LottieViewHolder(View view) {
@@ -34,27 +40,33 @@ class LottieViewHolder extends RecyclerView.ViewHolder {
 
     @Override
     public String toString() {
-        return super.toString() + " '" + labelView.getText() + "'";
+        return super.toString() + " '" + label.getText() + "'";
     }
 
     @SuppressWarnings("WeakerAccess")
     public void setItem(LottieUi item) {
-        this.item = item;
-        labelView.setText(item.label());
-    }
-
-    @NonNull
-    @SuppressWarnings("WeakerAccess")
-    public Observable<LottieUi> viewClicked() {
-        return clicks(itemView).map(click -> item);
+        clicks = clicks(itemView).map(click -> item);
+        label.setText(item.label());
+        if (item.content() == null) {
+            // TODO insert a placeholder image
+        } else {
+            try {
+                image.setAnimation(new JSONObject(item.content()));
+            } catch (JSONException e) {
+                // TODO deal with error/ show broken image
+                e.printStackTrace();
+            }
+        }
     }
 
     @SuppressWarnings("WeakerAccess")
     public void setClickListener(Observer<LottieUi> observer) {
         resetClickListener();
-        subscription.add(viewClicked().subscribe(observer));
+        subscription.add(clicks.subscribe(observer));
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void resetClickListener() {subscription.clear();}
+    public void resetClickListener() {
+        subscription.clear();
+    }
 }

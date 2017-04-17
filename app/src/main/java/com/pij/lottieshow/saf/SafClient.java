@@ -1,4 +1,4 @@
-package com.pij.lottieshow.list;
+package com.pij.lottieshow.saf;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -27,7 +27,7 @@ import static rx.Single.zip;
  * @author Pierrejean
  */
 
-class SafClient {
+public class SafClient {
 
     private final ContentResolver contentResolver;
     private final PublishSubject<Intent> jsonFilePicked = PublishSubject.create();

@@ -11,9 +11,9 @@ import dagger.android.AndroidInjector;
  */
 
 @ActivityScope
-@Subcomponent(modules = LottieListActivityModule.class)
-public interface LottieListActivitySubComponent extends AndroidInjector<LottieListActivity> {
+@Subcomponent(modules = LottiesActivityModule.class)
+public interface LottiesActivitySubComponent extends AndroidInjector<LottiesActivity> {
 
     @Subcomponent.Builder
-    abstract class Builder extends AndroidInjector.Builder<LottieListActivity> { }
+    abstract class Builder extends AndroidInjector.Builder<LottiesActivity> { }
 }
