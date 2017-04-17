@@ -40,9 +40,9 @@ class AssetSource implements LottieSource {
     @Override
     public Observable<Iterable<LottieFile>> lottieFiles() {
         Observable<String> relativeFolder = just("samples");
-        Observable<String> absoluteFolder = relativeFolder.map(s -> AssetSerializer.PREFIX + s);
         Observable<Iterable<String>> shortFilenames = relativeFolder.map(this::listFiles).map(Arrays::asList);
-        // TODO specify somewhere how to open this file.
+        Observable<String> absoluteFolder = relativeFolder.map(s -> AssetSerializer.PREFIX + s);
+
         return shortFilenames.flatMap(list -> Observable.combineLatest(absoluteFolder,
                                                                        Observable.from(list),
                                                                        this::absoluteAssertName)
