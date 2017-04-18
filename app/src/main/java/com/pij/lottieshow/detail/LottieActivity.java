@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -15,6 +14,10 @@ import com.pij.lottieshow.R;
 import com.pij.lottieshow.list.LottiesActivity;
 import com.pij.lottieshow.model.LottieUi;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+import rx.subscriptions.CompositeSubscription;
 import se.emilsjolander.intentbuilder.Extra;
 import se.emilsjolander.intentbuilder.IntentBuilder;
 
@@ -27,8 +30,14 @@ import se.emilsjolander.intentbuilder.IntentBuilder;
 @IntentBuilder
 public class LottieActivity extends AppCompatActivity {
 
+    private final CompositeSubscription subscriptions = new CompositeSubscription();
     @Extra
     LottieUi file;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    private Unbinder unbinder;
 
     @NonNull
     public static Intent createIntent(Context context, LottieUi item) {
@@ -40,50 +49,41 @@ public class LottieActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         LottieActivityIntentBuilder.inject(getIntent(), this);
         setContentView(R.layout.activity_lottie_detail);
-        Toolbar toolbar = (Toolbar)findViewById(R.id.detail_toolbar);
-        setSupportActionBar(toolbar);
+        unbinder = ButterKnife.bind(this);
 
-        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
+        setSupportActionBar(toolbar);
+        // Show the Up button in the action bar.
+        //noinspection ConstantConditions
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
                                                .setAction("Action", null)
                                                .show());
 
-        // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
-        // savedInstanceState is non-null when there is fragment state
-        // saved from previous configurations of this activity
-        // (e.g. when rotating the screen from portrait to landscape).
-        // In this case, the fragment will automatically be re-added
-        // to its container so we don't need to manually add it.
-        // For more information, see the Fragments API guide at:
-        //
-        // http://developer.android.com/guide/components/fragments.html
-        //
         if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-            LottieFragment fragment = LottieFragment.createInstance(file);
-            getSupportFragmentManager().beginTransaction().add(R.id.lottie_detail_container, fragment).commit();
+            setDetailFragment(LottieFragment.createInstance(file));
         }
     }
 
     @Override
+    protected void onDestroy() {
+        subscriptions.clear();
+        unbinder.unbind();
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. For
-            // more label, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-            navigateUpTo(new Intent(this, LottiesActivity.class));
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                navigateUpTo(LottiesActivity.createIntent(this));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+    }
+
+    private int setDetailFragment(LottieFragment fragment) {
+        return getSupportFragmentManager().beginTransaction().replace(R.id.lottie_detail_container, fragment).commit();
     }
 }

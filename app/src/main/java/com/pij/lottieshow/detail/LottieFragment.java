@@ -1,10 +1,8 @@
 package com.pij.lottieshow.detail;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,7 +81,7 @@ public class LottieFragment extends DaggerFragment {
 
         // display the content
         if (lottie != null) {
-            converter.toModel(lottie).subscribe(viewModel::loadLottie, this::notifyError);
+            subscriptions.add(converter.toModel(lottie).subscribe(viewModel::loadLottie, this::notifyError));
         }
     }
 
@@ -115,11 +113,7 @@ public class LottieFragment extends DaggerFragment {
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
 
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout)activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(lottie.label());
-            }
+            getActivity().setTitle(lottie.label());
         }
     }
 }
