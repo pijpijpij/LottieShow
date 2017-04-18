@@ -1,7 +1,9 @@
 package com.pij.lottieshow.list;
 
+import android.net.Uri;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +29,6 @@ import static org.apache.commons.collections4.IterableUtils.toList;
 class LottiesAdapter extends RecyclerView.Adapter<LottieViewHolder> {
 
     private final PublishSubject<LottieUi> itemClicked = PublishSubject.create();
-    private final PublishSubject<LottieUi> contentNeeded = PublishSubject.create();
     private final int itemLayout;
     @NonNull
     private List<Pair<LottieUi, Single<String>>> values = emptyList();
@@ -68,8 +69,10 @@ class LottiesAdapter extends RecyclerView.Adapter<LottieViewHolder> {
 
     @SuppressWarnings("WeakerAccess")
     public void setItems(List<Pair<LottieUi, Single<String>>> items) {
+        List<Pair<LottieUi, Single<String>>> oldValues = values;
         values = toList(items);
-        notifyDataSetChanged();
+        DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new MyCallback(oldValues, items));
+        diff.dispatchUpdatesTo(this);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -77,4 +80,43 @@ class LottiesAdapter extends RecyclerView.Adapter<LottieViewHolder> {
         return itemClicked.asObservable();
     }
 
+    private static class MyCallback extends DiffUtil.Callback {
+
+        private final List<Pair<LottieUi, Single<String>>> oldValues;
+        private final List<Pair<LottieUi, Single<String>>> newValues;
+
+        MyCallback(List<Pair<LottieUi, Single<String>>> oldValues, List<Pair<LottieUi, Single<String>>> newValues) {
+            this.oldValues = oldValues;
+            this.newValues = newValues;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldValues.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return newValues.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            Uri oldItemId = getItemId(oldItemPosition, oldValues);
+            Uri newItemId = getItemId(newItemPosition, newValues);
+            return oldItemId.equals(newItemId);
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            Pair<LottieUi, Single<String>> oldItem = oldValues.get(oldItemPosition);
+            Pair<LottieUi, Single<String>> newItem = newValues.get(newItemPosition);
+            return oldItem.getLeft().label().equals(newItem.getLeft().label()) &&
+                   oldItem.getRight() == newItem.getRight();
+        }
+
+        private Uri getItemId(int position, List<Pair<LottieUi, Single<String>>> values) {
+            return values.get(position).getLeft().id();
+        }
+    }
 }
