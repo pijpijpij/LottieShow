@@ -3,7 +3,9 @@ package com.pij.lottieshow;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 
+import com.pij.lottieshow.detail.LottieActivitySubComponent;
 import com.pij.lottieshow.detail.LottieFragmentSubcomponent;
 import com.pij.lottieshow.interactor.CompoundSerializer;
 import com.pij.lottieshow.interactor.ContentResolverSerializer;
@@ -27,7 +29,9 @@ import dagger.multibindings.IntoSet;
  * <p>Created on 08/04/2017.</p>
  * @author Pierrejean
  */
-@Module(subcomponents = { LottiesActivitySubComponent.class, LottieFragmentSubcomponent.class })
+@Module(subcomponents = {
+        LottiesActivitySubComponent.class, LottieActivitySubComponent.class, LottieFragmentSubcomponent.class
+})
 abstract class LottieApplicationModule {
 
     @Provides
@@ -56,6 +60,11 @@ abstract class LottieApplicationModule {
     @Provides
     static AssetManager provideAssetManager(Context context) {
         return context.getAssets();
+    }
+
+    @Provides
+    static Resources provideResources(Context context) {
+        return context.getResources();
     }
 
     @Provides

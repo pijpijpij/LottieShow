@@ -36,8 +36,8 @@ public class SafClient {
     private final PublishSubject<Intent> jsonFilePicked = PublishSubject.create();
     private final PublishSubject<Boolean> inProgress = PublishSubject.create();
 
-    @SuppressWarnings("WeakerAccess")
     @Inject
+    @SuppressWarnings("WeakerAccess")
     public SafClient(ContentResolver contentResolver, ContentResolverSerializer serializer) {
         this.contentResolver = contentResolver;
         this.serializer = serializer;
