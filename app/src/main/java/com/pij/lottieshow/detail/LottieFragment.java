@@ -15,11 +15,9 @@ import com.hannesdorfmann.fragmentargs.annotation.FragmentWithArgs;
 import com.pij.lottieshow.R;
 import com.pij.lottieshow.list.LottiesActivity;
 import com.pij.lottieshow.model.Converter;
+import com.pij.lottieshow.model.LottieContent;
 import com.pij.lottieshow.model.LottieUi;
 import com.pij.lottieshow.ui.Utils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import javax.inject.Inject;
 
@@ -28,6 +26,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.support.DaggerFragment;
 import rx.Observable;
+import rx.Single;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -76,12 +75,12 @@ public class LottieFragment extends DaggerFragment {
         // TODO Move this code to LottieActivity
         updateToolbar();
 
-        Observable<JSONObject> content = viewModel.showAnimation().map(this::asJsonObject);
+        Observable<LottieContent> content = viewModel.showAnimation().map(Single::just).map(LottieContent::create);
         subscriptions.addAll(
                 // Display the lottie
-                content.subscribe(animation::setAnimation, this::notifyError),
+                content.flatMapSingle(LottieContent::content).subscribe(animation::setAnimation, this::notifyError),
                 // Display its version
-                content.map(this::extractVersion).subscribe(version::setText, this::notifyError),
+                content.flatMapSingle(LottieContent::version).subscribe(version::setText, this::notifyError),
 
                 // Display errors
                 viewModel.showLoadingError().subscribe(this::notifyError, this::notifyError));
@@ -98,24 +97,6 @@ public class LottieFragment extends DaggerFragment {
         animation.cancelAnimation();
         unbinder.unbind();
         super.onDestroyView();
-    }
-
-    private String extractVersion(JSONObject input) {
-        try {
-            return input.getString("v");
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @NonNull
-    private JSONObject asJsonObject(String json) {
-        try {
-            return new JSONObject(json);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
     }
 
     private void notifyError(Throwable error) {
