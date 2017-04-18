@@ -8,13 +8,12 @@ import com.pij.lottieshow.model.LottieFile;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
-import java.util.List;
 
 import javax.inject.Inject;
 
 import rx.Observable;
+import rx.Single;
 
-import static org.apache.commons.collections4.IterableUtils.transformedIterable;
 import static org.apache.commons.lang3.ArrayUtils.EMPTY_STRING_ARRAY;
 import static org.apache.commons.lang3.ArrayUtils.nullToEmpty;
 import static rx.Observable.empty;
@@ -27,10 +26,12 @@ import static rx.Observable.just;
 class AssetSource implements LottieSource {
 
     private final AssetManager assetManager;
+    private final Serializer serializer;
 
     @Inject
-    AssetSource(AssetManager assetManager) {
+    AssetSource(AssetManager assetManager, AssetSerializer serializer) {
         this.assetManager = assetManager;
+        this.serializer = serializer;
     }
 
     /**
@@ -38,31 +39,34 @@ class AssetSource implements LottieSource {
      */
     @Override
     public Observable<Iterable<LottieFile>> lottieFiles() {
-        Observable<String> relative = just("samples");
-        Observable<String> absolute = relative.map(s -> AssetSerializer.PREFIX + s);
-        Observable<Iterable<URI>> files = relative.map(this::list).map(Arrays::asList).zipWith(absolute, this::asURI);
-        // TODO specify somewhere how to open this file.
-        return files.flatMap(list -> Observable.from(list)
-                                               .map(LottieFile::create)
-                                               .doOnError(Throwable::printStackTrace)
-                                               .onErrorResumeNext(e -> empty())
-                                               .toList());
+        Observable<String> relativeFolder = just("samples");
+        Observable<Iterable<String>> shortFilenames = relativeFolder.map(this::listFiles).map(Arrays::asList);
+        Observable<String> absoluteFolder = relativeFolder.map(s -> AssetSerializer.PREFIX + s);
+
+        return shortFilenames.flatMap(list -> Observable.combineLatest(absoluteFolder,
+                                                                       Observable.from(list),
+                                                                       this::absoluteAssertName)
+                                                        .map(URI::create)
+                                                        .onErrorResumeNext(e -> empty())
+                                                        .map(LottieFile::create)
+                                                        .flatMapSingle(this::appendContent)
+                                                        .toList());
     }
 
     @NonNull
-    private Iterable<URI> asURI(List<String> shortNames, String absoluteFolder) {
-        return transformedIterable(shortNames, input -> asURI(input, absoluteFolder));
+    private Single<LottieFile> appendContent(LottieFile file) {
+        return Single.zip(Single.just(file), Single.just(serializer.open(file)), LottieFile::create);
     }
 
     @NonNull
-    private URI asURI(String shortName, String absoluteFolder) {
-        return URI.create(absoluteFolder + "/" + shortName);
+    private String absoluteAssertName(String absoluteFolder, String shortName) {
+        return absoluteFolder + "/" + shortName;
     }
 
     @NonNull
-    private String[] list(String folder) {
+    private String[] listFiles(String folder) {
         try {
-            return nullToEmpty(assetManager.list("samples"));
+            return nullToEmpty(assetManager.list(folder));
         } catch (IOException e) {
             e.printStackTrace();
             return EMPTY_STRING_ARRAY;

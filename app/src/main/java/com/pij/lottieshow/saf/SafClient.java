@@ -1,4 +1,4 @@
-package com.pij.lottieshow.list;
+package com.pij.lottieshow.saf;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 
+import com.pij.lottieshow.interactor.ContentResolverSerializer;
+import com.pij.lottieshow.interactor.Serializer;
 import com.pij.lottieshow.model.LottieFile;
 
 import java.net.URI;
@@ -27,16 +29,18 @@ import static rx.Single.zip;
  * @author Pierrejean
  */
 
-class SafClient {
+public class SafClient {
 
     private final ContentResolver contentResolver;
+    private final Serializer serializer;
     private final PublishSubject<Intent> jsonFilePicked = PublishSubject.create();
-    private PublishSubject<Boolean> inProgress = PublishSubject.create();
+    private final PublishSubject<Boolean> inProgress = PublishSubject.create();
 
     @SuppressWarnings("WeakerAccess")
     @Inject
-    public SafClient(ContentResolver contentResolver) {
+    public SafClient(ContentResolver contentResolver, ContentResolverSerializer serializer) {
         this.contentResolver = contentResolver;
+        this.serializer = serializer;
     }
 
     /**
@@ -62,9 +66,11 @@ class SafClient {
     @SuppressWarnings("WeakerAccess")
     public Observable<LottieFile> analysed() {
         return jsonFilePicked.map(Intent::getData)
-                             .doOnNext(ignored -> inProgress.onNext(true))
-                             .flatMap(uri -> createLottie(uri).toObservable()
-                                                              .doAfterTerminate(() -> inProgress.onNext(false)));
+                             .flatMapSingle(uri -> Single.just(uri)
+                                                         .doOnSubscribe(() -> inProgress.onNext(true))
+                                                         .flatMap(this::createLottie)
+                                                         .map(file -> LottieFile.create(file, serializer.open(file)))
+                                                         .doAfterTerminate(() -> inProgress.onNext(false)));
     }
 
     @SuppressWarnings("WeakerAccess")

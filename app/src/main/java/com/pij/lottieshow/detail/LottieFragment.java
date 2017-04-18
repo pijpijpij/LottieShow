@@ -8,14 +8,13 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.hannesdorfmann.fragmentargs.FragmentArgs;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentWithArgs;
 import com.pij.lottieshow.R;
-import com.pij.lottieshow.list.LottieListActivity;
+import com.pij.lottieshow.list.LottiesActivity;
 import com.pij.lottieshow.model.Converter;
 import com.pij.lottieshow.model.LottieUi;
 import com.pij.lottieshow.ui.Utils;
@@ -33,7 +32,7 @@ import rx.subscriptions.CompositeSubscription;
 
 /**
  * A fragment representing a single Lottie detail screen.
- * This fragment is either contained in a {@link LottieListActivity}
+ * This fragment is either contained in a {@link LottiesActivity}
  * in two-pane mode (on tablets) or a {@link LottieActivity}
  * on handsets.
  */
@@ -48,8 +47,6 @@ public class LottieFragment extends DaggerFragment {
     @Inject
     Converter converter;
 
-    @BindView(R.id.lottie_detail)
-    TextView label;
     @BindView(R.id.animation)
     LottieAnimationView animation;
     private Unbinder unbinder;
@@ -87,7 +84,6 @@ public class LottieFragment extends DaggerFragment {
         // display the content
         if (lottie != null) {
             converter.toModel(lottie).subscribe(viewModel::loadLottie, this::notifyError);
-            label.setText(lottie.label());
         }
     }
 

@@ -3,11 +3,6 @@ package com.pij.lottieshow.detail;
 import com.pij.lottieshow.interactor.Serializer;
 import com.pij.lottieshow.model.LottieFile;
 
-import org.apache.commons.io.IOUtils;
-
-import java.io.IOException;
-import java.io.Reader;
-
 import javax.inject.Inject;
 
 import rx.Observable;
@@ -34,24 +29,15 @@ class LottieViewModel {
 
     @SuppressWarnings("WeakerAccess")
     public Observable<String> showAnimation() {
-        return lottie.flatMap(input -> serializer.open(input)
-                                                 .map(this::read)
-                                                 .toObservable()
-                                                 .doOnError(errors::onNext)
-                                                 .onErrorResumeNext(empty()));
+        return lottie.concatMap(input -> serializer.open(input)
+                                                   .toObservable()
+                                                   .doOnError(errors::onNext)
+                                                   .onErrorResumeNext(empty()));
     }
 
     @SuppressWarnings("WeakerAccess")
     public Observable<Throwable> showLoadingError() {
         return errors;
-    }
-
-    private String read(Reader input) {
-        try {
-            return IOUtils.toString(input);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }

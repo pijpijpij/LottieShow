@@ -10,8 +10,6 @@ import org.apache.commons.io.IOUtils;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.URI;
 
 import javax.inject.Inject;
@@ -20,7 +18,6 @@ import rx.Single;
 
 import static java.nio.charset.Charset.defaultCharset;
 import static rx.Single.just;
-import static rx.Single.using;
 
 /**
  * <p>Created on 13/04/2017.</p>
@@ -39,16 +36,8 @@ class AssetSerializer implements Serializer {
     }
 
     @Override
-    public Single<Reader> open(LottieFile input) {
-        return just(input).map(LottieFile::id)
-                          .map(URI::toString)
-                          .map(this::assetFileName)
-                          .flatMap(filename -> using(() -> open(filename), this::asReader, IOUtils::closeQuietly));
-    }
-
-    @NonNull
-    private Single<InputStreamReader> asReader(InputStream stream) {
-        return just(stream).zipWith(just(defaultCharset()), InputStreamReader::new);
+    public Single<String> open(LottieFile input) {
+        return just(input).map(LottieFile::id).map(URI::toString).map(this::assetFileName).map(this::open);
     }
 
     @NonNull
@@ -60,13 +49,14 @@ class AssetSerializer implements Serializer {
 
     }
 
-    private InputStream open(String asset) {
-        try {
-            return assets.open(asset);
+    private String open(String asset) {
+        try (InputStream input = assets.open(asset)) {
+            return IOUtils.toString(input, defaultCharset());
         } catch (FileNotFoundException e) {
             throw new UnknownFileException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+
 }
