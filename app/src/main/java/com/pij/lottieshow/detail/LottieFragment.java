@@ -81,7 +81,7 @@ public class LottieFragment extends DaggerFragment {
 
         // display the content
         if (lottie != null) {
-            converter.toModel(lottie).subscribe(viewModel::loadLottie, this::notifyError);
+            subscriptions.add(converter.toModel(lottie).subscribe(viewModel::loadLottie, this::notifyError));
         }
     }
 
