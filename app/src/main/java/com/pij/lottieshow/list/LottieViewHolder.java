@@ -32,6 +32,8 @@ class LottieViewHolder extends RecyclerView.ViewHolder {
     private final CompositeSubscription subscription = new CompositeSubscription();
     @BindView(R.id.label)
     TextView label;
+    @BindView(R.id.version)
+    TextView version;
     @BindView(R.id.placeholder)
     ImageView placeholder;
     @BindView(R.id.image)
@@ -62,7 +64,7 @@ class LottieViewHolder extends RecyclerView.ViewHolder {
     public void setClickListener(Observer<LottieUi> observer) {
         resetClickListener();
         subscription.addAll(clicks.subscribe(observer),
-                            content.map(this::asJSON).subscribe(this::showAnimation, this::showFailedLoad));
+                            content.map(this::asJSON).subscribe(this::updateItem, this::showFailedLoad));
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -74,14 +76,25 @@ class LottieViewHolder extends RecyclerView.ViewHolder {
         this.content = content;
     }
 
-    private void showAnimation(@Nullable JSONObject json) {
-        if (json == null) {
+    private void updateItem(@Nullable JSONObject content) {
+        if (content == null) {
             showFailedContent();
+            version.setText(null);
         } else {
-            image.setAnimation(json);
-            image.setVisibility(View.VISIBLE);
-            placeholder.setVisibility(View.INVISIBLE);
+            showAnimation(content);
+            showVersion(content);
         }
+    }
+
+    private void showVersion(JSONObject content) {
+        String version = content.optString("v");
+        this.version.setText(version);
+    }
+
+    private void showAnimation(@NonNull JSONObject json) {
+        image.setAnimation(json);
+        image.setVisibility(View.VISIBLE);
+        placeholder.setVisibility(View.INVISIBLE);
     }
 
     private void showFailedLoad(Throwable error) {
@@ -95,8 +108,9 @@ class LottieViewHolder extends RecyclerView.ViewHolder {
         image.setVisibility(View.INVISIBLE);
     }
 
-    @NonNull
-    private JSONObject asJSON(@NonNull String input) {
+    @Nullable
+    private JSONObject asJSON(@Nullable String input) {
+        if (input == null) return null;
         try {
             return new JSONObject(input);
         } catch (JSONException e) {

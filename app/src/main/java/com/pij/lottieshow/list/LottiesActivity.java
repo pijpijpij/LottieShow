@@ -9,6 +9,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 
 import com.pij.lottieshow.R;
@@ -18,6 +20,7 @@ import com.pij.lottieshow.model.Converter;
 import com.pij.lottieshow.model.LottieFile;
 import com.pij.lottieshow.model.LottieUi;
 import com.pij.lottieshow.saf.SafClient;
+import com.pij.lottieshow.ui.LibraryString;
 import com.pij.lottieshow.ui.Utils;
 
 import org.apache.commons.collections4.IterableUtils;
@@ -69,7 +72,8 @@ public class LottiesActivity extends DaggerAppCompatActivity {
     SafClient saf;
     @Inject
     Converter converter;
-
+    @Inject
+    LibraryString libraryString;
     private Unbinder unbinder;
     private Snackbar progress;
 
@@ -136,6 +140,18 @@ public class LottiesActivity extends DaggerAppCompatActivity {
             default:
                 super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    /**
+     * Put the library version in the menu.
+     * We don't do anything when the _only_ menu is clicked.
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.lotties_menu, menu);
+        libraryString.configure(menu);
+        return true;
     }
 
     private Single<LottieFile> toModel(LottieUi ui) {

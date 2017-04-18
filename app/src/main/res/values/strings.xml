@@ -4,4 +4,7 @@
     <string name="snackbar_show_error">Display error details</string>
 
     <string name="lottie_icon_label">Initial Lottie image</string>
+    <string name="item_version_hint">version</string>
+    <string name="item_label_hint">this Lottie has no name</string>
+    <string name="lottie_library_version_template">Lottie library %1$s</string>
 </resources>

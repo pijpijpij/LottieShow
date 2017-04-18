@@ -36,6 +36,8 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+
+        resValue "string", "lottie_library_version", lottieVersion
     }
     buildTypes {
         release {
@@ -51,6 +53,7 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:cardview-v7:$supportVersion"
     compile "com.android.support:design:$supportVersion"
+    compile "com.android.support:percent:$supportVersion"
     compile "com.jakewharton:butterknife:$butterknifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
@@ -80,7 +83,7 @@ dependencies {
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
     testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 
-    compile 'com.airbnb.android:lottie:1.5.3'
+    compile "com.airbnb.android:lottie:$lottieVersion"
 
     testCompile "junit:junit:$junitVersion"
 //    testCompile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"

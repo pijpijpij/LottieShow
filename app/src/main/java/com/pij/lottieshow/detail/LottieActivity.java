@@ -6,17 +6,22 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.pij.lottieshow.R;
 import com.pij.lottieshow.list.LottiesActivity;
 import com.pij.lottieshow.model.LottieUi;
+import com.pij.lottieshow.ui.LibraryString;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import dagger.android.support.DaggerAppCompatActivity;
 import rx.subscriptions.CompositeSubscription;
 import se.emilsjolander.intentbuilder.Extra;
 import se.emilsjolander.intentbuilder.IntentBuilder;
@@ -28,7 +33,7 @@ import se.emilsjolander.intentbuilder.IntentBuilder;
  * in a {@link LottiesActivity}.
  */
 @IntentBuilder
-public class LottieActivity extends AppCompatActivity {
+public class LottieActivity extends DaggerAppCompatActivity {
 
     private final CompositeSubscription subscriptions = new CompositeSubscription();
     @Extra
@@ -37,6 +42,8 @@ public class LottieActivity extends AppCompatActivity {
     Toolbar toolbar;
     @BindView(R.id.fab)
     FloatingActionButton fab;
+    @Inject
+    LibraryString libraryString;
     private Unbinder unbinder;
 
     @NonNull
@@ -47,8 +54,8 @@ public class LottieActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LottieActivityIntentBuilder.inject(getIntent(), this);
         setContentView(R.layout.activity_lottie_detail);
+        LottieActivityIntentBuilder.inject(getIntent(), this);
         unbinder = ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
@@ -70,6 +77,18 @@ public class LottieActivity extends AppCompatActivity {
         subscriptions.clear();
         unbinder.unbind();
         super.onDestroy();
+    }
+
+    /**
+     * Put the library version in the menu.
+     * We don't do anything when the _only_ menu is clicked.
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.lotties_menu, menu);
+        libraryString.configure(menu);
+        return true;
     }
 
     @Override
