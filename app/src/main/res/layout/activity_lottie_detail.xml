@@ -4,8 +4,7 @@
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
                                                  android:fitsSystemWindows="true"
-                                                 tools:context="com.pij.lottieshow.detail.LottieActivity"
-                                                 tools:ignore="MergeRootFrame">
+                                                 tools:context="com.pij.lottieshow.detail.LottieActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -24,7 +23,8 @@
     <FrameLayout
         android:id="@+id/lottie_detail_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <!--We may have one FAB later-->
     <android.support.design.widget.FloatingActionButton

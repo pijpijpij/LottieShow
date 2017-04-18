@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.hannesdorfmann.fragmentargs.FragmentArgs;
@@ -26,6 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.support.DaggerFragment;
+import rx.Observable;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -47,6 +49,8 @@ public class LottieFragment extends DaggerFragment {
 
     @BindView(R.id.animation)
     LottieAnimationView animation;
+    @BindView(R.id.version)
+    TextView version;
     private Unbinder unbinder;
     private CompositeSubscription subscriptions = new CompositeSubscription();
 
@@ -72,9 +76,12 @@ public class LottieFragment extends DaggerFragment {
         // TODO Move this code to LottieActivity
         updateToolbar();
 
+        Observable<JSONObject> content = viewModel.showAnimation().map(this::asJsonObject);
         subscriptions.addAll(
                 // Display the lottie
-                viewModel.showAnimation().map(this::asJsonObject).subscribe(animation::setAnimation, this::notifyError),
+                content.subscribe(animation::setAnimation, this::notifyError),
+                // Display its version
+                content.map(this::extractVersion).subscribe(version::setText, this::notifyError),
 
                 // Display errors
                 viewModel.showLoadingError().subscribe(this::notifyError, this::notifyError));
@@ -91,6 +98,14 @@ public class LottieFragment extends DaggerFragment {
         animation.cancelAnimation();
         unbinder.unbind();
         super.onDestroyView();
+    }
+
+    private String extractVersion(JSONObject input) {
+        try {
+            return input.getString("v");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @NonNull

@@ -8,12 +8,23 @@
     android:padding="@dimen/horizontal_margin"
     tools:context="com.pij.lottieshow.detail.LottieFragment">
 
-    <TextView android:id="@+id/error"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center_horizontal"
-              tools:text="Error message"/>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:orientation="vertical">
+        <TextView android:id="@+id/version"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="end"
+                  tools:text="v 4.4.45"/>
 
+        <TextView android:id="@+id/error"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center_horizontal"
+                  tools:text="Error message"/>
+
+    </LinearLayout>
+
+    <!--This it on top of the 2 lines of test, on purpose-->
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animation"
         android:layout_width="match_parent"
