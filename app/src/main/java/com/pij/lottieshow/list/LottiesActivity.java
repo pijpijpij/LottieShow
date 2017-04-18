@@ -1,5 +1,6 @@
 package com.pij.lottieshow.list;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -27,7 +28,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import dagger.android.AndroidInjection;
 import dagger.android.support.DaggerAppCompatActivity;
 import rx.Observable;
 import rx.Single;
@@ -73,17 +73,20 @@ public class LottiesActivity extends DaggerAppCompatActivity {
     private Unbinder unbinder;
     private Snackbar progress;
 
+    @NonNull
+    public static Intent createIntent(Context context) {
+        return new Intent(context, LottiesActivity.class);
+    }
+
     public LottiesActivity() {}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lottie_list);
         unbinder = ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
 
         progress = Snackbar.make(fab, "Loading...", Snackbar.LENGTH_INDEFINITE);
 
@@ -167,9 +170,11 @@ public class LottiesActivity extends DaggerAppCompatActivity {
 
     @NonNull
     private <T> Observable.Transformer<LottieFile, T> mapWithoutError(final Func1<LottieUi, T> mapper) {
-        return lottie -> lottie.flatMapSingle(this::fromModel).map(Pair::getLeft).flatMap(item -> just(item).map(mapper)
-                                                                                                            .doOnError(this::notifyError)
-                                                                                                            .onErrorResumeNext(empty()));
+        return lottie -> lottie.flatMapSingle(this::fromModel)
+                               .map(Pair::getLeft)
+                               .flatMap(item -> just(item).map(mapper)
+                                                          .doOnError(this::notifyError)
+                                                          .onErrorResumeNext(empty()));
     }
 
     private int setDetailFragment(LottieFragment fragment) {
