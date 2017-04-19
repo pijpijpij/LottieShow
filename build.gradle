@@ -72,7 +72,7 @@ ext {
 
     leakCanaryVersion = '1.5'
 
-    def calculateVersionCode = { String versionName ->
+    calculateVersionCode = { String versionName ->
         def shortVersion = versionName.split("-", 2)[0]
         def strings = shortVersion.split("\\.", 3)
         def numbers = strings.collect {

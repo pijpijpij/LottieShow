@@ -63,7 +63,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
-        versionCode rootProject.ext.calculateVersionCode(project.version)
+        versionCode calculateVersionCode(project.version)
         versionName project.version
         resConfigs "en", "fr"
         if (serviceAccountSetup) playAccountConfig = playAccountConfigs.defaultAccountConfig
