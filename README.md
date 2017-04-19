@@ -3,7 +3,7 @@ This is a visualisation tool for [Lotties](http://airbnb.design/lottie/), animat
 
 It lists the Lotties it knows about. Each one can be viewed in more detail.
 
-# Integration
+## Integration
 The app can import Lotties from a few sources:
 - The local SD card,
 - Google Drive,
@@ -12,22 +12,22 @@ folder.
  
 These imports are achieved via the Storage Access framework.
 
-# Future ideas
+# Further ideas
 
-They are, in no particular order:
+They are, in **no** particular order:
 - Integration with [Dropbox](https://github.com/pijpijpij/LottieShow/issues/21)
 - Opening a Lottie directly [from other applications](https://github.com/pijpijpij/LottieShow/issues/22). That's in essence declaring the app as a handler for *.json 
 files.
 - Monitor removal/insertion of External storage (see https://developer.android.com/reference/android/os/Environment.html#getExternalStorageDirectory())
 - Online library
 - Export as video
-- Show Lottie library version
+- ~~Show [versions](https://github.com/pijpijpij/LottieShow/issues/27) of Lottie and the library used.~~
 - Change background colour (with a colour picker or a simple RGB value)
 - auto-sync with Google drive or Dropbox
 - export from Bodymovin
 - resizing (during replay) with a slider.
-- play:
-  - continuous
+- play animation:
+  - ~~continuously~~
   - back and forth
 - reverse slider
 - show in context (put a screen grab in the background)
