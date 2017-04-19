@@ -1,6 +1,7 @@
 buildscript {
     dependencies {
 //        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath 'com.github.triplet.gradle:play-publisher:1.2.0'
         classpath 'com.android.tools.build:gradle:2.3.1'
         // Should be the last one on the classpath according to the Retrolambda website.
         classpath "me.tatarka:gradle-retrolambda:$retrolambdaVersion"
@@ -10,7 +11,24 @@ buildscript {
 }
 apply plugin: 'com.android.application'
 //apply plugin: 'kotlin-android'
+apply plugin: 'com.github.triplet.play'
 apply plugin: 'me.tatarka.retrolambda'
+
+// signingStorePassword can be defined as an environment variable:
+// ORG_GRADLE_PROJECT_signingStorePassword=<the password>
+// or on the command line: -PsigningStorePassword=<the password>
+// Same with signingKeyAlias and <the alias>
+// Same with signingKeyPassword and <the password>
+// Same with signingKeyFile and <the file>
+def signingPijInternationalSetup = hasProperty('signingStoreFile') && hasProperty('signingStorePassword') && hasProperty('signingKeyAlias') &&
+        hasProperty('signingKeyPassword')
+println "Signing ${signingPijInternationalSetup ? "available" : "not setup"}."
+// Can be defined as an environment variable: ORG_GRADLE_PROJECT_serviceAccountEmail=<the email>
+// or on the command line: -PserviceAccountEmail=<the account email>
+// Same with pk12File and <the account file>
+def serviceAccountSetup = hasProperty('serviceAccountEmail') && hasProperty('pk12File')
+println "Service account ${serviceAccountSetup ? "available" : "not setup"}."
+
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -28,6 +46,15 @@ android {
 //        main.java.srcDirs += 'src/main/kotlin'
 //        test.java.srcDirs += 'src/test/kotlin'
 //    }
+    playAccountConfigs {
+        if (serviceAccountSetup) {
+            defaultAccountConfig {
+                serviceAccountEmail = project.serviceAccountEmail
+                pk12File = file(project.pk12File)
+            }
+        }
+    }
+
     defaultConfig {
         applicationId "com.pij.lottieshow"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -36,15 +63,43 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        versionCode calculateVersionCode(project.version)
+        versionName project.version
+        resConfigs "en", "fr"
+        if (serviceAccountSetup) playAccountConfig = playAccountConfigs.defaultAccountConfig
 
         resValue "string", "lottie_library_version", lottieVersion
     }
+
+    signingConfigs {
+        if (signingPijInternationalSetup) {
+            pijInternational {
+                storeFile = file(project.signingStoreFile)
+                storePassword = project.signingStorePassword
+                keyAlias = project.signingKeyAlias
+                keyPassword = project.signingKeyPassword
+            }
+        }
+    }
+
     buildTypes {
+        debug {
+            applicationIdSuffix ".test"
+            testCoverageEnabled true
+        }
         release {
             minifyEnabled true
+            shrinkResources true
+            if (signingPijInternationalSetup) signingConfig signingConfigs.pijInternational
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+}
+
+play {
+    track = 'beta' // or 'rollout' or 'production' or 'alpha'
+    userFraction = 0.2 // only necessary for 'rollout', in this case default is 0.1 (10% of the target)
+    uploadImages = true
 }
 
 dependencies {
@@ -74,6 +129,8 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
 
+    compile "io.reactivex:rxjava:rxJavaVersion"
+    compile "com.artemzin.rxjava:proguard-rules:$rxJavaProguardVersion"
     compile "com.jakewharton.rxbinding:rxbinding:$rxBindingsVersion"
     compile 'com.cantrowitz:rxbroadcast:1.1.1'
 

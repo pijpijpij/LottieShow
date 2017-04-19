@@ -4,7 +4,29 @@ buildscript {
     repositories {
         jcenter()
     }
+    dependencies {
+        classpath 'pl.allegro.tech.build:axion-release-plugin:1.6.0'
+    }
 }
+
+apply plugin: 'pl.allegro.tech.build.axion-release'
+
+scmVersion {
+    tag {
+        prefix = 'lottie-show'
+    }
+    if (hasProperty('githubPersonalAccessToken'))
+        repository {
+            customUsername = project.githubPersonalAccessToken
+        }
+    versionCreator 'versionWithBranch'
+    hooks {
+        pre 'fileUpdate', [file: 'README.md', pattern: { v, p -> /version: $v/ }, replacement: { v, p -> "version: $v" }]
+        pre 'commit', { v, p -> "Automatic update for release $v" }
+        post 'push'
+    }
+}
+
 
 ext {
     ciBuild = "true" == System.env['CI']
@@ -42,12 +64,36 @@ ext {
     autoValueParcelAdapter = 'com.ryanharter.auto.value:auto-value-parcel-adapter:0.2.2'
 
     rxJavaVersion = '1.2.7'
+    rxJavaProguardVersion = '1.2.7.0'
     rxJavaString = 'io.reactivex:rxjava-string:1.1.0'
     rxAndroid = 'io.reactivex:rxandroid:1.2.1'
 
     lottieVersion = '1.5.3'
 
     leakCanaryVersion = '1.5'
+
+    def calculateVersionCode = { String versionName ->
+        def shortVersion = versionName.split("-", 2)[0]
+        def strings = shortVersion.split("\\.", 3)
+        def numbers = strings.collect {
+            try {
+                it.toInteger()
+            } catch (ignored) {
+                0
+            }
+        }
+        while (numbers.size < 3) {
+            numbers.add(0)
+        }
+        def result = 0
+        numbers.eachWithIndex { number, i ->
+            if (i < 3) {
+                result = result * 1000 + number
+            }
+        }
+        result
+    }
+
 }
 
 allprojects {
@@ -59,6 +105,8 @@ allprojects {
     repositories {
         jcenter()
     }
+
+    project.version = scmVersion.version
 }
 
 task clean(type: Delete) {

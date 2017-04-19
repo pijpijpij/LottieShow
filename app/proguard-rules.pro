@@ -53,4 +53,4 @@
 # the unsafe functionality if the platform supports it.
 #  - ReactiveX/RxJava#1415 (comment)
 #  - https://github.com/ReactiveX/RxJava/blob/1.x/src/main/java/rx/internal/util/unsafe/UnsafeAccess.java#L23
--dontwarn rx.internal.util.unsafe.**
+#-dontwarn rx.internal.util.unsafe.**
