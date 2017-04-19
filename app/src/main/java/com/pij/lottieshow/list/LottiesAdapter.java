@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.pij.lottieshow.model.LottieContent;
 import com.pij.lottieshow.model.LottieUi;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -16,7 +17,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.List;
 
 import rx.Observable;
-import rx.Single;
 import rx.subjects.PublishSubject;
 
 import static java.util.Collections.emptyList;
@@ -31,7 +31,7 @@ class LottiesAdapter extends RecyclerView.Adapter<LottieViewHolder> {
     private final PublishSubject<LottieUi> itemClicked = PublishSubject.create();
     private final int itemLayout;
     @NonNull
-    private List<Pair<LottieUi, Single<String>>> values = emptyList();
+    private List<Pair<LottieUi, LottieContent>> values = emptyList();
 
     LottiesAdapter(@LayoutRes int itemLayout) {
         this.itemLayout = itemLayout;
@@ -45,7 +45,7 @@ class LottiesAdapter extends RecyclerView.Adapter<LottieViewHolder> {
 
     @Override
     public void onBindViewHolder(final LottieViewHolder holder, int position) {
-        Pair<LottieUi, Single<String>> item = values.get(position);
+        Pair<LottieUi, LottieContent> item = values.get(position);
         holder.setItem(item.getLeft());
         holder.setContent(item.getRight());
     }
@@ -68,8 +68,8 @@ class LottiesAdapter extends RecyclerView.Adapter<LottieViewHolder> {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void setItems(List<Pair<LottieUi, Single<String>>> items) {
-        List<Pair<LottieUi, Single<String>>> oldValues = values;
+    public void setItems(List<Pair<LottieUi, LottieContent>> items) {
+        List<Pair<LottieUi, LottieContent>> oldValues = values;
         values = toList(items);
         DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new MyCallback(oldValues, items));
         diff.dispatchUpdatesTo(this);
@@ -82,10 +82,10 @@ class LottiesAdapter extends RecyclerView.Adapter<LottieViewHolder> {
 
     private static class MyCallback extends DiffUtil.Callback {
 
-        private final List<Pair<LottieUi, Single<String>>> oldValues;
-        private final List<Pair<LottieUi, Single<String>>> newValues;
+        private final List<Pair<LottieUi, LottieContent>> oldValues;
+        private final List<Pair<LottieUi, LottieContent>> newValues;
 
-        MyCallback(List<Pair<LottieUi, Single<String>>> oldValues, List<Pair<LottieUi, Single<String>>> newValues) {
+        MyCallback(List<Pair<LottieUi, LottieContent>> oldValues, List<Pair<LottieUi, LottieContent>> newValues) {
             this.oldValues = oldValues;
             this.newValues = newValues;
         }
@@ -109,13 +109,13 @@ class LottiesAdapter extends RecyclerView.Adapter<LottieViewHolder> {
 
         @Override
         public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-            Pair<LottieUi, Single<String>> oldItem = oldValues.get(oldItemPosition);
-            Pair<LottieUi, Single<String>> newItem = newValues.get(newItemPosition);
+            Pair<LottieUi, LottieContent> oldItem = oldValues.get(oldItemPosition);
+            Pair<LottieUi, LottieContent> newItem = newValues.get(newItemPosition);
             return oldItem.getLeft().label().equals(newItem.getLeft().label()) &&
                    oldItem.getRight() == newItem.getRight();
         }
 
-        private Uri getItemId(int position, List<Pair<LottieUi, Single<String>>> values) {
+        private Uri getItemId(int position, List<Pair<LottieUi, LottieContent>> values) {
             return values.get(position).getLeft().id();
         }
     }

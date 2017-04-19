@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.pij.lottieshow.R;
+import com.pij.lottieshow.model.LottieContent;
 import com.pij.lottieshow.model.LottieUi;
 
 import org.json.JSONException;
@@ -18,7 +19,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observable;
 import rx.Observer;
-import rx.Single;
 import rx.subscriptions.CompositeSubscription;
 
 import static com.jakewharton.rxbinding.view.RxView.clicks;
@@ -39,7 +39,7 @@ class LottieViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.image)
     LottieAnimationView image;
     private Observable<LottieUi> clicks;
-    private Single<String> content;
+    private LottieContent content;
 
     @SuppressWarnings("WeakerAccess")
     public LottieViewHolder(View view) {
@@ -64,7 +64,8 @@ class LottieViewHolder extends RecyclerView.ViewHolder {
     public void setClickListener(Observer<LottieUi> observer) {
         resetClickListener();
         subscription.addAll(clicks.subscribe(observer),
-                            content.map(this::asJSON).subscribe(this::updateItem, this::showFailedLoad));
+                            content.content().subscribe(this::setAnimation, this::showFailedLoad),
+                            content.version().subscribe(this::setVersion, this::showFailedLoad));
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -72,29 +73,22 @@ class LottieViewHolder extends RecyclerView.ViewHolder {
         subscription.clear();
     }
 
-    public void setContent(@NonNull Single<String> content) {
+    public void setContent(@NonNull LottieContent content) {
         this.content = content;
     }
 
-    private void updateItem(@Nullable JSONObject content) {
+    private void setAnimation(@Nullable JSONObject content) {
         if (content == null) {
             showFailedContent();
-            version.setText(null);
         } else {
-            showAnimation(content);
-            showVersion(content);
+            image.setAnimation(content);
+            image.setVisibility(View.VISIBLE);
+            placeholder.setVisibility(View.INVISIBLE);
         }
     }
 
-    private void showVersion(JSONObject content) {
-        String version = content.optString("v");
-        this.version.setText(version);
-    }
-
-    private void showAnimation(@NonNull JSONObject json) {
-        image.setAnimation(json);
-        image.setVisibility(View.VISIBLE);
-        placeholder.setVisibility(View.INVISIBLE);
+    private void setVersion(String newValue) {
+        version.setText(newValue);
     }
 
     private void showFailedLoad(Throwable error) {

@@ -17,6 +17,7 @@ import com.pij.lottieshow.R;
 import com.pij.lottieshow.detail.LottieActivity;
 import com.pij.lottieshow.detail.LottieFragment;
 import com.pij.lottieshow.model.Converter;
+import com.pij.lottieshow.model.LottieContent;
 import com.pij.lottieshow.model.LottieFile;
 import com.pij.lottieshow.model.LottieUi;
 import com.pij.lottieshow.saf.SafClient;
@@ -158,8 +159,10 @@ public class LottiesActivity extends DaggerAppCompatActivity {
         return converter.toModel(ui);
     }
 
-    private Single<Pair<LottieUi, Single<String>>> fromModel(LottieFile model) {
-        return Single.zip(converter.fromModel(model), Single.just(model.content()), Pair::of);
+    private Single<Pair<LottieUi, LottieContent>> fromModel(LottieFile model) {
+        return Single.zip(converter.fromModel(model),
+                          Single.just(model.content()).map(LottieContent::create),
+                          Pair::of);
     }
 
     private void showProgress(boolean inProgress) {
