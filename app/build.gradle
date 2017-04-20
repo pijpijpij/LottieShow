@@ -12,7 +12,9 @@ buildscript {
 }
 apply plugin: 'com.android.application'
 //apply plugin: 'kotlin-android'
-apply plugin: 'io.fabric'
+if (useFabric) {
+    apply plugin: 'io.fabric'
+}
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'me.tatarka.retrolambda'
 
@@ -89,7 +91,7 @@ android {
         release {
             minifyEnabled true
             shrinkResources true
-            buildConfigField "boolean", "USE_FABRIC", "true"
+            buildConfigField "boolean", "USE_FABRIC", useFabric ? "true" : "false"
             if (signingPijInternationalSetup) signingConfig signingConfigs.pijInternational
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

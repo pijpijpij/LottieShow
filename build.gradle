@@ -30,6 +30,7 @@ scmVersion {
 
 ext {
     ciBuild = "true" == System.env['CI']
+    useFabric = !ciBuild
 
 //    kotlinVersion = '1.1.1'
     sourceCompatibility = 1.8
