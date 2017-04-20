@@ -2,6 +2,9 @@
 <manifest package="com.pij.lottieshow"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.INTERNET">
+        <!--For Crashlytics-->
+    </uses-permission>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
