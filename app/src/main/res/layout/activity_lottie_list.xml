@@ -4,6 +4,7 @@
                                                  xmlns:tools="http://schemas.android.com/tools"
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
+                                                 android:animateLayoutChanges="true"
                                                  android:fitsSystemWindows="true"
                                                  tools:context="com.pij.lottieshow.list.LottiesActivity">
 
@@ -31,7 +32,7 @@
                   android:layout_gravity="center"
                   android:layout_margin="@dimen/list_keyline"
                   android:gravity="center"
-                  android:text="@string/list_empty"
+                  android:hint="@string/list_empty"
                   android:textAppearance="?android:attr/textAppearanceLarge"
         />
     </FrameLayout>
@@ -44,6 +45,5 @@
         android:layout_margin="@dimen/fab_margin"
         android:tint="?attr/colorButtonNormal"
         app:srcCompat="@drawable/ic_add_black_24dp"/>
-
 
 </android.support.design.widget.CoordinatorLayout>

@@ -12,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.pij.lottieshow.R;
@@ -26,9 +28,8 @@ import com.pij.lottieshow.ui.LibraryString;
 import com.pij.lottieshow.ui.Utils;
 
 import org.apache.commons.collections4.IterableUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.tuple.Pair;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -39,7 +40,9 @@ import dagger.android.support.DaggerAppCompatActivity;
 import rx.Observable;
 import rx.Single;
 import rx.Subscription;
+import rx.functions.Actions;
 import rx.functions.Func1;
+import rx.subjects.BehaviorSubject;
 import rx.subscriptions.CompositeSubscription;
 
 import static com.jakewharton.rxbinding.view.RxView.clicks;
@@ -60,6 +63,7 @@ public class LottiesActivity extends DaggerAppCompatActivity {
     private static final int REQUEST_CODE_PICK = 24;
 
     private final CompositeSubscription subscriptions = new CompositeSubscription();
+    private final BehaviorSubject<Boolean> onCreate = BehaviorSubject.create();
     @Nullable
     @BindView(R.id.lottie_detail_container)
     View detailContainer;
@@ -71,7 +75,6 @@ public class LottiesActivity extends DaggerAppCompatActivity {
     RecyclerView list;
     @BindView(R.id.empty)
     TextView empty;
-
     @Inject
     LottiesViewModel viewModel;
     @Inject
@@ -110,10 +113,11 @@ public class LottiesActivity extends DaggerAppCompatActivity {
                              adapter.itemClicked().flatMapSingle(this::toModel)
                                     .subscribe(viewModel::select, this::notifyError),
 
+                             // error handling
+                             viewModel.shouldShowList().subscribe(ignored -> Actions.empty(), this::notifyError),
                              viewModel.shouldShowList()
-                                      .map(IterableUtils::emptyIfNull)
                                       .flatMap(list -> from(list).flatMapSingle(this::fromModel).toList())
-                                      .subscribe(items -> applyItems(adapter, items), this::notifyError),
+                                      .subscribe(adapter::setItems, e -> empty()),
 
                              // The detail container view will be present only in the
                              // large-screen layouts (res/values-w900dp).
@@ -121,11 +125,28 @@ public class LottiesActivity extends DaggerAppCompatActivity {
                              // activity should be in two-pane mode.
                              detailContainer == null
                              ? showInActivity(viewModel.shouldShowLottie())
-                             : showInFragment(viewModel.shouldShowLottie()));
+                             : showInFragment(viewModel.shouldShowLottie()),
+
+                             viewModel.shouldShowList()
+                                      .map(IterableUtils::isEmpty)
+                                      .map(empty -> empty ? View.VISIBLE : View.GONE)
+                                      .subscribe(empty::setVisibility, e -> empty()),
+                             Observable.zip(viewModel.shouldShowList().map(IterableUtils::isEmpty),
+                                            onCreate,
+                                            (emptyList, firstCreate) -> emptyList && firstCreate)
+                                       .filter(BooleanUtils::isTrue)
+                                       .take(1)
+                                       .subscribe(this::animateFab, e -> empty())
+
+        );
+
+        onCreate.onNext(savedInstanceState == null);
+        System.out.println("PJC in onCreate");
     }
 
     @Override
     protected void onDestroy() {
+        fab.clearAnimation();
         subscriptions.clear();
         unbinder.unbind();
         super.onDestroy();
@@ -160,9 +181,10 @@ public class LottiesActivity extends DaggerAppCompatActivity {
         return true;
     }
 
-    private void applyItems(LottiesAdapter target, List<Pair<LottieUi, LottieContent>> items) {
-        target.setItems(items);
-        empty.setVisibility(items.size() > 0 ? View.GONE : View.VISIBLE);
+    private void animateFab(boolean extraordinary) {
+        int resource = extraordinary ? R.anim.pulses : R.anim.slide_in_right;
+        Animation animation = AnimationUtils.loadAnimation(this, resource);
+        fab.startAnimation(animation);
     }
 
     private Single<LottieFile> toModel(LottieUi ui) {
