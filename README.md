@@ -12,6 +12,12 @@ folder.
  
 These imports are achieved via the Storage Access framework.
 
+## Dev notes
+
+To upload to Beta on the `master` branch:
+
+`> gradlew assembleRelease crashlyticsUploadDistributionRelease`
+
 # Further ideas
 
 They are, in **no** particular order:

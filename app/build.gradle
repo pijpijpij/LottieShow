@@ -3,6 +3,7 @@ buildscript {
 //        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath 'com.github.triplet.gradle:play-publisher:1.2.0'
         classpath 'com.android.tools.build:gradle:2.3.1'
+        classpath "io.fabric.tools:gradle:1.22.0"
         // Should be the last one on the classpath according to the Retrolambda website.
         classpath "me.tatarka:gradle-retrolambda:$retrolambdaVersion"
         // For lintVitalRelase's inability to deal with Lombok inside Retrolambda
@@ -11,6 +12,9 @@ buildscript {
 }
 apply plugin: 'com.android.application'
 //apply plugin: 'kotlin-android'
+if (useFabric) {
+    apply plugin: 'io.fabric'
+}
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'me.tatarka.retrolambda'
 
@@ -59,16 +63,13 @@ android {
         applicationId "com.pij.lottieshow"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
         versionCode calculateVersionCode(project.version)
         versionName project.version
+        vectorDrawables.useSupportLibrary = true
+        resValue "string", "lottie_library_version", lottieVersion
         resConfigs "en", "fr"
         if (serviceAccountSetup) playAccountConfig = playAccountConfigs.defaultAccountConfig
-
-        resValue "string", "lottie_library_version", lottieVersion
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
@@ -84,12 +85,13 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix ".test"
             testCoverageEnabled true
+            buildConfigField "boolean", "USE_FABRIC", "false"
         }
         release {
             minifyEnabled true
             shrinkResources true
+            buildConfigField "boolean", "USE_FABRIC", useFabric ? "true" : "false"
             if (signingPijInternationalSetup) signingConfig signingConfigs.pijInternational
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -139,7 +141,9 @@ dependencies {
             "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
     testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
-
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
+        transitive = true;
+    }
     compile "com.airbnb.android:lottie:$lottieVersion"
 
     testCompile "junit:junit:$junitVersion"
