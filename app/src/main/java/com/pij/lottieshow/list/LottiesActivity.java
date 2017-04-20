@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.pij.lottieshow.R;
 import com.pij.lottieshow.detail.LottieActivity;
@@ -26,6 +27,8 @@ import com.pij.lottieshow.ui.Utils;
 
 import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -66,6 +69,8 @@ public class LottiesActivity extends DaggerAppCompatActivity {
     FloatingActionButton fab;
     @BindView(R.id.lottie_list)
     RecyclerView list;
+    @BindView(R.id.empty)
+    TextView empty;
 
     @Inject
     LottiesViewModel viewModel;
@@ -108,7 +113,7 @@ public class LottiesActivity extends DaggerAppCompatActivity {
                              viewModel.shouldShowList()
                                       .map(IterableUtils::emptyIfNull)
                                       .flatMap(list -> from(list).flatMapSingle(this::fromModel).toList())
-                                      .subscribe(adapter::setItems, this::notifyError),
+                                      .subscribe(items -> applyItems(adapter, items), this::notifyError),
 
                              // The detail container view will be present only in the
                              // large-screen layouts (res/values-w900dp).
@@ -153,6 +158,11 @@ public class LottiesActivity extends DaggerAppCompatActivity {
         inflater.inflate(R.menu.lotties_menu, menu);
         libraryString.configure(menu);
         return true;
+    }
+
+    private void applyItems(LottiesAdapter target, List<Pair<LottieUi, LottieContent>> items) {
+        target.setItems(items);
+        empty.setVisibility(items.size() > 0 ? View.GONE : View.VISIBLE);
     }
 
     private Single<LottieFile> toModel(LottieUi ui) {

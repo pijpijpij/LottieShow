@@ -3,6 +3,7 @@
     <string name="title_lottie_detail">Lottie Detail</string>
     <string name="snackbar_show_error">Display error details</string>
 
+    <string name="list_empty">Click on the button below to add a Lottie to this list.</string>
     <string name="lottie_icon_label">Initial Lottie image</string>
     <string name="item_version_hint">version</string>
     <string name="item_label_hint">this Lottie has no name</string>
