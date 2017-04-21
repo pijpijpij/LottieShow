@@ -1,7 +1,5 @@
 package com.pij.lottieshow.interactor;
 
-import com.pij.lottieshow.model.LottieFile;
-
 import org.junit.Test;
 
 import java.net.URI;
@@ -24,7 +22,7 @@ public class CompoundSerializerTest {
         CompoundSerializer sut = new CompoundSerializer(emptyIterable());
 
         TestSubscriber<String> subscriber = TestSubscriber.create();
-        sut.open(LottieFile.create(URI.create("dummy.com"))).subscribe(subscriber);
+        sut.open(URI.create("dummy.com")).subscribe(subscriber);
 
         subscriber.assertError(UnknownFileException.class);
     }
@@ -35,7 +33,7 @@ public class CompoundSerializerTest {
         CompoundSerializer sut = new CompoundSerializer(singletonList(serializer));
 
         TestSubscriber<String> subscriber = TestSubscriber.create();
-        sut.open(LottieFile.create(URI.create("dummy.com"))).subscribe(subscriber);
+        sut.open(URI.create("dummy.com")).subscribe(subscriber);
 
         subscriber.assertError(RuntimeException.class);
     }
@@ -46,7 +44,7 @@ public class CompoundSerializerTest {
         CompoundSerializer sut = new CompoundSerializer(singletonList(serializer));
 
         TestSubscriber<String> subscriber = TestSubscriber.create();
-        sut.open(LottieFile.create(URI.create("dummy.com"))).subscribe(subscriber);
+        sut.open(URI.create("dummy.com")).subscribe(subscriber);
 
         subscriber.assertNoErrors();
         subscriber.assertValue("whatever");
@@ -59,7 +57,7 @@ public class CompoundSerializerTest {
         CompoundSerializer sut = new CompoundSerializer(asList(serializer1, serializer2));
 
         TestSubscriber<String> subscriber = TestSubscriber.create();
-        sut.open(LottieFile.create(URI.create("dummy.com"))).subscribe(subscriber);
+        sut.open(URI.create("dummy.com")).subscribe(subscriber);
 
         subscriber.assertNoErrors();
         subscriber.assertValue("whatever");
@@ -72,7 +70,7 @@ public class CompoundSerializerTest {
         CompoundSerializer sut = new CompoundSerializer(asList(serializer1, serializer2));
 
         TestSubscriber<String> subscriber = TestSubscriber.create();
-        sut.open(LottieFile.create(URI.create("dummy.com"))).subscribe(subscriber);
+        sut.open(URI.create("dummy.com")).subscribe(subscriber);
 
         subscriber.assertError(RuntimeException.class);
     }

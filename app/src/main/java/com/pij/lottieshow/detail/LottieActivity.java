@@ -57,7 +57,7 @@ public class LottieActivity extends DaggerAppCompatActivity {
     @Inject
     LibraryString libraryString;
     @Inject
-    LottieActivityViewModel viewModel;
+    LottieViewModel viewModel;
     @Inject
     Converter converter;
     @Inject
@@ -88,7 +88,7 @@ public class LottieActivity extends DaggerAppCompatActivity {
         // 1) listen to that one  being created
         subscriptions.addAll(
                 // Display whichever lottie is to be displayed
-                viewModel.shouldShowLottie()
+                viewModel.showLottie()
                          .flatMapSingle(converter::fromModel)
                          .map(LottieFragment::createInstance)
                          .subscribe(this::setDetailFragment, this::notifyError),

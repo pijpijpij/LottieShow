@@ -45,6 +45,11 @@ android {
     lintOptions {
         baseline file("lint-baseline.xml")
         abortOnError true
+        warningsAsErrors true
+        xmlReport false
+        htmlReport !ciBuild
+        textReport ciBuild
+        textOutput "stdout"
     }
 //    sourceSets {
 //        main.java.srcDirs += 'src/main/kotlin'
