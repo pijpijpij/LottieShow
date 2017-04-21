@@ -5,6 +5,7 @@
 
     <dimen name="horizontal_margin">16dp</dimen>
 
+    <dimen name="list_keyline">72dp</dimen>
     <!--48dp = 72 - 2* (8+4)-->
     <dimen name="lottie_list_item_height">48dp</dimen>
 

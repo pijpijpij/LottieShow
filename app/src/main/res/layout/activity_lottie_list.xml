@@ -4,6 +4,7 @@
                                                  xmlns:tools="http://schemas.android.com/tools"
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
+                                                 android:animateLayoutChanges="true"
                                                  android:fitsSystemWindows="true"
                                                  tools:context="com.pij.lottieshow.list.LottiesActivity">
 
@@ -22,12 +23,18 @@
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
-        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <include layout="@layout/lottie_list"/>
+        <TextView android:id="@+id/empty" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:layout_gravity="center"
+                  android:layout_margin="@dimen/list_keyline"
+                  android:gravity="center"
+                  android:hint="@string/list_empty"
+                  android:textAppearance="?android:attr/textAppearanceLarge"
+        />
     </FrameLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -38,6 +45,5 @@
         android:layout_margin="@dimen/fab_margin"
         android:tint="?attr/colorButtonNormal"
         app:srcCompat="@drawable/ic_add_black_24dp"/>
-
 
 </android.support.design.widget.CoordinatorLayout>
