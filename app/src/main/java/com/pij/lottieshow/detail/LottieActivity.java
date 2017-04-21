@@ -18,13 +18,15 @@ import com.pij.lottieshow.ui.LibraryString;
 
 import javax.inject.Inject;
 
+import activitystarter.ActivityStarter;
+import activitystarter.Arg;
+import activitystarter.MakeActivityStarter;
+import activitystarter.Optional;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.support.DaggerAppCompatActivity;
 import rx.subscriptions.CompositeSubscription;
-import se.emilsjolander.intentbuilder.Extra;
-import se.emilsjolander.intentbuilder.IntentBuilder;
 
 /**
  * An activity representing a single Lottie detail screen. This
@@ -32,11 +34,12 @@ import se.emilsjolander.intentbuilder.IntentBuilder;
  * item label are presented side-by-side with a list of items
  * in a {@link LottiesActivity}.
  */
-@IntentBuilder
+@MakeActivityStarter
 public class LottieActivity extends DaggerAppCompatActivity {
 
     private final CompositeSubscription subscriptions = new CompositeSubscription();
-    @Extra
+    @Arg
+    @Optional
     LottieUi file;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -48,14 +51,14 @@ public class LottieActivity extends DaggerAppCompatActivity {
 
     @NonNull
     public static Intent createIntent(Context context, LottieUi item) {
-        return new LottieActivityIntentBuilder(item).build(context);
+        return LottieActivityStarter.getIntent(context, item);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lottie_detail);
-        LottieActivityIntentBuilder.inject(getIntent(), this);
+        ActivityStarter.fill(this);
         unbinder = ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);

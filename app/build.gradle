@@ -114,10 +114,8 @@ dependencies {
     compile "com.jakewharton:butterknife:$butterknifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
-    compile "com.hannesdorfmann.fragmentargs:annotation:$fragmentArgsVersion"
-    annotationProcessor "com.hannesdorfmann.fragmentargs:processor:$fragmentArgsVersion"
-    compile "se.emilsjolander:intentbuilder-api:$intentBuilderVersion"
-    annotationProcessor "se.emilsjolander:intentbuilder-compiler:$intentBuilderVersion"
+    compile "com.github.marcinmoskala.activitystarter:activitystarter:$activitystarterVersion"
+    annotationProcessor "com.github.marcinmoskala.activitystarter:activitystarter-compiler:$activitystarterVersion"
 
     provided "com.google.auto.value:auto-value:$autoValueVersion"
     provided 'com.ryanharter.auto.value:auto-value-parcel:0.2.5'

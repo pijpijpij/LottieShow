@@ -9,9 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.hannesdorfmann.fragmentargs.FragmentArgs;
-import com.hannesdorfmann.fragmentargs.annotation.Arg;
-import com.hannesdorfmann.fragmentargs.annotation.FragmentWithArgs;
 import com.pij.lottieshow.R;
 import com.pij.lottieshow.list.LottiesActivity;
 import com.pij.lottieshow.model.Converter;
@@ -21,6 +18,8 @@ import com.pij.lottieshow.ui.Utils;
 
 import javax.inject.Inject;
 
+import activitystarter.Arg;
+import activitystarter.MakeActivityStarter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -35,7 +34,7 @@ import rx.subscriptions.CompositeSubscription;
  * in two-pane mode (on tablets) or a {@link LottieActivity}
  * on handsets.
  */
-@FragmentWithArgs
+@MakeActivityStarter
 public class LottieFragment extends DaggerFragment {
 
     @Arg
@@ -55,7 +54,7 @@ public class LottieFragment extends DaggerFragment {
 
     @NonNull
     public static LottieFragment createInstance(LottieUi item) {
-        return LottieFragmentBuilder.newLottieFragment(item);
+        return LottieFragmentStarter.newInstance(item);
     }
 
     public LottieFragment() {
@@ -69,7 +68,7 @@ public class LottieFragment extends DaggerFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        FragmentArgs.inject(this);
+        LottieFragmentStarter.fill(this);
         unbinder = ButterKnife.bind(this, view);
 
         // TODO Move this code to LottieActivity
