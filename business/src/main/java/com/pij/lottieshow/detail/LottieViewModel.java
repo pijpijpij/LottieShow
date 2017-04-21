@@ -5,8 +5,6 @@ import android.support.annotation.Nullable;
 import com.pij.lottieshow.interactor.Serializer;
 import com.pij.lottieshow.model.LottieFile;
 
-import javax.inject.Inject;
-
 import rx.Observable;
 import rx.subjects.PublishSubject;
 
@@ -15,10 +13,9 @@ import static rx.Observable.empty;
 class LottieViewModel {
 
     private final Serializer serializer;
-    private PublishSubject<LottieFile> lottie = PublishSubject.create();
-    private PublishSubject<Throwable> errors = PublishSubject.create();
+    private final PublishSubject<LottieFile> lottie = PublishSubject.create();
+    private final PublishSubject<Throwable> errors = PublishSubject.create();
 
-    @Inject
     @SuppressWarnings("WeakerAccess")
     public LottieViewModel(Serializer serializer) {
         this.serializer = serializer;

@@ -68,6 +68,31 @@ public class LottieViewModelTest {
         subscriber.assertValueCount(1);
     }
 
+    @Test
+    public void emitsNoAnimationWhenLottieIsNull() {
+        when(mockSerializer.open(null)).thenReturn(Single.error(new NullPointerException("failed!")));
+        TestSubscriber<String> subscriber = TestSubscriber.create();
+        sut.showAnimation().subscribe(subscriber);
+
+        sut.loadLottie(null);
+
+        subscriber.assertNoErrors();
+        subscriber.assertNoValues();
+    }
+
+    @Test
+    public void emitsAnErrorWhenLottieIsNull() {
+        when(mockSerializer.open(null)).thenReturn(Single.error(new NullPointerException("failed!")));
+        TestSubscriber<Throwable> subscriber = TestSubscriber.create();
+        sut.showLoadingError().subscribe(subscriber);
+        sut.showAnimation().subscribe();
+
+        sut.loadLottie(null);
+
+        subscriber.assertNoErrors();
+        subscriber.assertValueCount(1);
+    }
+
     private void setupSerializerFailure(String s) {
         when(mockSerializer.open(LottieFile.create(URI.create(s)))).thenReturn(Single.error(new IOException
                                                                                                     ("failed!")));

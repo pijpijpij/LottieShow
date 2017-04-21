@@ -14,8 +14,11 @@ import android.view.MenuItem;
 
 import com.pij.lottieshow.R;
 import com.pij.lottieshow.list.LottiesActivity;
+import com.pij.lottieshow.model.Converter;
 import com.pij.lottieshow.model.LottieUi;
+import com.pij.lottieshow.saf.SafClient;
 import com.pij.lottieshow.ui.LibraryString;
+import com.pij.lottieshow.ui.Utils;
 
 import javax.inject.Inject;
 
@@ -27,7 +30,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.support.DaggerAppCompatActivity;
+import rx.subjects.PublishSubject;
 import rx.subscriptions.CompositeSubscription;
+
+import static rx.Observable.just;
 
 /**
  * An activity representing a single Lottie detail screen. This
@@ -39,6 +45,7 @@ import rx.subscriptions.CompositeSubscription;
 public class LottieActivity extends DaggerAppCompatActivity {
 
     private final CompositeSubscription subscriptions = new CompositeSubscription();
+    private final PublishSubject<LottieUi> internalLottie = PublishSubject.create();
     @Arg
     @Optional
     @Nullable
@@ -49,6 +56,12 @@ public class LottieActivity extends DaggerAppCompatActivity {
     FloatingActionButton fab;
     @Inject
     LibraryString libraryString;
+    @Inject
+    LottieActivityViewModel viewModel;
+    @Inject
+    Converter converter;
+    @Inject
+    SafClient safClient;
     private Unbinder unbinder;
 
     @NonNull
@@ -72,8 +85,27 @@ public class LottieActivity extends DaggerAppCompatActivity {
                                                .setAction("Action", null)
                                                .show());
 
+        // 1) listen to that one  being created
+        subscriptions.addAll(
+                // Display whichever lottie is to be displayed
+                viewModel.shouldShowLottie()
+                         .flatMapSingle(converter::fromModel)
+                         .map(LottieFragment::createInstance)
+                         .subscribe(this::setDetailFragment, this::notifyError),
+                // Add the external Lottie if it is provided
+                safClient.analysed().subscribe(viewModel::addLottie, this::notifyError),
+                // load the internal lottie if it is provided
+                just(file).filter(file -> file != null)
+                          .flatMapSingle(converter::toModel)
+                          .subscribe(viewModel::loadLottie, this::notifyError));
+
         if (savedInstanceState == null) {
-            setDetailFragment(LottieFragment.createInstance(file));
+            if (file == null) {
+                // No internal lottie, let's look for an external one.
+                safClient.analyse(getIntent());
+            } else {
+                internalLottie.onNext(file);
+            }
         }
     }
 
@@ -105,6 +137,10 @@ public class LottieActivity extends DaggerAppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void notifyError(Throwable error) {
+        Utils.notifyError(error, fab);
     }
 
     private int setDetailFragment(LottieFragment fragment) {

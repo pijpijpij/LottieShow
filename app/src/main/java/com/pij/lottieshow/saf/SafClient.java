@@ -65,7 +65,7 @@ public class SafClient {
 
     @SuppressWarnings("WeakerAccess")
     public Observable<LottieFile> analysed() {
-        return jsonFilePicked.map(Intent::getData)
+        return jsonFilePicked.map(Intent::getData).filter(uri -> uri != null)
                              .flatMapSingle(uri -> Single.just(uri)
                                                          .doOnSubscribe(() -> inProgress.onNext(true))
                                                          .flatMap(this::createLottie)

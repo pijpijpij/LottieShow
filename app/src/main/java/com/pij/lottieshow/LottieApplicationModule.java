@@ -9,6 +9,7 @@ import com.pij.lottieshow.detail.LottieActivitySubComponent;
 import com.pij.lottieshow.detail.LottieFragmentSubcomponent;
 import com.pij.lottieshow.interactor.CompoundSerializer;
 import com.pij.lottieshow.interactor.ContentResolverSerializer;
+import com.pij.lottieshow.interactor.LottieSink;
 import com.pij.lottieshow.interactor.LottieSource;
 import com.pij.lottieshow.interactor.Serializer;
 import com.pij.lottieshow.interactor.SourceFunnel;
@@ -83,6 +84,9 @@ abstract class LottieApplicationModule {
     static Serializer provideContentResolverSerializer(ContentResolver contentResolver) {
         return new ContentResolverSerializer(contentResolver);
     }
+
+    @Binds
+    abstract LottieSink provideMemoryLottieSink(MemoryLottieStore implementation);
 
     @Binds
     @IntoSet
