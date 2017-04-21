@@ -49,11 +49,13 @@ public class LottieFragment extends DaggerFragment {
     LottieAnimationView animation;
     @BindView(R.id.version)
     TextView version;
+    @BindView(R.id.error)
+    TextView error;
     private Unbinder unbinder;
     private CompositeSubscription subscriptions = new CompositeSubscription();
 
     @NonNull
-    public static LottieFragment createInstance(LottieUi item) {
+    public static LottieFragment createInstance(@Nullable LottieUi item) {
         return LottieFragmentStarter.newInstance(item);
     }
 
@@ -82,12 +84,12 @@ public class LottieFragment extends DaggerFragment {
                 content.flatMapSingle(LottieContent::version).subscribe(version::setText, this::notifyError),
 
                 // Display errors
-                viewModel.showLoadingError().subscribe(this::notifyError, this::notifyError));
+                viewModel.showLoadingError().subscribe(this::notifyError, this::notifyError),
 
-        // display the content
-        if (lottie != null) {
-            subscriptions.add(converter.toModel(lottie).subscribe(viewModel::loadLottie, this::notifyError));
-        }
+                // Pass lottie to ViewModel
+                Single.just(lottie)
+                      .flatMap(ui -> ui == null ? Single.just(null) : converter.toModel(ui))
+                      .subscribe(viewModel::loadLottie, this::notifyError));
     }
 
     @Override
@@ -99,6 +101,7 @@ public class LottieFragment extends DaggerFragment {
     }
 
     private void notifyError(Throwable error) {
+        this.error.setText(R.string.detail_cannot_display_lottie);
         Utils.notifyError(error, animation);
     }
 

@@ -47,12 +47,12 @@ public class Converter {
 
 
     @NonNull
-    public Single<LottieUi> fromModel(LottieFile file) {
+    public Single<LottieUi> fromModel(@NonNull LottieFile file) {
         return just(file).map(Converter::create);
     }
 
     @NonNull
-    public Single<LottieFile> toModel(LottieUi ui) {
+    public Single<LottieFile> toModel(@NonNull LottieUi ui) {
         return just(ui).flatMap(i -> files.map(map -> map.get(i)).take(1).filter(item -> item != null).toSingle());
     }
 

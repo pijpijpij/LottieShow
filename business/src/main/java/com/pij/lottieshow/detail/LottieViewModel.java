@@ -1,5 +1,7 @@
 package com.pij.lottieshow.detail;
 
+import android.support.annotation.Nullable;
+
 import com.pij.lottieshow.interactor.Serializer;
 import com.pij.lottieshow.model.LottieFile;
 
@@ -23,7 +25,7 @@ class LottieViewModel {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void loadLottie(LottieFile newFile) {
+    public void loadLottie(@Nullable LottieFile newFile) {
         lottie.onNext(newFile);
     }
 
