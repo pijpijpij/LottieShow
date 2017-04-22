@@ -17,9 +17,38 @@ Finally, it integrates in other apps. For example, Gmail will call upon it to vi
 
 ## Dev notes
 
+### Uploading to Fabric
 To upload to Beta on the `master` branch:
 
 `> gradlew assembleRelease crashlyticsUploadDistributionRelease`
+
+### How to release the app?
+
+1. Checkout the head of `master` and start a command prompt
+1. Run pre-release checks. Build and run all to ensure the code is good to be released.
+
+    `> gradlew build cC`
+
+1. Release (assuming Git authentication with SSH keys is setup):
+
+    `> gradlew release`
+
+    Make sure the last output line indicates it's been *pushed to origin*.
+
+    To set the release number, rather than accept the ususal bug-level increment, as the property:
+
+    `-Prelease.forceVersion=k.m.n`
+
+1. Build the release version of the app to take the new version number into account:
+
+    `> gradlew build`
+
+1. Publish to Googleplay:
+
+    `> gradlew publishApkRelease`
+
+### Upload to Google Store 
+TBW
 
 # Further ideas
 
