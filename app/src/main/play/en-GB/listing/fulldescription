@@ -1,0 +1,6 @@
+The app lists the Lotties it knows about. Each one can be viewed in more detail. It can import Lotties from a few sources (depending on the phone):
+- The local SD card,
+- Google Drive,
+- The Downloads folder.
+
+Finally, it integrates in other apps. For example, Gmail will call upon it to visualise .json attachments.
