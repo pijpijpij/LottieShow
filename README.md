@@ -22,7 +22,7 @@ To upload to Beta on the `master` branch:
 
 `> gradlew assembleRelease crashlyticsUploadDistributionRelease`
 
-### How to release the app?
+### Releasing and uploading to Google store
 
 1. Checkout the head of `master` and start a command prompt
 1. Run pre-release checks. Build and run all to ensure the code is good to be released.
@@ -46,9 +46,6 @@ To upload to Beta on the `master` branch:
 1. Publish to Googleplay:
 
     `> gradlew publishApkRelease`
-
-### Upload to Google Store 
-TBW
 
 # Further ideas
 
