@@ -2,8 +2,7 @@ package com.pij.lottieshow.interactor;
 
 import android.support.annotation.NonNull;
 
-import com.pij.lottieshow.model.LottieFile;
-
+import java.net.URI;
 import java.util.NoSuchElementException;
 
 import javax.inject.Inject;
@@ -26,7 +25,7 @@ public class CompoundSerializer implements Serializer {
     }
 
     @Override
-    public Single<String> open(LottieFile input) {
+    public Single<String> open(URI input) {
         // emits all known formats
         Observable<String> contents = from(serializers).concatMap(serializer -> serializer.open(input)
                                                                                           .toObservable()
@@ -35,7 +34,7 @@ public class CompoundSerializer implements Serializer {
         return contents.take(1).toSingle().onErrorResumeNext(e -> transformNoSerializerFound(e, input));
     }
 
-    private Single<? extends String> transformNoSerializerFound(Throwable e, LottieFile file) {
+    private Single<? extends String> transformNoSerializerFound(Throwable e, URI file) {
         return (e instanceof NoSuchElementException) ? Single.error(new UnknownFileException(
                 "Could not find a Serializer for " + file + ".",
                 e)) : Single.error(e);

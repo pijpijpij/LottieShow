@@ -101,6 +101,6 @@ public class AssetSourceTest {
     }
 
     private void setupSerializerSameContentForAll() {
-        when(mockSerializer.open(any(LottieFile.class))).thenReturn(Single.just("zap!"));
+        when(mockSerializer.open(any(URI.class))).thenReturn(Single.just("zap!"));
     }
 }

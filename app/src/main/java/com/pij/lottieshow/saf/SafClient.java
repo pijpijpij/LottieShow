@@ -22,7 +22,6 @@ import rx.subjects.PublishSubject;
 
 import static rx.Single.just;
 import static rx.Single.using;
-import static rx.Single.zip;
 
 /**
  * <p>Created on 13/04/2017.</p>
@@ -66,10 +65,11 @@ public class SafClient {
     @SuppressWarnings("WeakerAccess")
     public Observable<LottieFile> analysed() {
         return jsonFilePicked.map(Intent::getData)
-                             .flatMapSingle(uri -> Single.just(uri)
+                             .flatMapSingle(uri -> Single.zip(calculateURI(uri),
+                                                              calculateLabel(uri),
+                                                              calculateContent(uri),
+                                                              LottieFile::create)
                                                          .doOnSubscribe(() -> inProgress.onNext(true))
-                                                         .flatMap(this::createLottie)
-                                                         .map(file -> LottieFile.create(file, serializer.open(file)))
                                                          .doAfterTerminate(() -> inProgress.onNext(false)));
     }
 
@@ -78,11 +78,17 @@ public class SafClient {
         return inProgress;
     }
 
+    private Single<URI> calculateURI(Uri uri) {
+        return just(uri).map(Uri::toString).map(URI::create);
+    }
+
+    private Single<Single<String>> calculateContent(Uri uri) {
+        return calculateURI(uri).map(serializer::open);
+    }
+
     @NonNull
-    private Single<LottieFile> createLottie(Uri uri) {
-        return zip(just(uri).map(Uri::toString).map(URI::create),
-                   using(() -> queryDisplayName(uri), cursor -> just(cursor).map(c -> c.getString(0)), Cursor::close),
-                   LottieFile::create);
+    private Single<String> calculateLabel(Uri uri) {
+        return using(() -> queryDisplayName(uri), cursor -> just(cursor).map(c -> c.getString(0)), Cursor::close);
     }
 
     @NonNull

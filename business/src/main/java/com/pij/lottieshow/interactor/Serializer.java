@@ -1,6 +1,6 @@
 package com.pij.lottieshow.interactor;
 
-import com.pij.lottieshow.model.LottieFile;
+import java.net.URI;
 
 import rx.Single;
 
@@ -11,5 +11,5 @@ import rx.Single;
 
 public interface Serializer {
 
-    Single<String> open(LottieFile input);
+    Single<String> open(URI input);
 }

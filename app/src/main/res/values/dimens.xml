@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="app_bar_height">200dp</dimen>
 
     <dimen name="horizontal_margin">16dp</dimen>
 
     <dimen name="list_keyline">72dp</dimen>
-    <!--48dp = 72 - 2* (8+4)-->
-    <dimen name="lottie_list_item_height">48dp</dimen>
+    <!--&lt;!&ndash;48dp = 72 - 2* (8+4)&ndash;&gt;-->
+    <!--<dimen name="lottie_list_item_height">48dp</dimen>-->
 
     <dimen name="screen_edge_left">@dimen/horizontal_margin</dimen>
     <dimen name="screen_edge_right">@dimen/horizontal_margin</dimen>

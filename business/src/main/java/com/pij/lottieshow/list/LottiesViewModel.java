@@ -43,9 +43,4 @@ public class LottiesViewModel {
         return shouldShowLottie;
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public void loadContent(LottieFile file) {
-        System.err.println("loadContent([file]) not implemented yet");
-
-    }
 }

@@ -2,6 +2,7 @@ package com.pij.lottieshow.detail;
 
 import com.pij.dagger.FragmentScope;
 import com.pij.lottieshow.interactor.CompoundSerializer;
+import com.pij.lottieshow.interactor.LottieSink;
 
 import dagger.Module;
 import dagger.Provides;
@@ -15,8 +16,8 @@ abstract class LottieFragmentModule {
 
     @FragmentScope
     @Provides
-    static LottieViewModel provideLottieViewModel(CompoundSerializer serializer) {
-        return new LottieViewModel(serializer);
+    static LottieViewModel provideLottieViewModel(LottieSink sink, CompoundSerializer serializer) {
+        return new LottieViewModel(sink, serializer);
     }
 
 }

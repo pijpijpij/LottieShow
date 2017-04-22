@@ -1,12 +1,9 @@
 package com.pij.lottieshow.detail;
 
 import com.pij.dagger.ActivityScope;
+import com.pij.lottieshow.interactor.CompoundSerializer;
 import com.pij.lottieshow.interactor.LottieSink;
-import com.pij.lottieshow.interactor.SourceFunnel;
-import com.pij.lottieshow.list.LottiesViewModel;
-import com.pij.lottieshow.list.MemoryLottieStore;
 
-import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
@@ -18,11 +15,8 @@ abstract class LottieActivityModule {
 
     @Provides
     @ActivityScope
-    static LottiesViewModel provideLottiesViewModel(SourceFunnel funnel, LottieSink sink) {
-        return new LottiesViewModel(funnel, sink);
+    static LottieViewModel provideLottieViewModel(LottieSink sink, CompoundSerializer serializer) {
+        return new LottieViewModel(sink, serializer);
     }
-
-    @Binds
-    abstract LottieSink provideMemoryLottieSink(MemoryLottieStore implementation);
 
 }

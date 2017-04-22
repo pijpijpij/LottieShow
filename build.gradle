@@ -44,8 +44,7 @@ ext {
 
     supportVersion = '25.3.1'
     daggerVersion = '2.10'
-    intentBuilderVersion = '0.14.0'
-    fragmentArgsVersion = '3.0.2'
+    activitystarterVersion = '0.20'
     butterknifeVersion = '8.5.1'
     rxBindingsVersion = '1.0.1'
 
@@ -111,8 +110,12 @@ allprojects {
     repositories {
         jcenter()
         maven {
-            name 'fabric'
+            name 'Fabric'
             url 'https://maven.fabric.io/public'
+        }
+        maven {
+            name 'Jitpack'
+            url 'https://jitpack.io'
         }
     }
 

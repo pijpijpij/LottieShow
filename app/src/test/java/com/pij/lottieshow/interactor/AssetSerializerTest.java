@@ -2,8 +2,6 @@ package com.pij.lottieshow.interactor;
 
 import android.content.res.AssetManager;
 
-import com.pij.lottieshow.model.LottieFile;
-
 import org.apache.commons.io.input.CharSequenceInputStream;
 import org.junit.Rule;
 import org.junit.Test;
@@ -42,7 +40,7 @@ public class AssetSerializerTest {
         when(mockAssets.open("samples/a_file")).thenReturn(new CharSequenceInputStream("aa", Charset.defaultCharset()));
 
         TestSubscriber<String> subscriber = TestSubscriber.create();
-        sut.open(LottieFile.create(URI.create("file:///android_asset/samples/a_file"))).subscribe(subscriber);
+        sut.open(URI.create("file:///android_asset/samples/a_file")).subscribe(subscriber);
 
         subscriber.assertNoErrors();
         subscriber.assertValueCount(1);
@@ -55,7 +53,7 @@ public class AssetSerializerTest {
         when(mockAssets.open("samples/a_file")).thenThrow(new FileNotFoundException());
 
         TestSubscriber<String> subscriber = TestSubscriber.create();
-        sut.open(LottieFile.create(URI.create("file:///android_asset/samples/a_file"))).subscribe(subscriber);
+        sut.open(URI.create("file:///android_asset/samples/a_file")).subscribe(subscriber);
 
         subscriber.assertError(RuntimeException.class);
     }

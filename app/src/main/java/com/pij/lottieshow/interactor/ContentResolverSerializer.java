@@ -3,8 +3,6 @@ package com.pij.lottieshow.interactor;
 import android.content.ContentResolver;
 import android.net.Uri;
 
-import com.pij.lottieshow.model.LottieFile;
-
 import org.apache.commons.io.IOUtils;
 
 import java.io.FileNotFoundException;
@@ -34,8 +32,8 @@ public class ContentResolverSerializer implements Serializer {
     }
 
     @Override
-    public Single<String> open(LottieFile input) {
-        return just(input).map(LottieFile::id).map(URI::toString).map(Uri::parse).map(this::open);
+    public Single<String> open(URI input) {
+        return just(input).map(URI::toString).map(Uri::parse).map(this::open);
     }
 
     private String open(Uri uri) {

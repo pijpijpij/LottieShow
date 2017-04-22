@@ -3,8 +3,6 @@ package com.pij.lottieshow.interactor;
 import android.content.res.AssetManager;
 import android.support.annotation.NonNull;
 
-import com.pij.lottieshow.model.LottieFile;
-
 import org.apache.commons.io.IOUtils;
 
 import java.io.FileNotFoundException;
@@ -36,8 +34,8 @@ class AssetSerializer implements Serializer {
     }
 
     @Override
-    public Single<String> open(LottieFile input) {
-        return just(input).map(LottieFile::id).map(URI::toString).map(this::assetFileName).map(this::open);
+    public Single<String> open(URI input) {
+        return just(input).map(URI::toString).map(this::assetFileName).map(this::open);
     }
 
     @NonNull
