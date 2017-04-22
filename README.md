@@ -1,16 +1,19 @@
 # LottieShow
 This is a visualisation tool for [Lotties](http://airbnb.design/lottie/), animations created by Air BnB.
 
-It lists the Lotties it knows about. Each one can be viewed in more detail.
+## Visualisation
+TBW
 
 ## Integration
-The app can import Lotties from a few sources:
+It lists the Lotties it knows about. Each one can be viewed in more detail.
+The app can import Lotties from a few sources via the Storage Access framework, so depending on the phone,Lotties can
+ be imported from :
 - The local SD card,
 - Google Drive,
 - The `Downloads` folder. That provides basic e-mail integration: all files included in an e-mail are created in that 
 folder.
- 
-These imports are achieved via the Storage Access framework.
+
+Finally, it integrates in other apps. For example, Gmail will call upon it to visualise .json attachments.
 
 ## Dev notes
 
