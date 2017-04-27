@@ -52,6 +52,7 @@ ext {
     mockitoVersion = '1.10.19'
     assertjCoreVersion = '1.7.1'
     assertjAndroidVersion = '1.1.1'
+    espressoVersion = '2.2.2'
 
     commonsLangVersion = '3.4'
     commonsCollectionsVersion = '4.1'
