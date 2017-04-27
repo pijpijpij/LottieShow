@@ -129,12 +129,8 @@ dependencies {
     compile "com.android.support:support-annotations:$supportVersion"
     compile "org.apache.commons:commons-lang3:$commonsLangVersion"
     compile "org.apache.commons:commons-collections4:$commonsCollectionsVersion"
-//    compile ("com.google.dagger:dagger-android:${daggerVersion}") {
-//    exclude group: 'com.google.code.findbugs', module: 'jsr305'
-//}
-    compile("com.google.dagger:dagger-android-support:$daggerVersion") {
-        exclude group: 'com.google.code.findbugs', module: 'jsr305'
-    }
+//    compile "com.google.dagger:dagger-android:${daggerVersion}"
+    compile "com.google.dagger:dagger-android-support:$daggerVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
     annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
 
@@ -160,15 +156,21 @@ dependencies {
 
     androidTestCompile("com.android.support.test.espresso:espresso-intents:$espressoVersion") {
         exclude group: "com.android.support", module: "support-annotations"
+        // Avoid conflict with dagger-android and dagger-support-android
+        exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
     androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion") {
         exclude group: "com.android.support", module: "support-annotations"
+        // Avoid conflict with dagger-android and dagger-support-android
+        exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
     androidTestCompile "com.android.support.test.espresso:espresso-contrib:$espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude group: 'com.android.support', module: 'design'
         exclude group: 'com.android.support', module: 'recyclerview-v7'
+        // Avoid conflict with dagger-android and dagger-support-android
+        exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
 }
 
