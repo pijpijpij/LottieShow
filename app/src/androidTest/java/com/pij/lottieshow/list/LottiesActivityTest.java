@@ -4,7 +4,9 @@ package com.pij.lottieshow.list;
 import android.app.Activity;
 import android.app.Instrumentation.ActivityResult;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -14,6 +16,7 @@ import com.pij.lottieshow.detail.LottieActivity;
 import com.pij.lottieshow.model.LottieUi;
 
 import org.hamcrest.Matcher;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,12 +48,22 @@ import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.Matchers.allOf;
+import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class LottiesActivityTest {
 
     @Rule
     public IntentsTestRule<LottiesActivity> activity = new IntentsTestRule<>(LottiesActivity.class, false, false);
+
+    public static boolean isTablet() {
+        int smallestScreenWidthDp = InstrumentationRegistry.getTargetContext()
+                                                           .getResources()
+                                                           .getConfiguration().smallestScreenWidthDp;
+        return (smallestScreenWidthDp != Configuration.SMALLEST_SCREEN_WIDTH_DP_UNDEFINED &&
+                smallestScreenWidthDp >= 600);
+    }
 
     @Test
     public void tVersionMenuAvailable() {
@@ -65,8 +78,9 @@ public class LottiesActivityTest {
     }
 
     @Test
-    public void tClickingOnTwitterHeartCallsDetailScreenWithTwitterHeartInExtra() {
+    public void tClickingOnTwitterHeartCallsDetailActivityWithTwitterHeartInExtra() {
         // given
+        assumeFalse(isTablet());
         activity.launchActivity(null);
 
         setupDetailActivityCompletesImmediately();
@@ -81,6 +95,20 @@ public class LottiesActivityTest {
                                        hasPath(allOf(startsWith("/android_asset"), endsWith("TwitterHeart.json"))));
         intended(hasExtras(hasValue(transformed(LottieUi::id, idMatcher))));
         intended(hasExtras(hasValue(transformed(LottieUi::label, is("TwitterHeart")))));
+    }
+
+    @Ignore("No implemented yet")
+    @Test
+    public void tClickingOnTwitterHeartCallsDetailFragmentWithTwitterHeartInExtra() {
+        // given
+        assumeTrue(isTablet());
+        activity.launchActivity(null);
+
+        // when
+        clickEntry("TwitterHeart");
+
+        // then
+        // TODO code this
     }
 
     @Test
