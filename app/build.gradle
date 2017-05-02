@@ -154,12 +154,16 @@ dependencies {
     testCompile "org.mockito:mockito-core:$mockitoVersion"
     testCompile "org.assertj:assertj-core:$assertjCoreVersion"
 
-    androidTestCompile("com.android.support.test.espresso:espresso-intents:$espressoVersion") {
+    androidTestCompile "com.pij:hamcrest:$utilsVersion", {
+        exclude group: "com.android.support", module: "support-annotations"
+    }
+    // Espresso
+    androidTestCompile "com.android.support.test.espresso:espresso-intents:$espressoVersion", {
         exclude group: "com.android.support", module: "support-annotations"
         // Avoid conflict with dagger-android and dagger-support-android
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
-    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion") {
+    androidTestCompile "com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: "com.android.support", module: "support-annotations"
         // Avoid conflict with dagger-android and dagger-support-android
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
@@ -172,5 +176,12 @@ dependencies {
         // Avoid conflict with dagger-android and dagger-support-android
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
+//    androidTestCompile "com.android.support.test:runner:$runnerVersion", {
+//        exclude group: "com.android.support", module: "support-annotations"
+//    }
+//    androidTestCompile "com.android.support.test:rules:$runnerVersion", {
+//        exclude group: "com.android.support", module: "support-annotations"
+//    }
+
 }
 

@@ -53,10 +53,13 @@ ext {
     assertjCoreVersion = '1.7.1'
     assertjAndroidVersion = '1.1.1'
     espressoVersion = '2.2.2'
+    runnerVersion = '0.5'
 
     commonsLangVersion = '3.4'
     commonsCollectionsVersion = '4.1'
     commonsIoVersion = '2.5'
+    utilsVersion = '1.2.0'
+
     autoValueVersion = '1.4'
     autoValueWither = 'com.gabrielittner.auto.value:auto-value-with:0.1.5'
     autoValueCursor = 'com.gabrielittner.auto.value:auto-value-cursor:0.5.0'
