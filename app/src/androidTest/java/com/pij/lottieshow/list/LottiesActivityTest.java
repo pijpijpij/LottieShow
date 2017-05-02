@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.pij.lottieshow.R;
@@ -19,7 +18,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
@@ -45,15 +46,23 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.Matchers.allOf;
 
-/**
- * First test, created with the Espresso test recorder and slightly changed.
- */
-@LargeTest
 @RunWith(AndroidJUnit4.class)
 public class LottiesActivityTest {
 
     @Rule
     public IntentsTestRule<LottiesActivity> activity = new IntentsTestRule<>(LottiesActivity.class, false, false);
+
+    @Test
+    public void tVersionMenuAvailable() {
+        // given
+        activity.launchActivity(null);
+
+        // when
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+
+        // then
+        onView(withText("Lottie library 1.5.3")).check(matches(allOf(isDisplayed(), isEnabled())));
+    }
 
     @Test
     public void tClickingOnTwitterHeartCallsDetailScreenWithTwitterHeartInExtra() {
