@@ -3,6 +3,7 @@ package com.pij.lottieshow.list;
 
 import android.app.Activity;
 import android.app.Instrumentation.ActivityResult;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
@@ -20,18 +21,22 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItem;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.BundleMatchers.hasValue;
 import static android.support.test.espresso.intent.matcher.ComponentNameMatchers.hasClassName;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtras;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasType;
 import static android.support.test.espresso.intent.matcher.UriMatchers.hasHost;
 import static android.support.test.espresso.intent.matcher.UriMatchers.hasPath;
 import static android.support.test.espresso.intent.matcher.UriMatchers.hasScheme;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.pij.hamcrest.Matchers.transformed;
@@ -51,7 +56,7 @@ public class LottiesActivityTest {
     public IntentsTestRule<LottiesActivity> activity = new IntentsTestRule<>(LottiesActivity.class, false, false);
 
     @Test
-    public void tClickingOnTwitterHeartCallsDetailActivityWithTwitterHeartInExtra() {
+    public void tClickingOnTwitterHeartCallsDetailScreenWithTwitterHeartInExtra() {
         // given
         activity.launchActivity(null);
 
@@ -67,6 +72,32 @@ public class LottiesActivityTest {
                                        hasPath(allOf(startsWith("/android_asset"), endsWith("TwitterHeart.json"))));
         intended(hasExtras(hasValue(transformed(LottieUi::id, idMatcher))));
         intended(hasExtras(hasValue(transformed(LottieUi::label, is("TwitterHeart")))));
+    }
+
+    @Test
+    public void tAddLottieButtonAvailable() {
+        // given
+        activity.launchActivity(null);
+
+        // then
+        onView(withId(R.id.fab)).check(matches(allOf(isDisplayed(), isEnabled())));
+    }
+
+    @Test
+    public void tClickingOnAddLottieCallsSAF() {
+        // given
+        activity.launchActivity(null);
+        setupPickFileCanceledImmediately();
+
+        // then
+        onView(withId(R.id.fab)).perform(click());
+
+        intended(allOf(hasAction(Intent.ACTION_OPEN_DOCUMENT), hasType("application/json")));
+    }
+
+    private void setupPickFileCanceledImmediately() {
+        ActivityResult result = new ActivityResult(Activity.RESULT_CANCELED, null);
+        intending(allOf(hasAction(Intent.ACTION_OPEN_DOCUMENT), hasType("application/json"))).respondWith(result);
     }
 
     /**
