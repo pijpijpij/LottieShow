@@ -51,8 +51,8 @@ To upload to Beta on the `master` branch:
 
 They are, in **no** particular order:
 - Integration with [Dropbox](https://github.com/pijpijpij/LottieShow/issues/21)
-- Opening a Lottie directly [from other applications](https://github.com/pijpijpij/LottieShow/issues/22). That's in essence declaring the app as a handler for *.json 
-files.
+- ~~Opening a Lottie directly [from other applications](https://github.com/pijpijpij/LottieShow/issues/22). That's in 
+essence declaring the app as a handler for *.json files.~~
 - Monitor removal/insertion of External storage (see https://developer.android.com/reference/android/os/Environment.html#getExternalStorageDirectory())
 - Online library
 - Export as video
