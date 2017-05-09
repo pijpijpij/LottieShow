@@ -53,7 +53,7 @@ public class SafClient {
     @SuppressWarnings("WeakerAccess")
     public void pickJsonFile(Activity launcher, int requestCode) {
         Intent pick = new Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE)
-                                                             .setType("application/*");
+                                                             .setType("application/json");
         launcher.startActivityForResult(pick, requestCode);
     }
 

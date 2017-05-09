@@ -25,20 +25,26 @@ android:
   - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
 
 before_script:
+  # Install the shared gradle init file
+  - mkdir -p $HOME/.gradle
+  - wget https://bitbucket.org/pijpijpij/init-gradle/raw/master/init.gradle -O $HOME/.gradle/init.gradle
 #  - ./gradlew build jacocoTestReport assembleAndroidTest
 
-  # start an emulator
-  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
-  - emulator -avd test -no-skin -no-audio -no-window &
-  - android-wait-for-emulator
-  # turn off all animations for Espresso
-  - adb shell settings put global window_animation_scale 0
-  - adb shell settings put global transition_animation_scale 0
-  - adb shell settings put global animator_animation_scale 0
-  # Unlock the screen(?)
-  - adb shell input keyevent 82 &
+#  # start an emulator
+#  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
+#  - emulator -avd test -no-skin -no-audio -no-window &
+#  - android-wait-for-emulator
+#
+#  # turn off all animations for Espresso
+#  - adb shell settings put global window_animation_scale 0
+#  - adb shell settings put global transition_animation_scale 0
+#  - adb shell settings put global animator_animation_scale 0
+#  # Unlock the screen(?)
+#  - adb shell input keyevent 82 &
 
 # Not sure there's any need to skip code verification
 # - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
+
 script:
-  - ./gradlew check assembleRelease connectedCheck
+#  - ./gradlew --no-daemon --stacktrace check assembleRelease connectedCheck
+  - ./gradlew --no-daemon --stacktrace check assembleRelease

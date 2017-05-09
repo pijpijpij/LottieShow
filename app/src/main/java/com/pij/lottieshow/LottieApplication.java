@@ -28,6 +28,8 @@ public class LottieApplication extends Application
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingFragmentInjector;
 
+    private LottieApplicationComponent component;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -45,16 +47,36 @@ public class LottieApplication extends Application
             System.out.println("Fabric disable.");
         }
 
-        DaggerLottieApplicationComponent.builder().application(this).build().inject(this);
     }
 
     @Override
     public DispatchingAndroidInjector<Activity> activityInjector() {
+        if (dispatchingActivityInjector == null) {
+            injectSelf();
+        }
         return dispatchingActivityInjector;
     }
 
     @Override
     public DispatchingAndroidInjector<Fragment> supportFragmentInjector() {
+        if (dispatchingFragmentInjector == null) {
+            injectSelf();
+        }
         return dispatchingFragmentInjector;
+    }
+
+    public void setComponent(LottieApplicationComponent newValue) {
+        component = newValue;
+    }
+
+    private void injectSelf() {
+        if (component == null) {
+            setComponent(defaultComponent());
+            component.inject(this);
+        }
+    }
+
+    private LottieApplicationComponent defaultComponent() {
+        return DaggerLottieApplicationComponent.builder().application(this).build();
     }
 }

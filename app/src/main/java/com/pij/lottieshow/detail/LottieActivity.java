@@ -33,8 +33,6 @@ import dagger.android.support.DaggerAppCompatActivity;
 import rx.subjects.PublishSubject;
 import rx.subscriptions.CompositeSubscription;
 
-import static rx.Observable.just;
-
 /**
  * An activity representing a single Lottie detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
@@ -95,9 +93,9 @@ public class LottieActivity extends DaggerAppCompatActivity {
                 // Add the external Lottie if it is provided
                 safClient.analysed().subscribe(viewModel::addLottie, this::notifyError),
                 // load the internal lottie if it is provided
-                just(file).filter(file -> file != null)
-                          .flatMapSingle(converter::toModel)
-                          .subscribe(viewModel::loadLottie, this::notifyError));
+                internalLottie.filter(file -> file != null)
+                              .flatMapSingle(converter::toModel)
+                              .subscribe(viewModel::loadLottie, this::notifyError));
 
         if (savedInstanceState == null) {
             if (file == null) {
@@ -143,7 +141,7 @@ public class LottieActivity extends DaggerAppCompatActivity {
         Utils.notifyError(error, fab);
     }
 
-    private int setDetailFragment(LottieFragment fragment) {
-        return getSupportFragmentManager().beginTransaction().replace(R.id.lottie_detail_container, fragment).commit();
+    private void setDetailFragment(LottieFragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.lottie_detail_container, fragment).commit();
     }
 }

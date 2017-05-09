@@ -1,9 +1,8 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    repositories {
-        jcenter()
-    }
+    ext.kotlin_version = '1.1.1'
+
     dependencies {
         classpath 'pl.allegro.tech.build:axion-release-plugin:1.6.0'
     }
@@ -13,7 +12,7 @@ apply plugin: 'pl.allegro.tech.build.axion-release'
 
 scmVersion {
     tag {
-        prefix = 'lottie-show'
+        prefix = ''
     }
     if (hasProperty('githubPersonalAccessToken'))
         repository {
@@ -32,7 +31,6 @@ ext {
     ciBuild = "true" == System.env['CI']
     useFabric = !ciBuild
 
-//    kotlinVersion = '1.1.1'
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
@@ -40,7 +38,7 @@ ext {
     buildToolsVersion = '25.0.3'
     minSdkVersion = 21
     targetSdkVersion = 25
-    retrolambdaVersion = '3.5.0'
+    retrolambdaVersion = '3.6.1'
 
     supportVersion = '25.3.1'
     daggerVersion = '2.10'
@@ -53,10 +51,13 @@ ext {
     assertjCoreVersion = '1.7.1'
     assertjAndroidVersion = '1.1.1'
     espressoVersion = '2.2.2'
+    runnerVersion = '0.5'
 
     commonsLangVersion = '3.4'
     commonsCollectionsVersion = '4.1'
     commonsIoVersion = '2.5'
+    utilsVersion = '1.2.2'
+
     autoValueVersion = '1.4'
     autoValueWither = 'com.gabrielittner.auto.value:auto-value-with:0.1.5'
     autoValueCursor = 'com.gabrielittner.auto.value:auto-value-cursor:0.5.0'

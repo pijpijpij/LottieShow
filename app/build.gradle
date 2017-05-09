@@ -1,6 +1,6 @@
 buildscript {
     dependencies {
-//        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.github.triplet.gradle:play-publisher:1.2.0'
         classpath 'com.android.tools.build:gradle:2.3.1'
         classpath "io.fabric.tools:gradle:1.22.0"
@@ -11,7 +11,8 @@ buildscript {
     }
 }
 apply plugin: 'com.android.application'
-//apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 if (useFabric) {
     apply plugin: 'io.fabric'
 }
@@ -150,16 +151,20 @@ dependencies {
     compile "com.airbnb.android:lottie:$lottieVersion"
 
     testCompile "junit:junit:$junitVersion"
-//    testCompile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
+    testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testCompile "org.mockito:mockito-core:$mockitoVersion"
     testCompile "org.assertj:assertj-core:$assertjCoreVersion"
 
-    androidTestCompile("com.android.support.test.espresso:espresso-intents:$espressoVersion") {
+    androidTestCompile "org.bitbucket.pijpijpij.android-utils:hamcrest:$utilsVersion", {
+        exclude group: "com.android.support", module: "support-annotations"
+    }
+    // Espresso
+    androidTestCompile "com.android.support.test.espresso:espresso-intents:$espressoVersion", {
         exclude group: "com.android.support", module: "support-annotations"
         // Avoid conflict with dagger-android and dagger-support-android
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
-    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion") {
+    androidTestCompile "com.android.support.test.espresso:espresso-core:$espressoVersion", {
         exclude group: "com.android.support", module: "support-annotations"
         // Avoid conflict with dagger-android and dagger-support-android
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
@@ -172,5 +177,12 @@ dependencies {
         // Avoid conflict with dagger-android and dagger-support-android
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
+//    androidTestCompile "com.android.support.test:runner:$runnerVersion", {
+//        exclude group: "com.android.support", module: "support-annotations"
+//    }
+//    androidTestCompile "com.android.support.test:rules:$runnerVersion", {
+//        exclude group: "com.android.support", module: "support-annotations"
+//    }
+
 }
 
