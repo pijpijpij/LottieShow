@@ -26,7 +26,7 @@ android:
 
 before_script:
   # Install the shared gradle init file
-  - mkdir $HOME/.gradle
+  - mkdir -p $HOME/.gradle
   - wget https://bitbucket.org/pijpijpij/init-gradle/raw/master/init.gradle -O $HOME/.gradle/init.gradle
 #  - ./gradlew build jacocoTestReport assembleAndroidTest
 
