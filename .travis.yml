@@ -46,4 +46,4 @@ before_script:
 # - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
 
 script:
-  - ./gradlew --no-daemon check assembleRelease connectedCheck
+  - ./gradlew --no-daemon --stacktrace check assembleRelease connectedCheck
