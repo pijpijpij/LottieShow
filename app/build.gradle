@@ -155,7 +155,7 @@ dependencies {
     testCompile "org.mockito:mockito-core:$mockitoVersion"
     testCompile "org.assertj:assertj-core:$assertjCoreVersion"
 
-    androidTestCompile "com.pij:hamcrest:$utilsVersion", {
+    androidTestCompile "org.bitbucket.pijpijpij.android-utils:hamcrest:$utilsVersion", {
         exclude group: "com.android.support", module: "support-annotations"
     }
     // Espresso

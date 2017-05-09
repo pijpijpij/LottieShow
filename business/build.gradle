@@ -23,7 +23,7 @@ dependencies {
     compile "commons-io:commons-io:$commonsIoVersion"
     compile "io.reactivex:rxjava:$rxJavaVersion"
     compile "com.google.dagger:dagger:$daggerVersion"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     testCompile "junit:junit:$junitVersion"
     testCompile "org.mockito:mockito-core:$mockitoVersion"
