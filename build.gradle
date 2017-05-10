@@ -69,6 +69,7 @@ ext {
     rxJavaProguardVersion = '1.2.7.0'
     rxJavaString = 'io.reactivex:rxjava-string:1.1.0'
     rxAndroid = 'io.reactivex:rxandroid:1.2.1'
+    rxKotlinVersion = '1.0.0'
 
     lottieVersion = '1.5.3'
 

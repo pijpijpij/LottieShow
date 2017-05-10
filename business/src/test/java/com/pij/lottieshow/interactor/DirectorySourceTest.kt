@@ -23,14 +23,13 @@ class DirectorySourceTest {
     @Mock internal lateinit var mockRoot: File
 
     @Test fun `Emits empty list when root does not emit`() {
-        `when`(mockRoot.isDirectory).thenReturn(false)
         val sut = DirectorySource(never<File>())
         val subscriber = TestSubscriber.create<Iterable<LottieFile>>()
 
         sut.lottieFiles().subscribe(subscriber)
 
         subscriber.assertNoErrors()
-        subscriber.assertValue(emptyList<LottieFile>())
+        subscriber.assertValue(listOf())
     }
 
     @Test fun `Emits empty list when root is not directory`() {
@@ -41,7 +40,7 @@ class DirectorySourceTest {
         sut.lottieFiles().subscribe(subscriber)
 
         subscriber.assertNoErrors()
-        subscriber.assertValue(emptyList<LottieFile>())
+        subscriber.assertValue(listOf())
     }
 
     @Test fun `Emits empty list when root is an empty directory`() {
@@ -53,7 +52,7 @@ class DirectorySourceTest {
         sut.lottieFiles().subscribe(subscriber)
 
         subscriber.assertNoErrors()
-        subscriber.assertValue(emptyList<LottieFile>())
+        subscriber.assertValue(listOf())
     }
 
     @Test fun `Emits singleton list when root contains a single file`() {

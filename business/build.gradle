@@ -22,6 +22,7 @@ dependencies {
     compile "org.apache.commons:commons-collections4:$commonsCollectionsVersion"
     compile "commons-io:commons-io:$commonsIoVersion"
     compile "io.reactivex:rxjava:$rxJavaVersion"
+    compile "io.reactivex:rxkotlin:$rxKotlinVersion"
     compile "com.google.dagger:dagger:$daggerVersion"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 

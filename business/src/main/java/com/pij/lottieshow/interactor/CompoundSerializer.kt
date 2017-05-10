@@ -8,7 +8,6 @@ import rx.Observable.from
 import rx.Observable.just
 import rx.Single
 import java.net.URI
-import java.util.*
 import javax.inject.Inject
 
 class CompoundSerializer @Inject constructor(private val serializers: Iterable<Serializer>) : Serializer {
@@ -23,17 +22,17 @@ class CompoundSerializer @Inject constructor(private val serializers: Iterable<S
         return opener.open(input).toObservable().onErrorResumeNext { absorbUnknownFile(it) }
     }
 
-    private fun transformNoSerializerFound(e: Throwable, file: URI): Single<out String> {
+    private fun transformNoSerializerFound(e: Throwable, file: URI): Single<String> {
         val result = if (e is NoSuchElementException) {
             UnknownFileException("Could not find a Serializer for $file.", e)
         } else {
             e
         }
-        return Single.error<String>(result)
+        return Single.error(result)
     }
 
     private fun absorbUnknownFile(e: Throwable): Observable<String> {
-        return if (e is UnknownFileException) empty<String>() else error<String>(e)
+        return if (e is UnknownFileException) empty() else error(e)
     }
 
 }

@@ -9,7 +9,7 @@ import rx.Observable.merge
 import rx.subjects.PublishSubject
 import java.net.URI
 
-class LottieViewModel(sink: LottieSink, serializer: Serializer) {
+class LottieViewModel(private val sink: LottieSink, private val serializer: Serializer) {
 
     private val lottieToLoad = PublishSubject.create<LottieFile>()
     private val lottieToAdd = PublishSubject.create<LottieFile>()

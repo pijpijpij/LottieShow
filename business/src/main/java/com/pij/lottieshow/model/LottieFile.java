@@ -18,31 +18,31 @@ public abstract class LottieFile {
 
     private Single<String> content;
 
-    public static LottieFile create(LottieFile source, String content) {
+    public static LottieFile create(@NonNull LottieFile source, String content) {
         return create(source, just(content));
     }
 
-    public static LottieFile create(LottieFile source, @NonNull Single<String> content) {
+    public static LottieFile create(@NonNull LottieFile source, @NonNull Single<String> content) {
         return create(source.id(), source.label(), content);
     }
 
-    public static LottieFile create(File id) {
+    public static LottieFile create(@NonNull File id) {
         return create(id.toURI());
     }
 
-    public static LottieFile create(URI id) {
+    public static LottieFile create(@NonNull URI id) {
         return create(id, null);
     }
 
-    public static LottieFile create(URI id, String label) {
+    public static LottieFile create(@NonNull URI id, String label) {
         return create(id, label, (String)null);
     }
 
-    public static LottieFile create(URI id, String label, String content) {
+    public static LottieFile create(@NonNull URI id, String label, String content) {
         return create(id, label, just(content));
     }
 
-    public static LottieFile create(URI id, String label, @NonNull Single<String> content) {
+    public static LottieFile create(@NonNull URI id, String label, @NonNull Single<String> content) {
         LottieFile result = new AutoValue_LottieFile(id, label);
         result.content = content;
         return result;
