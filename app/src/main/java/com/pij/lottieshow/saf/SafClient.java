@@ -67,8 +67,7 @@ public class SafClient {
         return jsonFilePicked.map(Intent::getData)
                              .flatMapSingle(uri -> Single.zip(calculateURI(uri),
                                                               calculateLabel(uri),
-                                                              calculateContent(uri),
-                                                              LottieFile::create)
+                                                              calculateContent(uri), LottieFile.Companion::create)
                                                          .doOnSubscribe(() -> inProgress.onNext(true))
                                                          .doAfterTerminate(() -> inProgress.onNext(false)));
     }

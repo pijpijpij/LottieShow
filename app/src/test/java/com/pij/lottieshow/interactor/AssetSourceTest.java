@@ -14,13 +14,15 @@ import org.mockito.junit.MockitoRule;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Comparator;
 import java.util.List;
 
 import rx.Single;
 import rx.observers.TestSubscriber;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
+import static org.apache.commons.collections4.ComparatorUtils.naturalComparator;
+import static org.apache.commons.collections4.ComparatorUtils.transformedComparator;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
@@ -83,9 +85,10 @@ public class AssetSourceTest {
         sut.lottieFiles().map(IterableUtils::toList).subscribe(subscriber);
 
         subscriber.assertNoErrors();
-        assertThat(subscriber.getOnNextEvents().get(0)).containsExactly(LottieFile.create(URI.create(
-                "file:///android_asset/samples/a_file")));
-        subscriber.assertValue(singletonList(LottieFile.create(URI.create("file:///android_asset/samples/a_file"))));
+        Comparator<LottieFile> comparator = transformedComparator(naturalComparator(), LottieFile::getId);
+        assertThat(subscriber.getOnNextEvents().get(0)).usingElementComparator(comparator)
+                                                       .containsExactly(LottieFile.Companion.create(URI.create(
+                                                               "file:///android_asset/samples/a_file")));
     }
 
     @Test

@@ -130,6 +130,7 @@ dependencies {
     compile "com.android.support:support-annotations:$supportVersion"
     compile "org.apache.commons:commons-lang3:$commonsLangVersion"
     compile "org.apache.commons:commons-collections4:$commonsCollectionsVersion"
+    compile "commons-io:commons-io:$commonsIoVersion"
 //    compile "com.google.dagger:dagger-android:${daggerVersion}"
     compile "com.google.dagger:dagger-android-support:$daggerVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
@@ -154,6 +155,9 @@ dependencies {
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testCompile "org.mockito:mockito-core:$mockitoVersion"
     testCompile "org.assertj:assertj-core:$assertjCoreVersion"
+    testCompile "org.bitbucket.pijpijpij.android-utils:hamcrest:$utilsVersion", {
+        exclude group: "com.android.support", module: "support-annotations"
+    }
 
     androidTestCompile "org.bitbucket.pijpijpij.android-utils:hamcrest:$utilsVersion", {
         exclude group: "com.android.support", module: "support-annotations"

@@ -28,16 +28,8 @@ class LottieViewModelTest {
     @Mock lateinit var mockSink: LottieSink
 
     @InjectMocks lateinit var sut: LottieViewModel
-//    @Before fun setUp() {
-//        mockSerializer = mock(Serializer::class.java)
-//        mockSink = mock(LottieSink::class.java)
-//
-//
-//        sut = LottieViewModel(mockSink, mockSerializer)
-//    }
 
-    @Test
-    fun emitsLoadedLottie() {
+    @Test fun `Emits loaded Lottie`() {
         `when`(mockSerializer.open(URI.create("zip.com"))).thenReturn(Single.just("Hello!"))
         sut.showAnimation().subscribe()
 
@@ -46,8 +38,7 @@ class LottieViewModelTest {
         verify<Serializer>(mockSerializer).open(URI.create("zip.com"))
     }
 
-    @Test
-    fun readsLoadedLottieOffSerializer() {
+    @Test fun `Reads loaded Lottie off the Serializer`() {
         `when`(mockSerializer.open(URI.create("zip.com"))).thenReturn(Single.just("Hello!"))
         val subscriber = TestSubscriber.create<String>()
         sut.showAnimation().subscribe(subscriber)
@@ -58,8 +49,7 @@ class LottieViewModelTest {
         subscriber.assertValue("Hello!")
     }
 
-    @Test
-    fun emitsNoAnimationWhenSerializerFails() {
+    @Test fun `Emits no animation when Serializer fails`() {
         `when`(mockSerializer.open(URI.create("zip.com"))).thenReturn(Single.error<String>(IOException("failed!")))
         val subscriber = TestSubscriber.create<String>()
         sut.showAnimation().subscribe(subscriber)
@@ -70,8 +60,7 @@ class LottieViewModelTest {
         subscriber.assertNoValues()
     }
 
-    @Test
-    fun emitsAnErrorWhenSerializerFails() {
+    @Test fun `Emits an error when the Serializer fails`() {
         `when`(mockSerializer.open(URI.create("zip.com"))).thenReturn(Single.error<String>(IOException("failed!")))
         val subscriber = TestSubscriber.create<Throwable>()
         sut.showLoadingError().subscribe(subscriber)
@@ -83,8 +72,7 @@ class LottieViewModelTest {
         subscriber.assertValueCount(1)
     }
 
-    @Test
-    fun emitsNoAnimationWhenLoadedLottieIsNull() {
+    @Test fun `Emits no animation when loaded Lottie is null`() {
         `when`(mockSerializer.open(null)).thenReturn(Single.error<String>(NullPointerException("failed!")))
         val subscriber = TestSubscriber.create<String>()
         sut.showAnimation().subscribe(subscriber)
@@ -95,8 +83,7 @@ class LottieViewModelTest {
         subscriber.assertNoValues()
     }
 
-    @Test
-    fun emitsAnErrorWhenLoadedLottieIsNull() {
+    @Test fun `Emits an error when loaded Lottie is null`() {
         `when`(mockSerializer.open(null)).thenReturn(Single.error<String>(NullPointerException("failed!")))
         val subscriber = TestSubscriber.create<Throwable>()
         sut.showLoadingError().subscribe(subscriber)
@@ -108,8 +95,7 @@ class LottieViewModelTest {
         subscriber.assertValueCount(1)
     }
 
-    @Test
-    fun addsAddedLottieToSink() {
+    @Test fun `Adds added Lottie to the Sink`() {
         sut.showLottie().subscribe()
 
         sut.addLottie(LottieFile.create(URI.create("zip.com")))

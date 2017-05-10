@@ -192,8 +192,7 @@ public class LottiesActivity extends DaggerAppCompatActivity {
     }
 
     private Single<Pair<LottieUi, LottieContent>> fromModel(LottieFile model) {
-        return Single.zip(converter.fromModel(model),
-                          Single.just(model.content()).map(LottieContent::create),
+        return Single.zip(converter.fromModel(model), Single.just(model.getContent()).map(LottieContent::create),
                           Pair::of);
     }
 
