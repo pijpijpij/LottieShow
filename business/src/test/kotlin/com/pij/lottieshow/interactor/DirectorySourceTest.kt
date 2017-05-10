@@ -1,6 +1,7 @@
 package com.pij.lottieshow.interactor
 
 import com.pij.lottieshow.model.LottieFile
+import com.pij.lottieshow.model.toLottie
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
@@ -65,7 +66,7 @@ class DirectorySourceTest {
 
         subscriber.assertNoErrors()
 
-        subscriber.assertValues(emptyList<LottieFile>(), listOf(LottieFile.create(File("zip", "zap"))))
+        subscriber.assertValues(emptyList<LottieFile>(), listOf(File("zip", "zap").toURI().toLottie()))
     }
 
     private fun createDefaultSut(root: File): DirectorySource {

@@ -28,8 +28,8 @@ public class Converter {
     private final Observable<Map<LottieUi, LottieFile>> files;
 
     private static LottieUi create(LottieFile model) {
-        String shortName = StringUtils.isEmpty(model.label()) ? defaultLabel(model.id()) : model.label();
-        return LottieUi.create(Uri.parse(model.id().toString()), shortName);
+        String shortName = StringUtils.isEmpty(model.getLabel()) ? defaultLabel(model.getId()) : model.getLabel();
+        return LottieUi.create(Uri.parse(model.getId().toString()), shortName);
     }
 
     @NonNull

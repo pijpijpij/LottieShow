@@ -1,6 +1,7 @@
 package com.pij.lottieshow.list
 
 import com.pij.lottieshow.model.LottieFile
+import com.pij.lottieshow.model.toLottie
 import org.apache.commons.collections4.IterableUtils
 import org.junit.Test
 import rx.observers.TestSubscriber
@@ -28,11 +29,11 @@ class MemoryLottieStoreTest {
         val subscriber = TestSubscriber.create<List<LottieFile>>()
         sut.lottieFiles().map { IterableUtils.toList(it) }.subscribe(subscriber)
 
-        sut.add(LottieFile.create(File("aa", "bbb")))
+        sut.add(File("aa", "bbb").toURI().toLottie())
 
         subscriber.assertNoErrors()
 
-        subscriber.assertValues(listOf(), listOf(LottieFile.create(File("aa", "bbb"))))
+        subscriber.assertValues(listOf(), listOf(File("aa", "bbb").toURI().toLottie()))
     }
 
     @Test fun `Emits a list with the latest appended`() {
@@ -40,26 +41,26 @@ class MemoryLottieStoreTest {
         val subscriber = TestSubscriber.create<List<LottieFile>>()
         sut.lottieFiles().map { IterableUtils.toList(it) }.subscribe(subscriber)
 
-        sut.add(LottieFile.create(File("11", "111")))
-        sut.add(LottieFile.create(File("22", "222")))
+        sut.add(File("11", "111").toURI().toLottie())
+        sut.add(File("22", "222").toURI().toLottie())
 
         subscriber.assertNoErrors()
 
         subscriber.assertValues(listOf(),
-                                listOf(LottieFile.create(File("11", "111"))),
-                                listOf(LottieFile.create(File("11", "111")), LottieFile.create(File("22", "222"))))
+                                listOf(File("11", "111").toURI().toLottie()),
+                                listOf(File("11", "111").toURI().toLottie(), File("22", "222").toURI().toLottie()))
     }
 
     @Test fun `Emits the last list for a second subscriber`() {
         val sut = MemoryLottieStore()
         sut.lottieFiles().subscribe()
-        sut.add(LottieFile.create(File("11", "111")))
-        sut.add(LottieFile.create(File("22", "222")))
+        sut.add(File("11", "111").toURI().toLottie())
+        sut.add(File("22", "222").toURI().toLottie())
 
         val subscriber = TestSubscriber.create<List<LottieFile>>()
         sut.lottieFiles().map { IterableUtils.toList(it) }.subscribe(subscriber)
 
         subscriber.assertNoErrors()
-        subscriber.assertValues(listOf(LottieFile.create(File("11", "111")), LottieFile.create(File("22", "222"))))
+        subscriber.assertValues(listOf(File("11", "111").toURI().toLottie(), File("22", "222").toURI().toLottie()))
     }
 }

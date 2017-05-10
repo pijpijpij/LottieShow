@@ -22,7 +22,7 @@ public abstract class BuildTypeModule {
     @Provides
     @IntoSet
     static LottieSource provideTestLottieSource() {
-        return () -> just(singletonList(LottieFile.create(new File("you should see", "at least that one"))));
+        return () -> just(singletonList(LottieFile.Companion.create(new File("you should see", "at least that one"))));
     }
 
 }

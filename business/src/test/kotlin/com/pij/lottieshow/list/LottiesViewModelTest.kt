@@ -3,6 +3,7 @@ package com.pij.lottieshow.list
 import com.pij.lottieshow.interactor.LottieSink
 import com.pij.lottieshow.interactor.LottieSource
 import com.pij.lottieshow.model.LottieFile
+import com.pij.lottieshow.model.toLottie
 import org.apache.commons.collections4.IterableUtils
 import org.junit.Rule
 import org.junit.Test
@@ -41,27 +42,27 @@ class LottiesViewModelTest {
     }
 
     @Test fun `Emits a singleton list when the source emimts a list with a single item`() {
-        val lottie = LottieFile.create(File("parent", "label"))
+        val lottie = File("parent", "label").toURI().toLottie()
         `when`(mockSource.lottieFiles()).thenReturn(just(listOf(lottie)))
         val subscriber = TestSubscriber.create<List<LottieFile>>()
 
         sut.shouldShowList().map { IterableUtils.toList(it) }.subscribe(subscriber)
 
         subscriber.assertNoErrors()
-        subscriber.assertValue(listOf(LottieFile.create(File("parent", "label"))))
+        subscriber.assertValue(listOf(File("parent", "label").toURI().toLottie()))
     }
 
     @Test fun `Emits a 2 item list when the source emits a 2 item list`() {
-        val lottie1 = LottieFile.create(File("parent1", "label1"))
-        val lottie2 = LottieFile.create(File("parent2", "label2"))
+        val lottie1 = File("parent1", "label1").toURI().toLottie()
+        val lottie2 = File("parent2", "label2").toURI().toLottie()
         `when`(mockSource.lottieFiles()).thenReturn(just(listOf(lottie1, lottie2)))
         val subscriber = TestSubscriber.create<List<LottieFile>>()
 
         sut.shouldShowList().map { IterableUtils.toList(it) }.subscribe(subscriber)
 
         subscriber.assertNoErrors()
-        subscriber.assertValue(asList(LottieFile.create(File("parent1", "label1")),
-                                      LottieFile.create(File("parent2", "label2"))))
+        subscriber.assertValue(asList(File("parent1", "label1").toURI().toLottie(),
+                                      File("parent2", "label2").toURI().toLottie()))
     }
 
 }

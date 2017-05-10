@@ -1,6 +1,7 @@
 package com.pij.lottieshow.interactor
 
 import com.pij.lottieshow.model.LottieFile
+import com.pij.lottieshow.model.toLottie
 import org.apache.commons.collections4.IterableUtils
 import org.junit.Rule
 import org.junit.Test
@@ -33,7 +34,7 @@ class SourceFunnelTest {
     }
 
     @Test fun `A single source with a singleton list emits a singleton list`() {
-        val lottie = LottieFile.create(File("parent", "label"))
+        val lottie = File("parent", "label").toURI().toLottie()
         val lottieSource = LottieSource { just(listOf(lottie)) }
         val sut = createDefaultSut(listOf(lottieSource))
         val subscriber = TestSubscriber.create<List<LottieFile>>()
@@ -41,12 +42,12 @@ class SourceFunnelTest {
         sut.lottieFiles().map { IterableUtils.toList(it) }.subscribe(subscriber)
 
         subscriber.assertNoErrors()
-        subscriber.assertValue(listOf(LottieFile.create(File("parent", "label"))))
+        subscriber.assertValue(listOf(File("parent", "label").toURI().toLottie()))
     }
 
     @Test fun `2 sources, one empty, one singleton emits a singleton list`() {
         val lottieSource1 = LottieSource { just(emptyList<LottieFile>()) }
-        val lottie = LottieFile.create(File("parent", "label"))
+        val lottie = File("parent", "label").toURI().toLottie()
         val lottieSource2 = LottieSource { just(listOf(lottie)) }
         val sut = createDefaultSut(listOf(lottieSource1, lottieSource2))
         val subscriber = TestSubscriber.create<List<LottieFile>>()
@@ -54,13 +55,13 @@ class SourceFunnelTest {
         sut.lottieFiles().map { IterableUtils.toList(it) }.subscribe(subscriber)
 
         subscriber.assertNoErrors()
-        subscriber.assertValue(listOf(LottieFile.create(File("parent", "label"))))
+        subscriber.assertValue(listOf(File("parent", "label").toURI().toLottie()))
     }
 
     @Test fun `2 singleton sources emits list with 2 items`() {
-        val lottie1 = LottieFile.create(File("parent1", "label1"))
+        val lottie1 = File("parent1", "label1").toURI().toLottie()
         val lottieSource1 = LottieSource { just(listOf(lottie1)) }
-        val lottie2 = LottieFile.create(File("parent2", "label2"))
+        val lottie2 = File("parent2", "label2").toURI().toLottie()
         val lottieSource2 = LottieSource { just(listOf(lottie2)) }
         val sut = createDefaultSut(listOf(lottieSource1, lottieSource2))
         val subscriber = TestSubscriber.create<List<LottieFile>>()
@@ -68,8 +69,8 @@ class SourceFunnelTest {
         sut.lottieFiles().map { IterableUtils.toList(it) }.subscribe(subscriber)
 
         subscriber.assertNoErrors()
-        subscriber.assertValue(asList(LottieFile.create(File("parent1", "label1")),
-                                      LottieFile.create(File("parent2", "label2"))))
+        subscriber.assertValue(asList(File("parent1", "label1").toURI().toLottie(),
+                                      File("parent2", "label2").toURI().toLottie()))
     }
 
     private fun createDefaultSut(lottieSources: List<LottieSource>): SourceFunnel {

@@ -48,7 +48,7 @@ class AssetSource implements LottieSource {
                                                                        this::absoluteAssertName)
                                                         .map(URI::create)
                                                         .onErrorResumeNext(e -> empty())
-                                                        .map(LottieFile::create)
+                                                        .map(LottieFile.Companion::create)
                                                         .flatMapSingle(this::appendContent)
                                                         .toList());
     }
@@ -56,8 +56,8 @@ class AssetSource implements LottieSource {
     @NonNull
     private Single<LottieFile> appendContent(LottieFile file) {
         return Single.zip(Single.just(file),
-                          Single.just(file).map(LottieFile::id).flatMap(serializer::open),
-                          LottieFile::create);
+                          Single.just(file).map(LottieFile::getId).flatMap(serializer::open),
+                          LottieFile.Companion::create);
     }
 
     @NonNull

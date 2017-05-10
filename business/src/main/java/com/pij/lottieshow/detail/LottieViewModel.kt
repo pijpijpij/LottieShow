@@ -7,7 +7,6 @@ import rx.Observable
 import rx.Observable.empty
 import rx.Observable.merge
 import rx.subjects.PublishSubject
-import java.net.URI
 
 class LottieViewModel(private val sink: LottieSink, private val serializer: Serializer) {
 
@@ -23,18 +22,18 @@ class LottieViewModel(private val sink: LottieSink, private val serializer: Seri
             Observable.just(it)
                     .doOnNext { sink.add(it) }
                     .doOnError { errors.onNext(it) }
-                    .onErrorResumeNext(empty<LottieFile>())
+                    .onErrorResumeNext(empty())
         }
 
         val loadedLottie = lottieToLoad
         lottieToShow = merge(loadedLottie, addedLottie)
 
-        animationToShow = lottieToShow.map<URI> { it?.id() }
+        animationToShow = lottieToShow.map { it?.id }
                 .concatMap {
                     serializer.open(it)
                             .toObservable()
                             .doOnError { errors.onNext(it) }
-                            .onErrorResumeNext(empty<String>())
+                            .onErrorResumeNext(empty())
                 }
     }
 
