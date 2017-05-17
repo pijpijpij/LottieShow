@@ -19,9 +19,10 @@ Finally, it integrates in other apps. For example, Gmail will call upon it to vi
 
 ## Automated build status
 Thanks [Travis-CI](https://travis-ci.org) for providing a build system. The status of the last master build: 
-[![Build Status](https://travis-ci.org/pijpijpij/FourSq.svg?branch=master)](https://travis-ci.org/pijpijpij/FourSq)
+[![Build Status](https://travis-ci.org/pijpijpij/FourSq.svg?branch=master)](https://travis-ci.org/pijpijpij/FourSq).
 Unfortunately, I don't quite trust encryption in Travis (nor my ability to use the feature properly) to 
-protect my credential in Google, Fabric and co, so it does not automatcally upload to Fabric and Release to the store. 
+protect my credentials in Google, Fabric and co, so it does not automatically upload to Fabric and release to the 
+store. 
 
 
 ### Uploading to Fabric
