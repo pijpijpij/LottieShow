@@ -17,7 +17,7 @@ Finally, it integrates in other apps. For example, Gmail will call upon it to vi
 
 ## Dev notes
 
-## Automated build status
+### Automated build status
 Thanks [Travis-CI](https://travis-ci.org) for providing a build system. The status of the last master build: 
 [![Build Status](https://travis-ci.org/pijpijpij/FourSq.svg?branch=master)](https://travis-ci.org/pijpijpij/FourSq).
 Unfortunately, I don't quite trust encryption in Travis (nor my ability to use the feature properly) to 
