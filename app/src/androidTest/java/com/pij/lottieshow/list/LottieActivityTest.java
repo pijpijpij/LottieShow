@@ -86,7 +86,7 @@ public class LottieActivityTest {
     }
 
     private void clickEntry(String label) {
-        ViewInteraction recyclerView = onView(allOf(withId(R.id.lottie_list), isDisplayed()));
+        ViewInteraction recyclerView = onView(allOf(withId(R.id.list), isDisplayed()));
         recyclerView.perform(actionOnItem(hasDescendant(withText(label)), click()));
     }
 

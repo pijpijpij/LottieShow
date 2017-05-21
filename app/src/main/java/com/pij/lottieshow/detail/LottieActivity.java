@@ -130,7 +130,7 @@ public class LottieActivity extends DaggerAppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                navigateUpTo(LottiesActivity.createIntent(this));
+                navigateUpTo(LottiesActivity.Companion.createIntent(this));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -142,6 +142,6 @@ public class LottieActivity extends DaggerAppCompatActivity {
     }
 
     private void setDetailFragment(LottieFragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.lottie_detail_container, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.detail_container, fragment).commit();
     }
 }

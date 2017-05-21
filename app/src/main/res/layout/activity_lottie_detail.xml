@@ -21,7 +21,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
-        android:id="@+id/lottie_detail_container"
+        android:id="@+id/detail_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
@@ -34,7 +34,7 @@
         android:layout_gravity="center_vertical|start"
         android:layout_margin="@dimen/fab_margin"
         android:visibility="gone"
-        app:layout_anchor="@+id/lottie_detail_container"
+        app:layout_anchor="@+id/detail_container"
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@android:drawable/stat_notify_chat"/>
 

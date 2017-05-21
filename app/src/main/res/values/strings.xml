@@ -9,4 +9,5 @@
     <string name="item_label_hint">this Lottie has no name</string>
     <string name="lottie_library_version_template">Lottie library %1$s</string>
     <string name="detail_cannot_display_lottie">Cannot display this animation</string>
+    <string name="loading">Loading…</string>
 </resources>

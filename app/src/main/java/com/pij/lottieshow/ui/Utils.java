@@ -1,5 +1,6 @@
 package com.pij.lottieshow.ui;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
@@ -11,7 +12,7 @@ import com.pij.lottieshow.R;
  */
 public class Utils {
 
-    public static void notifyError(Throwable error, View snackbarRelative) {
+    public static void notifyError(@NonNull Throwable error, @NonNull View snackbarRelative) {
         error.printStackTrace();
         //TODO add a dialog to display detail of exception stack.
         Snackbar.make(snackbarRelative, "Error: " + error, Snackbar.LENGTH_LONG)

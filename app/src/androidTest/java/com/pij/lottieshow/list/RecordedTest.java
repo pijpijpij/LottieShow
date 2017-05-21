@@ -34,7 +34,7 @@ public class RecordedTest {
 
     @Test
     public void tClickingOnTwitterHeartShowsDetailWithTitleTwitterHeart() {
-        ViewInteraction recyclerView = onView(allOf(withId(R.id.lottie_list), isDisplayed()));
+        ViewInteraction recyclerView = onView(allOf(withId(R.id.list), isDisplayed()));
         recyclerView.perform(actionOnItem(hasDescendant(withText("TwitterHeart")), click()));
 
         ViewInteraction title = onView(allOf(withText("TwitterHeart"),

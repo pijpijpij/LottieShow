@@ -14,6 +14,7 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 if (useFabric) {
     apply plugin: 'io.fabric'
 }
@@ -35,6 +36,9 @@ println "Signing ${signingPijInternationalSetup ? "available" : "not setup"}."
 def serviceAccountSetup = hasProperty('serviceAccountEmail') && hasProperty('pk12File')
 println "Service account ${serviceAccountSetup ? "available" : "not setup"}."
 
+kapt {
+    generateStubs = true
+}
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -122,9 +126,9 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
     compile "com.github.marcinmoskala.activitystarter:activitystarter:$activitystarterVersion"
-    annotationProcessor "com.github.marcinmoskala.activitystarter:activitystarter-compiler:$activitystarterVersion"
+    kapt "com.github.marcinmoskala.activitystarter:activitystarter-compiler:$activitystarterVersion"
 
-    provided "com.google.auto.value:auto-value:$autoValueVersion"
+    kapt "com.google.auto.value:auto-value:$autoValueVersion"
     provided 'com.ryanharter.auto.value:auto-value-parcel:0.2.5'
 //    autoValueParcelAdapter = 'com.ryanharter.auto.value:auto-value-parcel-adapter:+'
 
@@ -134,8 +138,10 @@ dependencies {
     compile "commons-io:commons-io:$commonsIoVersion"
 //    compile "com.google.dagger:dagger-android:${daggerVersion}"
     compile "com.google.dagger:dagger-android-support:$daggerVersion"
-    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
-    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+//    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+//    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
 
     compile "io.reactivex:rxjava:rxJavaVersion"
     compile "com.artemzin.rxjava:proguard-rules:$rxJavaProguardVersion"

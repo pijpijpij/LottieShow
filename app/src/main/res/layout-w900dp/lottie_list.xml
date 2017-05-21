@@ -15,7 +15,7 @@
     
     -->
 
-    <android.support.v7.widget.RecyclerView android:id="@+id/lottie_list"
+    <android.support.v7.widget.RecyclerView android:id="@+id/list"
                                             android:name="com.pij.lottieshow.LottieListFragment"
                                             xmlns:android="http://schemas.android.com/apk/res/android"
                                             xmlns:tools="http://schemas.android.com/tools"
@@ -26,7 +26,7 @@
                                             tools:listitem="@layout/lottie_list_item"/>
 
     <FrameLayout
-        android:id="@+id/lottie_detail_container"
+        android:id="@+id/detail_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="3"

@@ -68,7 +68,7 @@ class LottiesAdapter extends RecyclerView.Adapter<LottieViewHolder> {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void setItems(List<Pair<LottieUi, LottieContent>> items) {
+    public void setItems(@NonNull List<Pair<LottieUi, LottieContent>> items) {
         List<Pair<LottieUi, LottieContent>> oldValues = values;
         values = toList(items);
         DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new MyCallback(oldValues, items));

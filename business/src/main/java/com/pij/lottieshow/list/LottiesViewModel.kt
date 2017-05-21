@@ -9,10 +9,10 @@ import rx.subjects.PublishSubject
 
 class LottiesViewModel(private val updatableSources: LottieSource, private val sink: LottieSink) {
 
-    private val lotties: Observable<Iterable<LottieFile>> = defer { updatableSources.lottieFiles() }
+    private val lotties: Observable<List<LottieFile>> = defer { updatableSources.lottieFiles().map { it.toList() } }
     private val shouldShowLottie = PublishSubject.create<LottieFile>()
 
-    fun shouldShowList(): Observable<Iterable<LottieFile>> {
+    fun shouldShowList(): Observable<List<LottieFile>> {
         return lotties
     }
 
