@@ -36,10 +36,6 @@ println "Signing ${signingPijInternationalSetup ? "available" : "not setup"}."
 def serviceAccountSetup = hasProperty('serviceAccountEmail') && hasProperty('pk12File')
 println "Service account ${serviceAccountSetup ? "available" : "not setup"}."
 
-kapt {
-    generateStubs = true
-}
-
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
